@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="author" content="WB DataDic" />
+        <meta name="description" content="gurama Data Dictionary." />
+        <link rel="shortcut icon"
+            href="https://images.vexels.com/media/users/3/135780/isolated/preview/e141eabf8b5dc5201ddb4e229e2f460b-icono-de-circulo-de-base-de-datos-con-sombra.png">
+        <title>gurama Data Dictionary</title>
+        <style type="text/css">
+    body {
+        margin: 0 20px;
+    }
+    table{
+        width: 100%;
+        margin-bottom: 30px;
+        border-collapse: collapse;
+    }
+    abbr{
+        cursor: help;
+    }
+    table, td, th{
+        border: 2px solid black;
+        text-align: center;
+    }
+    table caption{
+        font-size: 120%;
+        font-weight: bold;
+    }
+    caption{
+        color: black;
+        margin-bottom: 10px;
+    }
+    td, th{
+        border-color: silver;
+    }
+    tr:hover{
+        color: #333;
+        background-color: #F2F2F2;
+    }
+    th{
+        background-color: #e885c0;
+    }
+    td{
+        color: black;
+    }
+    ul{
+        font-style: italic;
+    }
+    ul a {
+        text-decoration: none;
+    }
+    #title-sect{
+        color: rgb(48, 47, 47);
+        text-align: right;
+    }
+    .proj-desc{
+        text-align: right;
+    }
+    /* Ajustar el ancho de las columnas */
+    th:nth-child(2),
+    td:nth-child(2),
+    th:nth-child(11),
+    td:nth-child(11) {
+        width: 150px; /* Ancho de la columna 'Tipo de Dato' */
+    }
+    th:nth-child(12),
+    td:nth-child(11) {
+        width: 400px; /* Ancho de la columna 'Comment' */
+    }
+    </style>
+    </head>
+    <body>
+        <div id="title-sect">
+            <h1>gurama<br> Data Dictionary</h1>
+            <p>
+                <em>2025-09-02</em>
+            </p>
+            <p class="proj-desc">
+                <em></em>
+            </p>
+        </div>
+        <h2>Alphabetic Index</h2>
+        <ul>
+            <li><a href='#comprobante'>comprobante</a></li>
+            <li><a href='#datalle_pedido'>datalle_pedido</a></li>
+            <li><a href='#estado_pago'>estado_pago</a></li>
+            <li><a href='#mov_inventario'>mov_inventario</a></li>
+            <li><a href='#movimiento'>movimiento</a></li>
+            <li><a href='#pedido'>pedido</a></li>
+            <li><a href='#producto'>producto</a></li>
+            <li><a href='#tipo_documento'>tipo_documento</a></li>
+            <li><a href='#tipo_pedido'>tipo_pedido</a></li>
+            <li><a href='#usuario'>usuario</a></li>
+        </ul>
+        <table id='comprobante'>
+            <caption>comprobante</caption>
+            <tr><td colspan='11'></td></tr>
+            <tr>
+                <th>Column name</th>
+                <th>DataType</th>
+                <th><abbr title='Primary Key'>PK</abbr></th>
+                <th><abbr title='Not Null'>NN</abbr></th>
+                <th><abbr title='Unique'>UQ</abbr></th>
+                <th><abbr title='Binary'>BIN</abbr></th>
+                <th><abbr title='Unsigned'>UN</abbr></th>
+                <th><abbr title='Zero Fill'>ZF</abbr></th>
+                <th><abbr title='Auto Increment'>AI</abbr></th>
+                <th>Default</th>
+                <th>Comment</th>
+            </tr>
+            <tr>
+                <td>id_comprobante</td>
+                <td>INT(6)</td>
+                <td>&#10004;</td>
+                <td>&#10004;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td class='attr'>&nbsp;</td>
+                <td></td>
+                <td>PK identificador del comprobante es dato unico</td>
+            </tr>
+            <tr>
+                <td>img_comprobante</td>
+                <td>LONGBLOB</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td class='attr'>&nbsp;</td>
+                <td>NULL</td>
+                <td>Guarda la imagen que sube el usuario del comprobante de
+                    pago</td>
+            </tr>
+            <table id='datalle_pedido'>
+                <caption>datalle_pedido</caption>
+                <tr><td colspan='11'></td></tr>
+                <tr>
+                    <th>Column name</th>
+                    <th>DataType</th>
+                    <th><abbr title='Primary Key'>PK</abbr></th>
+                    <th><abbr title='Not Null'>NN</abbr></th>
+                    <th><abbr title='Unique'>UQ</abbr></th>
+                    <th><abbr title='Binary'>BIN</abbr></th>
+                    <th><abbr title='Unsigned'>UN</abbr></th>
+                    <th><abbr title='Zero Fill'>ZF</abbr></th>
+                    <th><abbr title='Auto Increment'>AI</abbr></th>
+                    <th>Default</th>
+                    <th>Comment</th>
+                </tr>
+                <tr>
+                    <td>id_detalle</td>
+                    <td>VARCHAR(4)</td>
+                    <td>&#10004;</td>
+                    <td>&#10004;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td class='attr'>&nbsp;</td>
+                    <td></td>
+                    <td>PK el valor unico del detalle del pedido</td>
+                </tr>
+                <tr>
+                    <td>descripcion</td>
+                    <td>VARCHAR(30)</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td class='attr'>&nbsp;</td>
+                    <td>NULL</td>
+                    <td>describe el tipo de pedido, si es estandar o
+                        personalizado</td>
+                </tr>
+                <tr>
+                    <td>pedido_id_pedido</td>
+                    <td>INT(4)</td>
+                    <td>&#10004;</td>
+                    <td>&#10004;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td class='attr'>&nbsp;</td>
+                    <td></td>
+                    <td>PK_FK relaciona a la tabla de pedido con el/los
+                        detalle(s) del pedido.</td>
+                </tr>
+                <table id='estado_pago'>
+                    <caption>estado_pago</caption>
+                    <tr><td colspan='11'></td></tr>
+                    <tr>
+                        <th>Column name</th>
+                        <th>DataType</th>
+                        <th><abbr title='Primary Key'>PK</abbr></th>
+                        <th><abbr title='Not Null'>NN</abbr></th>
+                        <th><abbr title='Unique'>UQ</abbr></th>
+                        <th><abbr title='Binary'>BIN</abbr></th>
+                        <th><abbr title='Unsigned'>UN</abbr></th>
+                        <th><abbr title='Zero Fill'>ZF</abbr></th>
+                        <th><abbr title='Auto Increment'>AI</abbr></th>
+                        <th>Default</th>
+                        <th>Comment</th>
+                    </tr>
+                    <tr>
+                        <td>id_estado</td>
+                        <td>VARCHAR(3)</td>
+                        <td>&#10004;</td>
+                        <td>&#10004;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td class='attr'>&nbsp;</td>
+                        <td></td>
+                        <td>PK valor unico que define el estado de pago</td>
+                    </tr>
+                    <tr>
+                        <td>estado_pago</td>
+                        <td>VARCHAR(10)</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td class='attr'>&nbsp;</td>
+                        <td>NULL</td>
+                        <td>guarda si el estado de pago esta validando,
+                            rechazado o aceptado </td>
+                    </tr>
+                    <tr>
+                        <td>comprobante_id_comprobante</td>
+                        <td>INT(6)</td>
+                        <td>&nbsp;</td>
+                        <td>&#10004;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td class='attr'>&nbsp;</td>
+                        <td></td>
+                        <td>FK relaciona el estado de pago con el comprobante
+                            del pago</td>
+                    </tr>
+                    <table id='mov_inventario'>
+                        <caption>mov_inventario</caption>
+                        <tr><td colspan='11'></td></tr>
+                        <tr>
+                            <th>Column name</th>
+                            <th>DataType</th>
+                            <th><abbr title='Primary Key'>PK</abbr></th>
+                            <th><abbr title='Not Null'>NN</abbr></th>
+                            <th><abbr title='Unique'>UQ</abbr></th>
+                            <th><abbr title='Binary'>BIN</abbr></th>
+                            <th><abbr title='Unsigned'>UN</abbr></th>
+                            <th><abbr title='Zero Fill'>ZF</abbr></th>
+                            <th><abbr title='Auto Increment'>AI</abbr></th>
+                            <th>Default</th>
+                            <th>Comment</th>
+                        </tr>
+                        <tr>
+                            <td>id_m</td>
+                            <td>VARCHAR(5)</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td class='attr'>&nbsp;</td>
+                            <td>NULL</td>
+                            <td>PK identifica el movimiento realizado</td>
+                        </tr>
+                        <tr>
+                            <td>nom_movimiento</td>
+                            <td>VARCHAR(11)</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td class='attr'>&nbsp;</td>
+                            <td>NULL</td>
+                            <td>nombre del mobimiento, entrada o salida</td>
+                        </tr>
+                        <tr>
+                            <td>movimiento_id_movimiento</td>
+                            <td>VARCHAR(3)</td>
+                            <td>&#10004;</td>
+                            <td>&#10004;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td class='attr'>&nbsp;</td>
+                            <td></td>
+                            <td>Relaciona los movimientos qie se han realizado
+                                con los movimientos del inventario</td>
+                        </tr>
+                        <table id='movimiento'>
+                            <caption>movimiento</caption>
+                            <tr><td colspan='11'></td></tr>
+                            <tr>
+                                <th>Column name</th>
+                                <th>DataType</th>
+                                <th><abbr title='Primary Key'>PK</abbr></th>
+                                <th><abbr title='Not Null'>NN</abbr></th>
+                                <th><abbr title='Unique'>UQ</abbr></th>
+                                <th><abbr title='Binary'>BIN</abbr></th>
+                                <th><abbr title='Unsigned'>UN</abbr></th>
+                                <th><abbr title='Zero Fill'>ZF</abbr></th>
+                                <th><abbr title='Auto Increment'>AI</abbr></th>
+                                <th>Default</th>
+                                <th>Comment</th>
+                            </tr>
+                            <tr>
+                                <td>id_movimiento</td>
+                                <td>VARCHAR(3)</td>
+                                <td>&#10004;</td>
+                                <td>&#10004;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td class='attr'>&nbsp;</td>
+                                <td></td>
+                                <td>PK valor unico de cada movimiento que se
+                                    hace</td>
+                            </tr>
+                            <tr>
+                                <td>cantidad_m</td>
+                                <td>INT(5)</td>
+                                <td>&nbsp;</td>
+                                <td>&#10004;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td class='attr'>&nbsp;</td>
+                                <td></td>
+                                <td>almacena la cantidad de productos que
+                                    realizan el movimiento</td>
+                            </tr>
+                            <tr>
+                                <td>fecha_m</td>
+                                <td>DATETIME</td>
+                                <td>&nbsp;</td>
+                                <td>&#10004;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td class='attr'>&nbsp;</td>
+                                <td></td>
+                                <td>guarda la fecha y hora en la que se realiza
+                                    el movimiento</td>
+                            </tr>
+                            <tr>
+                                <td>observacion</td>
+                                <td>VARCHAR(80)</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td class='attr'>&nbsp;</td>
+                                <td>NULL</td>
+                                <td>espacio para escribir observaciones del
+                                    movimiento (no es obligatorio)</td>
+                            </tr>
+                            <tr>
+                                <td>producto_id_producto</td>
+                                <td>VARCHAR(3)</td>
+                                <td>&#10004;</td>
+                                <td>&#10004;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td class='attr'>&nbsp;</td>
+                                <td></td>
+                                <td>PK_FK relaciona que producto realiza el
+                                    movimeinto. viene de la tabla producto</td>
+                            </tr>
+                            <table id='pedido'>
+                                <caption>pedido</caption>
+                                <tr><td colspan='11'></td></tr>
+                                <tr>
+                                    <th>Column name</th>
+                                    <th>DataType</th>
+                                    <th><abbr title='Primary Key'>PK</abbr></th>
+                                    <th><abbr title='Not Null'>NN</abbr></th>
+                                    <th><abbr title='Unique'>UQ</abbr></th>
+                                    <th><abbr title='Binary'>BIN</abbr></th>
+                                    <th><abbr title='Unsigned'>UN</abbr></th>
+                                    <th><abbr title='Zero Fill'>ZF</abbr></th>
+                                    <th><abbr
+                                            title='Auto Increment'>AI</abbr></th>
+                                    <th>Default</th>
+                                    <th>Comment</th>
+                                </tr>
+                                <tr>
+                                    <td>id_pedido</td>
+                                    <td>INT(4)</td>
+                                    <td>&#10004;</td>
+                                    <td>&#10004;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td class='attr'>&nbsp;</td>
+                                    <td></td>
+                                    <td>identificado unico del pedido, ejemplo
+                                        0001</td>
+                                </tr>
+                                <tr>
+                                    <td>fecha</td>
+                                    <td>DATETIME</td>
+                                    <td>&nbsp;</td>
+                                    <td>&#10004;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td class='attr'>&nbsp;</td>
+                                    <td></td>
+                                    <td>Guarda la fecha y hora en la que se
+                                        realizo el pedido</td>
+                                </tr>
+                                <tr>
+                                    <td>estado</td>
+                                    <td>VARCHAR(20)</td>
+                                    <td>&nbsp;</td>
+                                    <td>&#10004;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td class='attr'>&nbsp;</td>
+                                    <td></td>
+                                    <td>describe si esta pendiente o pagado
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>total</td>
+                                    <td>INT(5)</td>
+                                    <td>&nbsp;</td>
+                                    <td>&#10004;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td class='attr'>&nbsp;</td>
+                                    <td></td>
+                                    <td>guarda el precio total de producto</td>
+                                </tr>
+                                <tr>
+                                    <td>tipo_pedido_id_tipo</td>
+                                    <td>VARCHAR(4)</td>
+                                    <td>&#10004;</td>
+                                    <td>&#10004;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td class='attr'>&nbsp;</td>
+                                    <td></td>
+                                    <td>PK_FK realaciona el pedido con el tipo
+                                        de pedido (personalizado o
+                                        estandar)</td>
+                                </tr>
+                                <tr>
+                                    <td>comprobante_id_comprobante</td>
+                                    <td>INT(6)</td>
+                                    <td>&#10004;</td>
+                                    <td>&#10004;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td class='attr'>&nbsp;</td>
+                                    <td></td>
+                                    <td>PK_FK relaciona a pedido con la tabla
+                                        comprobante, que contiene elcomprobante
+                                        de pago del pedido realizado</td>
+                                </tr>
+                                <table id='producto'>
+                                    <caption>producto</caption>
+                                    <tr><td colspan='11'></td></tr>
+                                    <tr>
+                                        <th>Column name</th>
+                                        <th>DataType</th>
+                                        <th><abbr
+                                                title='Primary Key'>PK</abbr></th>
+                                        <th><abbr
+                                                title='Not Null'>NN</abbr></th>
+                                        <th><abbr title='Unique'>UQ</abbr></th>
+                                        <th><abbr title='Binary'>BIN</abbr></th>
+                                        <th><abbr
+                                                title='Unsigned'>UN</abbr></th>
+                                        <th><abbr
+                                                title='Zero Fill'>ZF</abbr></th>
+                                        <th><abbr
+                                                title='Auto Increment'>AI</abbr></th>
+                                        <th>Default</th>
+                                        <th>Comment</th>
+                                    </tr>
+                                    <tr>
+                                        <td>id_producto</td>
+                                        <td>VARCHAR(3)</td>
+                                        <td>&#10004;</td>
+                                        <td>&#10004;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td class='attr'>&nbsp;</td>
+                                        <td></td>
+                                        <td>PK identificador unico del producto
+                                            ej P01</td>
+                                    </tr>
+                                    <tr>
+                                        <td>producto</td>
+                                        <td>VARCHAR(20)</td>
+                                        <td>&nbsp;</td>
+                                        <td>&#10004;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td class='attr'>&nbsp;</td>
+                                        <td></td>
+                                        <td>guarda el nombre del producto</td>
+                                    </tr>
+                                    <tr>
+                                        <td>precio_unitario</td>
+                                        <td>INT(10)</td>
+                                        <td>&nbsp;</td>
+                                        <td>&#10004;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td class='attr'>&nbsp;</td>
+                                        <td></td>
+                                        <td>precio del producto por unidad</td>
+                                    </tr>
+                                    <tr>
+                                        <td>datalle_pedido_id_detalle</td>
+                                        <td>VARCHAR(4)</td>
+                                        <td>&nbsp;</td>
+                                        <td>&#10004;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td class='attr'>&nbsp;</td>
+                                        <td></td>
+                                        <td>FK relaciona a la tabla del producto
+                                            con el/los detalle(s) del pedido.
+                                            para guardar los detalles de cada
+                                            producto</td>
+                                    </tr>
+                                    <table id='tipo_documento'>
+                                        <caption>tipo_documento</caption>
+                                        <tr><td colspan='11'></td></tr>
+                                        <tr>
+                                            <th>Column name</th>
+                                            <th>DataType</th>
+                                            <th><abbr
+                                                    title='Primary Key'>PK</abbr></th>
+                                            <th><abbr
+                                                    title='Not Null'>NN</abbr></th>
+                                            <th><abbr
+                                                    title='Unique'>UQ</abbr></th>
+                                            <th><abbr
+                                                    title='Binary'>BIN</abbr></th>
+                                            <th><abbr
+                                                    title='Unsigned'>UN</abbr></th>
+                                            <th><abbr
+                                                    title='Zero Fill'>ZF</abbr></th>
+                                            <th><abbr
+                                                    title='Auto Increment'>AI</abbr></th>
+                                            <th>Default</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                        <tr>
+                                            <td>t_doc</td>
+                                            <td>VARCHAR(10)</td>
+                                            <td>&#10004;</td>
+                                            <td>&#10004;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td class='attr'>&nbsp;</td>
+                                            <td></td>
+                                            <td>PK código del tipo de documento
+                                                (ej. CC, TI, CE).</td>
+                                        </tr>
+                                        <tr>
+                                            <td>desc_doc</td>
+                                            <td>VARCHAR(20)</td>
+                                            <td>&nbsp;</td>
+                                            <td>&#10004;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td class='attr'>&nbsp;</td>
+                                            <td></td>
+                                            <td>Descripción completa del tipo de
+                                                documento (ej. cédula de
+                                                ciudadanía). </td>
+                                        </tr>
+                                        <table id='tipo_pedido'>
+                                            <caption>tipo_pedido</caption>
+                                            <tr><td colspan='11'></td></tr>
+                                            <tr>
+                                                <th>Column name</th>
+                                                <th>DataType</th>
+                                                <th><abbr
+                                                        title='Primary Key'>PK</abbr></th>
+                                                <th><abbr
+                                                        title='Not Null'>NN</abbr></th>
+                                                <th><abbr
+                                                        title='Unique'>UQ</abbr></th>
+                                                <th><abbr
+                                                        title='Binary'>BIN</abbr></th>
+                                                <th><abbr
+                                                        title='Unsigned'>UN</abbr></th>
+                                                <th><abbr
+                                                        title='Zero Fill'>ZF</abbr></th>
+                                                <th><abbr
+                                                        title='Auto Increment'>AI</abbr></th>
+                                                <th>Default</th>
+                                                <th>Comment</th>
+                                            </tr>
+                                            <tr>
+                                                <td>id_tipo</td>
+                                                <td>VARCHAR(4)</td>
+                                                <td>&#10004;</td>
+                                                <td>&#10004;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td class='attr'>&nbsp;</td>
+                                                <td></td>
+                                                <td>PK valor unico de la tabla
+                                                    pedido que ayuda a
+                                                    identificar que tipo de
+                                                    pedido es</td>
+                                            </tr>
+                                            <tr>
+                                                <td>tipo_pedido</td>
+                                                <td>VARCHAR(10)</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td class='attr'>&nbsp;</td>
+                                                <td>NULL</td>
+                                                <td>describe el tipo de pedido
+                                                    (personalizado o
+                                                    estandar)</td>
+                                            </tr>
+                                            <table id='usuario'>
+                                                <caption>usuario</caption>
+                                                <tr><td colspan='11'></td></tr>
+                                                <tr>
+                                                    <th>Column name</th>
+                                                    <th>DataType</th>
+                                                    <th><abbr
+                                                            title='Primary Key'>PK</abbr></th>
+                                                    <th><abbr
+                                                            title='Not Null'>NN</abbr></th>
+                                                    <th><abbr
+                                                            title='Unique'>UQ</abbr></th>
+                                                    <th><abbr
+                                                            title='Binary'>BIN</abbr></th>
+                                                    <th><abbr
+                                                            title='Unsigned'>UN</abbr></th>
+                                                    <th><abbr
+                                                            title='Zero Fill'>ZF</abbr></th>
+                                                    <th><abbr
+                                                            title='Auto Increment'>AI</abbr></th>
+                                                    <th>Default</th>
+                                                    <th>Comment</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>id_usuario</td>
+                                                    <td>VARCHAR(15)</td>
+                                                    <td>&#10004;</td>
+                                                    <td>&#10004;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td class='attr'>&nbsp;</td>
+                                                    <td></td>
+                                                    <td>PK Identificador único
+                                                        de la persona.
+                                                        Diferencia a cada
+                                                        cliente en el
+                                                        sistema.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>nom_1</td>
+                                                    <td>VARCHAR(50)</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&#10004;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td class='attr'>&nbsp;</td>
+                                                    <td></td>
+                                                    <td>Primer nombre de la
+                                                        persona. Campo
+                                                        obligatorio</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>nom_2</td>
+                                                    <td>VARCHAR(50)</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td class='attr'>&nbsp;</td>
+                                                    <td>NULL</td>
+                                                    <td>Segundo nombre de la
+                                                        persona (opcional).</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ape_1</td>
+                                                    <td>VARCHAR(50)</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&#10004;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td class='attr'>&nbsp;</td>
+                                                    <td></td>
+                                                    <td>Primer apellido de la
+                                                        persona. Campo
+                                                        obligatorio</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ape_2</td>
+                                                    <td>VARCHAR(50)</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td class='attr'>&nbsp;</td>
+                                                    <td>NULL</td>
+                                                    <td>Segundo apelido de la
+                                                        persona (opcional).</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>correo</td>
+                                                    <td>VARCHAR(40)</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&#10004;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td class='attr'>&nbsp;</td>
+                                                    <td></td>
+                                                    <td>guarda la direccion de
+                                                        correo electronico de la
+                                                        persona
+                                                        "ejemplo@gmaill.com",
+                                                        este dato es unico (el
+                                                        usuario solo puede tener
+                                                        un correo)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>telefono</td>
+                                                    <td>BIGINT(10)</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&#10004;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td class='attr'>&nbsp;</td>
+                                                    <td></td>
+                                                    <td>Teléfono de contacto de
+                                                        la persona</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>tipo_documento_t_doc</td>
+                                                    <td>VARCHAR(10)</td>
+                                                    <td>&#10004;</td>
+                                                    <td>&#10004;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td class='attr'>&nbsp;</td>
+                                                    <td></td>
+                                                    <td>PK_FK identifica el tipo
+                                                        de documento de un
+                                                        usuario ej: (CC, CE,
+                                                        TI)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>pedido_id_pedido</td>
+                                                    <td>INT(4)</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&#10004;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td class='attr'>&nbsp;</td>
+                                                    <td></td>
+                                                    <td>FK viene de la tabla
+                                                        pedido, relaciona que
+                                                        usuario realiza un
+                                                        pedido.</td>
+                                                </tr>
+                                            </table>
+                                        </body>
+                                    </html>
