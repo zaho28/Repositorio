@@ -1,0 +1,14 @@
+1. ¿Quién es el encargado del manejo del inventario?
+2. ¿Sabes cuando un producto está por agotarse?
+3. ¿Atenido problemas por falta o exceso de inventario?
+4. ¿Qué dificultad es enfrentar para mantener actualizado el inventario?
+5. ¿Cuánto tiempo tardan en verificar la disponibilidad de un producto?
+6. ¿Qué impacto tiene la falta de control en la organización interna?
+7. ¿Realizan reportes de ventas o inventario?
+8. ¿Cómo se registran actualmente los pedidos?
+9. ¿Qué información considera más importante el momento de registrar un pedido?
+10. ¿Se presentan errores en la toma de los pedidos?
+11. ¿Con qué frecuencia se presentan errores en las notaciones de los pedidos?
+12. ¿Por qué crees que se presentan errores en las notaciones de los pedidos?
+13. ¿Qué beneficios cree que traería un sistema formal para registrar pedidos y registrar el inventario?
+
