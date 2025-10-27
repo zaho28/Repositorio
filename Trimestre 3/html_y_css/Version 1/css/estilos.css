@@ -1,0 +1,12 @@
+.header {
+  display: flex; /* alinear elementos en una fila */
+  justify-content: space-between; /* Coloca los elementos a los extremos (izquierda y derecha) */
+  align-items: center; /* Centra verticalmente los elementos dentro del header */
+  background-color: #e783c9; /* color del Fondo*/
+  padding: 10px 30px; /* Espaciado interno: 10px arriba/abajo, 30px a los lados */
+}
+
+.logo img {
+  height: 60px; /* Altura fija de la imagen del logo */
+  max-width: 100%; /* Asegura que no se desborde del contenedor */
+}

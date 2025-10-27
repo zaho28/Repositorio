@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar contraseña | Gurama Online</title>
+  <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header>
+    <div class="header">
+      <nav>
+        <div class="logo">
+          <a href="/index.html">
+            <img src="../imagenes/Logo_GO.jpeg" alt="Logo de Gurama">
+          </a>
+        </div>
+        <ul>
+          <li><a href="iniciar_sesion.html">Iniciar sesión</a></li>
+          <li><a href="registrarse.html">Registrarse</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Contenedor principal -->
+  <main class="recuperar-container">
+    <form>
+      <h2>Recuperar Contraseña</h2>
+
+      <label for="correo">Teléfono o correo electrónico</label>
+      <input type="text" id="correo" placeholder="Teléfono / Correo" required>
+
+      <button type="button" class="btn-primario">Enviar código de recuperación</button>
+
+      <label for="codigo">Código de recuperación</label>
+      <input type="text" id="codigo" placeholder="— — — — — —" required>
+
+      <button type="button" class="btn-secundario" onclick="location.href='cambiar_contra.html'">Cambiar contraseña</button>
+
+      <div class="volver">
+        <a href="iniciar_sesion.html">Volver al inicio de sesión</a>
+      </div>
+    </form>
+  </main>
+
+</body>
+</html>

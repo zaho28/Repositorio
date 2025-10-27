@@ -1,0 +1,208 @@
+CREATE TABLE clientes (
+  id INT PRIMARY KEY,
+  nombre VARCHAR(50),
+  ciudad VARCHAR(50)
+);
+
+CREATE TABLE pedidos (
+  id INT PRIMARY KEY,
+  cliente_id INT,
+  monto DECIMAL (10,2),
+  fecha DATE,
+  foreign KEY (cliente_id) REFERENCES clientes(id)
+);
+
+CREATE TABLE productos (
+  id INT PRIMARY KEY,
+  nombre VARCHAR(100),
+  precio DECIMAL (10,2)
+);
+
+-- clientes
+INSERT INTO clientes (id, nombre, ciudad) VALUES
+(1, 'Juan Pérez', 'Madrid'),
+(2, 'Ana García', 'Barcelona'),
+(3, 'Luis Martín', 'Valencia'),
+(4, 'Marta López', 'Sevilla'),
+(5, 'Pedro González', 'Bilbao');
+
+-- pedidos
+INSERT INTO pedidos (id, cliente_id, monto, fecha) VALUES
+(101, 1, 150.50, '2024-01-15'),
+(102, 2, 200.00, '2024-01-16'),
+(103, 1, 75.25, '2024-01-17'),
+(104, 3, 300.75, '2024-01-18'),
+(105, 5, 125.00, '2024-01-19'),
+(106, 2, 180.50, '2024-01-20');
+
+    
+-- productos
+INSERT INTO productos (id, nombre, precio) VALUES
+    (1, 'Laptop', 899.99),
+    (2, 'Mouse', 25.50),
+    (3, 'Teclado', 45.75),
+    (4, 'Monitor', 199.99),
+    (5, 'Tablet', 299.99);
+
+-- JOINS
+
+SELECT c.nombre as cliente,
+    p.id as pedido_id,
+    p.monto,
+    p.fecha
+FROM clientes c
+INNER JOIN pedidos p on c.id = p.cliente_id;
+
+
+SELECT c.nombre as cliente,
+    p.monto,
+    p.fecha
+FROM clientes c
+INNER JOIN pedidos p on c.id = p.cliente_id
+WHERE p.monto < 300
+AND c.ciudad != 'Madrid';
+
+SELECT c.nombre as cliente,
+    p.monto,
+    p.fecha
+FROM clientes c
+INNER JOIN pedidos p on c.id = p.cliente_id
+WHERE p.fecha > '2024-01-17';
+
+SELECT
+    c.nombre,
+    c.ciudad,
+    COUNT(p.id) AS total_pedidos,
+    SUM(p.monto) AS gasto_total,
+    AVG(p.monto) AS promedio_por_pedido, -- saca el promedio de los pedidos del cliente
+    MAX(p.monto) AS pedido_maximo, -- el pedido mas caro
+    MIN(p.monto) AS pedido_minimo
+FROM clientes c
+LEFT JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.id, c.nombre, c.ciudad
+ORDER BY gasto_total DESC;
+
+
+-- Sacar  4 cosultas diferentes analizar y dar un ejemplo con cada 5 ejemplos de los 2 tablas inner join y agregacion
+
+SELECT -- 1 ciudad con mas ventas
+    c.ciudad,    
+MAX(p.monto) as Mas_ventas
+FROM clientes c
+INNER JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.monto > 0
+GROUP BY c.ciudad
+ORDER BY Mas_ventas DESC;
+
+SELECT -- 2 clientes que realizaron mas de 1 pedido
+    c.nombre,
+    c.ciudad,
+COUNT(p.id) AS pedidos_realizados
+FROM clientes c
+INNER JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.nombre, c.ciudad
+HAVING COUNT(p.id) > 1
+ORDER BY pedidos_realizados DESC;
+
+SELECT -- 3 fecha primer y ultimo pedido
+    c.nombre,
+    c.ciudad,
+    MIN(p.fecha) AS primer_pedido, 
+    MAX(p.fecha) AS ultimo_pedido 
+FROM clientes c
+INNER JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.nombre, c.ciudad;
+
+SELECT -- 4 Clientes que no han realizado pedidos
+    c.id,
+    c.nombre,
+COUNT(p.id) as pedidos
+FROM clientes c
+LEFT JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.id, c.nombre
+HAVING COUNT(p.id) = 0;
+
+SELECT -- 5 promedio pedidos realizados por fecha
+    c.nombre,
+    c.ciudad,
+    p.fecha,
+COUNT(p.id) AS cantidad_pedidos
+FROM clientes c
+INNER JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.nombre, c.ciudad, p.fecha
+ORDER BY p.fecha;
+
+
+-- ========================================
+
+-- 1. Clientes con más de 1 pedido
+
+SELECT 
+    c.nombre,
+    c.ciudad,
+COUNT(p.id) AS pedidos_realizados
+FROM clientes c
+INNER JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.nombre, c.ciudad
+HAVING COUNT(p.id) > 1
+ORDER BY pedidos_realizados DESC;
+
+-- 2. Clientes que han gastado más de 200€ 
+
+SELECT 
+    c.id,
+    c.nombre,
+COUNT(p.id) AS total_pedidos,
+SUM(p.monto) AS total_gastado
+FROM clientes c
+LEFT JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.id, c.nombre
+HAVING SUM(p.id) > 200
+ORDER BY total_pedidos DESC;
+
+
+-- 3. Total de pedidos y monto por ciudad
+
+SELECT 
+    c.ciudad,
+SUM(p.monto) AS Total_ventas
+FROM clientes c
+LEFT JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.ciudad
+ORDER BY Total_ventas DESC;
+
+
+-- 4. Clientes ordenados por monto total gastado  
+
+SELECT 
+    c.id,
+    c.nombre,
+SUM(p.monto) AS Total_gastado
+FROM clientes c
+LEFT JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.id, c.nombre
+ORDER BY Total_gastado DESC;
+
+-- 5. Monto total gastado por cada cliente
+
+SELECT 
+    c.id,
+    c.nombre,
+SUM(p.monto) AS Total_gastado
+FROM clientes c
+LEFT JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.id, c.nombre
+ORDER BY c.id ASC;
+
+-- 6. Pedido más caro y más económico 
+
+SELECT
+    c.id,
+    c.nombre,
+    c.ciudad,
+    MIN(p.monto) AS pedido_menos, 
+    MAX(p.monto) AS pedido_mas
+FROM clientes c
+INNER JOIN pedidos p ON c.id = p.cliente_id
+GROUP BY c.id, c.nombre, c.ciudad
+ORDER BY pedido_menos DESC;

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - GuramaOnline</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+
+    <!-- ENCABEZADO -->
+<header>
+    <div class="header">
+    <nav>
+        <!-- LOGO: al hacer clic, lleva al inicio -->
+        <div class="logo">
+        <a href="/index.html">
+            <img src="../imagenes/Logo_GO.jpeg" alt="Logo de Gurama">
+        </a>
+        </div>
+            <ul>
+            <li><a href="/index.html">volver</a></li>
+            <li><a href="iniciar_sesion.html">Iniciar sesión</a></li>
+        </ul>
+    </nav>
+    </div>
+    </header>
+
+<!-- FORMULARIO -->
+<main class="registro-container">
+
+    <form class="form-registro">
+        <div class="subtitulo">
+    <h2>Registrarse</h2>
+    </div>
+        <input type="text" placeholder="Ingrese su nombre completo" required>
+        <input type="email" placeholder="Ingrese su correo electrónico" required>
+        <input type="tel" placeholder="Ingrese su número telefónico" required>
+
+        <select required>
+        <option value="">Seleccione su tipo de documento</option>
+        <option value="CC">Cédula de ciudadanía</option>
+        <option value="CE">Cédula de extranjería</option>
+        <option value="TI">Tarjeta de identidad</option>
+    </select>
+
+    <input type="text" placeholder="Número de documento *Solo números sin espacio" required>
+    <input type="password" placeholder="Ingrese su contraseña" required>
+    <input type="password" placeholder="Confirmar contraseña" required>
+
+    <button type="boton" onclick="location.href='iniciar_sesion.html'">Guardar</button>
+    </form>
+</main>
+
+</body>
+</html>

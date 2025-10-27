@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuramaOnline</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <!-- Vincula el script JS que controla la ventana emergente -->
+    <script src="js/ventana_emerg.js" defer></script>
+</head>
+
+<body>
+
+    <header>
+    <div class="header">
+    <nav>
+        <!-- LOGO: al hacer clic, lleva al inicio -->
+        <div class="logo">
+        <a href="index.html">
+            <img src="imagenes/Logo_GO.jpeg" alt="Logo de Gurama">
+        </a>
+        </div>
+            <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="vistas/iniciar_sesion.html">Iniciar sesión</a></li>
+            <li><a href="vistas/registrarse.html">Registrarse</a></li>
+        </ul>
+    </nav>
+    </div>
+    </header>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main>
+    <div class="titulo_principal">
+        <h1>Gurama</h1>
+        <h2>Confecciones y pedidos</h2>
+    </div>
+
+    <div class="subtitulo">
+        <h2>¡Crea momentos especiales con nuestros amigurumis y sábanas personalizadas!</h2>
+    </div>
+
+    <!-- CATÁLOGO RESUMIDO EN EL INICIO -->
+    <section class="catalogo_inicio">
+        <h2>Cátalogo</h2>
+    <div class="productos">
+
+        <div class="producto"> <!-- luego debo agregar css con un cuadrado para cada producto -->
+            <img src="imagenes/producto1.jpg" alt="Muñeco amigurumi">
+            <p>Vigentes de crochet de 20 CM</p>
+        </div>
+
+        <div class="producto">
+            <img src="imagenes/producto2.png" alt="Ramo de tulipanes">
+            <p>Ramo de tulipanes tejidos</p>
+        </div>
+
+        <div class="producto">
+            <img src="imagenes/producto3.jpg" alt="Jabón artesanal">
+            <p>Jabón decorativo en crochet</p>
+        </div>
+    </div>
+    </section>
+
+    <!-- REDES SOCIALES -->
+    <footer>
+        <p>Síguenos en nuestras redes sociales</p>
+        <a href="https://www.instagram.com/_guramaa_/?igsh=d3VqcXE4cGdvdTYw&utm_source=qr" target="_blank">Instagram</a>
+    </footer>
+</main>
+
+<!-- VENTANA EMERGENTE DE OFERTAS -->
+<div id="ventana" class="ventana">
+    <div class="ventana-contenido">
+    <!-- Botón para cerrar -->
+<span class="cerrar" id="cerrar-ventana">&times;</span>
+
+    <h2>¡Descubre nuestras ofertas en amigurumis!</h2>
+    <p> Dale un toque tierno y único a tu mundo con nuestros amigurumis hechos a mano.</p>
+    <p> Hasta 30% de descuento en modelos seleccionados.</p>
+    <p> Hechos con amor, perfectos para regalar o coleccionar.</p>
+
+    <img src="imagenes/producto1.jpg" alt="Amigurumi en promoción">
+
+    <!-- Botón que redirige al catálogo -->
+    <a href="vistas/catalogo.html" class="boton-ver">Ver ofertas</a>
+    </div>
+</div>
+
+</body>
+</html>
