@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil de Usuario - GuramaOnline</title>
+<link rel="stylesheet" href="../css/cliente.css">
+</head>
+<body>
+  <header class="header-cliente">
+    <div class="header-container_c">
+      <div class="logo">
+        <a href="cliente.html">
+        <img src="../imagenes/Logo_GO2.png" alt="Logo Gurama Online"></a>
+      </div>
+
+      <nav class="menu">
+        <ul>
+          <li><a href="cliente.html" class="activo">Inicio</a></li>
+          <li><a href="catalogo_2.html">Catálogo</a></li>
+          <li><a href="pedido.html">Pedido personalizado</a></li>
+          <li><a href="../index.html">Cerrar sesión</a></li>
+        </ul>
+      </nav>
+
+      <div class="iconos">
+        <a href="carrito.html"><img src="../imagenes/icono_carrito.png" alt="Carrito"></a>
+        <a href="perfil.html"><img src="../imagenes/icono_usuario.png" alt="Perfil"></a>
+      </div>
+    </div>
+  </header>
+
+<main class="perfil-container">
+        <button class="btn-volver" onclick="history.back()">Volver</button>
+
+    <div class="profile-card">
+        <div class="info-section">
+            <div class="data-group">
+                <p class="label">Nombre de usuario</p>
+                <strong class="value">Maria Lopez</strong> 
+            </div>
+
+            <div class="data-group">
+                <p class="label">Correo electronico</p>
+                <strong class="value email">MariLz45@gmail.com</strong> 
+            </div>
+
+            <div class="data-group">
+                <p class="label">Numero telefonico</p>
+                <strong class="value">3287865455</strong> 
+            </div>
+
+            <div class="data-group">
+                <p class="label">Identificación</p>
+                <strong class="value">CC 1403655432</strong>
+            </div>
+        </div>
+
+        <div class="avatar-section">
+            <div class="avatar-circle">
+                            </div>
+            <p class="role">Rol Usuario</p>
+        </div>
+
+                <div class="action-buttons">
+            <a href="editar_datos.html" class="btn-profile primary">Cambiar datos</a>
+            <a href="cambiar_c.html" class="btn-profile primary">Cambiar contraseña</a>
+        </div>
+
+                <a href="../index.html" class="btn-profile secondary">Cerrar sesión</a>
+    </div>
+</main>
+<script src="../js/tocken.js" defer></script>
+</body>
+</html>

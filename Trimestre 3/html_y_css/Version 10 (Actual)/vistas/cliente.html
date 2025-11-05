@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio - Cliente | GuramaOnline</title>
+  <link rel="stylesheet" href="../css/cliente.css">
+  <link rel="icon" href="../imagenes/pestaña.png" type="image/x-icon">
+  <script src="../js/tocken.js" defer></script>
+  <script src="../js/ventana_emerg.js" defer></script>
+</head>
+
+<body>
+  <header class="header-cliente">
+    <div class="header-container_c">
+      <div class="logo">
+        <a href="cliente.html">
+        <img src="../imagenes/Logo_GO2.png" alt="Logo Gurama Online"></a>
+      </div>
+
+      <nav class="menu">
+        <ul>
+          <li><a href="cliente.html" class="activo">Inicio</a></li>
+          <li><a href="catalogo_2.html">Catálogo</a></li>
+          <li><a href="pedido.html">Pedido personalizado</a></li>
+          <li><a href="../index.html">Cerrar sesión</a></li>
+        </ul>
+      </nav>
+
+      <div class="iconos">
+        <a href="carrito.html"><img src="../imagenes/icono_carrito.png" alt="Carrito"></a>
+        <a href="perfil.html"><img src="../imagenes/icono_usuario.png" alt="Perfil"></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="buscador">
+      <input type="text" placeholder="Buscar productos...">
+      <button>🔎</button>
+    </section>
+
+    <section class="hero">
+      <div class="hero-texto">
+        <h1>Gurama</h1>
+        <h3>Confecciones y pedidos</h3>
+        <p>
+          ¡Crea momentos especiales con nuestros<br> 
+          <span>amigurumis y sábanas personalizadas!</span>
+        </p>
+      </div>
+      <div class="hero-imagen">
+        <img src="../imagenes/2.png" alt="Amigurumis personalizados">
+      </div>
+    </section>
+
+    <section class="promocion">
+      <p>Sorprende a tus seres queridos con regalos únicos y hechos con amor</p>
+      <a href="catalogo_2.html" class="boton-catalogo">Explora nuestro catálogo</a>
+    </section>
+  
+
+  <footer>
+    <p>Síguenos en nuestras redes sociales</p>
+    <div class="redes">
+      <a href="https://www.instagram.com/_guramaa_" target="_blank">Instagram</a> |
+      <a href="https://www.tiktok.com/@_guramaa_" target="_blank">TikTok</a>
+    </div>
+  </footer>
+  
+  <script>
+    // Cerrar sesión
+    document.getElementById('cerrar-sesion').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user_role');
+      alert('Sesión cerrada. ¡Vuelve pronto!');
+      window.location.href = '../index.html';
+    });
+  </script>
+  
+</main>
+
+  <!-- Ventana emergente para cliente -->
+  <div id="ventanaCliente" class="ventana">
+    <div class="ventana-contenido">
+      <span class="cerrar" id="cerrarCliente">&times;</span>
+      <h2>¡Bienvenido de nuevo a Gurama!</h2>
+      <p>Descubre las nuevas <strong>ofertas exclusivas</strong> solo para ti 💕</p>
+      <p>Te esperan descuentos en amigurumis, sábanas y más.</p>
+      <img src="../imagenes/1.png" alt="Amigurumi en promoción">
+      <a href="ofertas_cliente.html" class="boton-ver">Ver ofertas</a>
+    </div>
+  </div>
+
+</body>
+</html>

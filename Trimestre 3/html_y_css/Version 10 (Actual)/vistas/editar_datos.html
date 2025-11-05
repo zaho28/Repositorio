@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cambiar Datos - GuramaOnline</title>
+<link rel="stylesheet" href="../css/cliente.css">
+</head>
+<body>
+
+  <header class="header-cliente">
+    <div class="header-container_c">
+      <div class="logo">
+        <a href="cliente.html">
+        <img src="../imagenes/Logo_GO2.png" alt="Logo Gurama Online"></a>
+      </div>
+
+      <nav class="menu">
+        <ul>
+          <li><a href="cliente.html" class="activo">Inicio</a></li>
+          <li><a href="catalogo_2.html">Catálogo</a></li>
+          <li><a href="pedido.html">Pedido personalizado</a></li>
+          <li><a href="../index.html">Cerrar sesión</a></li>
+        </ul>
+      </nav>
+
+      <div class="iconos">
+        <a href="carrito.html"><img src="../imagenes/icono_carrito.png" alt="Carrito"></a>
+        <a href="perfil.html"><img src="../imagenes/icono_usuario.png" alt="Perfil"></a>
+      </div>
+    </div>
+  </header>
+<main class="perfil-container">
+    <button class="btn-volver" onclick="history.back()">Volver</button>
+
+    <div class="form-card">
+        <h2 class="form-title">Cambiar datos</h2>
+        
+        <form class="data-form" action="#" method="POST">
+            
+            <div class="form-group">
+                <input type="text" id="nombre_usuario" name="nombre_usuario" value="Maria Lopez" placeholder=" " required>
+                <label for="nombre_usuario">Nombre de usuario</label>
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="correo" name="correo" value="MariLz45@gmail.com" placeholder=" " required>
+                <label for="correo">Correo electrónico</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="tel" id="telefono" name="telefono" value="+57 328 7865455" placeholder=" " required>
+                <label for="telefono">Número telefónico</label>
+            </div>
+
+            <div class="document-group">
+                <div class="document-type">
+                    <input type="text" id="tipo_doc" name="tipo_doc" value="Cedula de ciudadania (CC)" placeholder=" " readonly>
+                    <label for="tipo_doc">Tipo de documento</label>
+                </div>
+                <div class="document-number">
+                    <input type="text" id="numero_doc" name="numero_doc" value="1014937269" placeholder=" " required>
+                    <label for="numero_doc">Número de documento</label>
+                </div>
+            </div>
+
+            <a href="perfil.html" class="btn-guardar">
+    Guardar
+</a>
+        </form>
+    </div>
+</main>
+<script src="../js/tocken.js" defer></script>
+</body>
+</html>

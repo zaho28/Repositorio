@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "nombre": "Andrea Gurama",
+        "correo": "usuario",
+        "telefono": 3287865455,
+        "tipo_doc": "CC",
+        "num_doc": 1403655432,
+        "contrasena_hash": "123", 
+        "rol": "admin"
+    },
+
+    {
+        "id": 2,
+        "nombre": "Maria Lopez",
+        "correo": "MariLz45@gmail.com",
+        "telefono": 3287865455,
+        "tipo_doc": "CC",
+        "num_doc": 1403655432,
+        "contrasena_hash": "123",
+        "rol": "cliente"
+    }
+]

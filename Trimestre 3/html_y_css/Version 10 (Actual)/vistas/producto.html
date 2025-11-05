@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalles del producto</title>
+  <link rel="stylesheet" href="../css/estilos.css">
+  
+</head>
+<body>
+  <header>
+    <div class="header">
+    <nav>
+        <div class="logo">
+        <a href="/index.html">
+            <img src="../imagenes/Logo_GO.jpeg" alt="Logo de Gurama">
+        </a>
+    <nav>
+        </div>
+            <ul>
+            <li><a href="../index.html">volver</a></li>
+            <li><a href="registrarse.html">Registrarse</a></li>
+            <li><a href="iniciar_sesion.html">Iniciar sesion</a></li>
+        </ul>
+    </nav>
+    </div>
+</header>
+  <div class="contenedor-producto">
+    <div class="imagen-producto">
+      <img id="producto-imagen" src="" alt="Producto">
+    </div>
+
+    <div class="info-producto">
+      <h2 id="producto-nombre"></h2>
+      <p id="producto-descripcion"></p>
+      <p class="precio" id="producto-precio"></p>
+
+      <!-- 🔹 Botón para agregar al carrito -->
+      <a id="btnAgregar" href="../vistas/iniciar_sesion.html" class="btn-carrito">Agregar al carrito 🛒</a>
+    </div>
+  </div>
+
+  <script src="../js/productos.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"));
+    const producto = productos.find(p => p.id === id);
+
+    if (producto) {
+      document.getElementById("producto-imagen").src = producto.imagen;
+      document.getElementById("producto-nombre").textContent = producto.nombre;
+      document.getElementById("producto-descripcion").textContent = producto.descripcion;
+      document.getElementById("producto-precio").textContent = producto.precio;
+    }
+
+    //  Redirección si intenta agregar al carrito sin sesión
+    document.getElementById("btnAgregar").addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = "../vistas/iniciar_sesion.html"; // Cambia la ruta si tu iniciar_sesion está en otra carpeta
+    });
+  </script>
+
+  <footer>
+        <p>Síguenos en nuestras redes sociales</p>
+        <a href="https://www.instagram.com/_guramaa_/?igsh=d3VqcXE4cGdvdTYw&utm_source=qr" target="_blank">Instagram</a>
+        <a href="https://www.tiktok.com/@_guramaa_?fbclid=PAZXh0bgNhZW0CMTEAAacqQCLxN9-WneTF4qrzVM9UUO2VW1YXo_j-W5NnQo0zYA2dIdXPBYqc6z-11g_aem_tINF11cpYGJOHCIz3Zp7Ew" target="_blank">TikTok</a>
+        <p>© Gurama 2025. Un proyecto de RACE-Coders. Todos los derechos reservados. Prohibida la reproducción no autorizada de este contenido.</p>
+    </footer>
+</body>
+</html>
