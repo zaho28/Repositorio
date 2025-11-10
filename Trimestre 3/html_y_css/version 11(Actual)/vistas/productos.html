@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos - GuramaOnline</title>
+  <link rel="stylesheet" href="../css/productos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+  <!-- Barra lateral -->
+  <aside class="sidebar">
+    <div class="logo">
+      <a href="panel_admin.html">
+        <img src="../imagenes/Logo_GO.jpeg" alt="GuramaOnline">
+      </a>
+    </div>
+
+    <nav class="menu">
+      <a href="panel_admin.html" class="menu-item">
+        <i class="fa-solid fa-gauge"></i>
+        <span>Panel de control</span>
+      </a>
+
+      <a href="productos.html" class="menu-item activo">
+        <i class="fa-solid fa-box"></i>
+        <span>Productos</span>
+      </a>
+
+      <a href="#">
+        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+        <span>Movimientos</span>
+      </a>
+
+      <a href="#">
+        <i class="fa-solid fa-user"></i>
+        <span>Usuario</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="contenido">
+    <header class="header-panel">
+      <h1>Productos</h1>
+      <div class="usuario">
+        <a href="perfil_admi.html">
+          <span>Admin.gurama</span>
+          <img src="../imagenes/logo_perfil.webp" alt="perfil">
+        </a>
+      </div>
+    </header>
+
+    <section class="cuadro-blanco">
+      <div class="acciones">
+        <button class="btn-categoria">Confecciones</button>
+        <input type="text" placeholder="Filtrar por categoría" class="buscar">
+        <button class="btn-registrar">+ Registrar</button>
+      </div>
+
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tr>
+            <td>01</td>
+            <td>Sábanas cama doble</td>
+            <td>Fibras</td>
+            <td>Diseño floral 90% algodón, 144 hilos</td>
+            <td>$75.000</td>
+            <td>120</td>
+            <td>
+              <button class="editar">Editar</button>
+              <button class="eliminar">Eliminar</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>02</td>
+            <td>Sábanas cama sencilla</td>
+            <td>Líneas</td>
+            <td>Diseño liso 90% algodón, 142 hilos</td>
+            <td>$59.900</td>
+            <td>90</td>
+            <td>
+              <button class="editar">Editar</button>
+              <button class="eliminar">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

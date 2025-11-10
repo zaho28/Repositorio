@@ -1,0 +1,225 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    background-color: #b4788b;
+}
+
+.banner {
+    position: relative;
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.banner .overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: #e6e6e6;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 40px;
+}
+
+.banner-content img {
+    height: 70px;
+    width: auto;
+    border-radius: 10px;
+}
+
+.botones {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 18px 34px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background-color: #e6e6e6;
+    color: black;
+    border: 2px solid #e6e6e6;
+}
+
+.btn:hover {
+    background-color: #dcdcdc;
+    color: #222;
+}
+
+.btn-primario,
+.btn-secundario,
+.btn-terciario,
+.btn-cuaternario {
+    background-color: #e6e6e6;
+    color: #797676;
+}
+
+.contenedor-imagen {
+    display: flex;
+    justify-content: center;
+    align-items: self-start;
+    gap: 60px;
+    padding: 60px 80px;
+    background-color: #b4788b;
+}
+
+.tarjeta-imagen {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    text-align: center;
+    width: 460px;
+}
+
+.tarjeta-imagen h2 {
+    color: #8a2d48;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.tarjeta-imagen img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+}
+
+.nota-precio {
+    color: #000;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.panel-derecho {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 460px;
+}
+
+.panel-opciones {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px 25px;
+    color: #000;
+}
+
+.panel-opciones h3 {
+    color: #000;
+    font-weight: 700;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #b4788b;
+    padding-bottom: 6px;
+}
+
+.opciones-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 15px;
+}
+
+.opciones-grid label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.opciones-grid label:hover {
+    background-color: #ececec;
+}
+
+.btn-ver {
+    width: 100%;
+    background-color: #8a2d48;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-ver:hover {
+    background-color: #a3415f;
+}
+
+.vista-precio {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: white;
+}
+
+.vista-precio label {
+    font-size: 0.9rem;
+}
+
+.vista-precio input {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 1rem;
+    text-align: right;
+    background-color: #dcdcdc;
+    color: #333;
+}
+
+.pie-pagina {
+    background-color: #e6e6e6;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 40px;
+    gap: 15px;
+    color: #000;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-top: 4px solid #b4788b;
+}
+
+.pie-pagina p {
+    margin: 0;
+}
+
+.iconos-redes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.iconos-redes img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.iconos-redes img:hover {
+    transform: scale(1.1);
+}

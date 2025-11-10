@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="personalizar_sabana.css">
+    <title>GuramaOnline</title>
+</head>
+
+<body>
+    <header class="header-cliente">
+        <div class="header-container_c">
+            <div class="logo">
+                <a href="cliente.html">
+                    <img src="../imagenes/Logo_GO2.png" alt="Logo Gurama Online">
+                </a>
+            </div>
+
+            <nav class="menu">
+                <ul>
+                    <li><a href="cliente.html">Inicio</a></li>
+                    <li><a href="catalogo_2.html">Catálogo</a></li>
+                    <li><a href="pedidos_personalizados.html" class="activo">Pedido personalizado</a></li>
+                    <li><a href="../index.html">Cerrar sesión</a></li>
+                </ul>
+            </nav>
+
+            <div class="iconos">
+                <a href="carrito.html"><img src="../imagenes/icono_carrito.png" alt="Carrito"></a>
+                <a href="perfil.html"><img src="../imagenes/icono_usuario.png" alt="Perfil"></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECCIÓN DE PERSONALIZACIÓN -->
+    <main>
+        <section class="contenedor-imagen">
+            <div class="tarjeta-imagen">
+                <h2>personalizar sabana</h2>
+                <img src="imagenes/sabana.webp" alt="sabana personalizada">
+                <p class="nota-precio">El precio puede variar segun la disponibilidad de materiales.</p>
+            </div>
+
+            <div class="panel derecho">
+                <div class="panel-opciones">
+                    <h3>Tamaño de sábana</h3>
+                    <div class="opciones-grid">
+                        <label><input type="radio" name="tamano" value="cuna"> Cuna (100 x 145 cm)</label>
+                        <label><input type="radio" name="tamano" value="individual"> Individual (180 x 275 cm)</label>
+                        <label><input type="radio" name="tamano" value="doble"> Doble (230 x 275 cm)</label>
+                        <label><input type="radio" name="tamano" value="rey"> Rey (275 x 275 cm)</label>
+                        <label><input type="radio" name="tamano" value="rey_europeo"> Rey europeo (300 x 275 cm)</label>
+                        <label><input type="radio" name="tamano" value="emperador"> Emperador (320 x 290 cm)</label>
+                    </div>
+                </div>
+
+                <div class="panel-opciones">
+                    <h3>¿Quiere añadir la funda de almohada?</h3>
+                    <div class="opciones-grid">
+                        <label><input type="radio" name="almohada" value="no"> No, sin almohadas</label>
+                        <label><input type="radio" name="almohada" value="una"> Una funda de almohada</label>
+                        <label><input type="radio" name="almohada" value="dos"> Dos fundas de almohada</label>
+                    </div>
+                </div>
+
+                <div class="panel-opciones">
+                    <h3>Diseño / Estampados</h3>
+                    <button class="btn-ver">Ver diseños</button>
+                </div>
+
+                <div class="vista-precio">
+                    <label>Vista previa del precio</label>
+                    <input type="text" placeholder="$0.00" readonly>
+                </div>
+            </div>
+        </section>
+    </main> 
+
+    <footer class="pie-pagina">
+        <p>Siguenos en nuestras redes sociales</p>
+        <div class="iconos-redes">
+            <img src="imagenes/logo_instagram.jpg" alt="instagram">
+            <img src="imagenes/logo_tiktok.jpg" alt="Tiktok">
+        </div>
+    </footer>    
+</body> 
+</html>

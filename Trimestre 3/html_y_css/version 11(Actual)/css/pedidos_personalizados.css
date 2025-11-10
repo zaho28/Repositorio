@@ -1,0 +1,217 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(136, 49, 103);
+    background-color: #fff5fbd2;
+}
+/* ======= HEADER ======= */
+
+.header-cliente {
+    width: 100%;
+    background-color: #E6E6E6; /* Fondo gris claro */
+    border-bottom: 3px solid #f5b4da; /* Borde sutil del color rosa */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container_c {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 15px 40px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 80px;
+    width: auto;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+/* ======= NAVEGACIÓN ======= */
+
+.menu ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #5a3d54;
+    font-weight: 500;
+    transition: color 0.3s ease, border-bottom 0.3s;
+    padding-bottom: 4px;
+}
+
+.menu a:hover {
+    color: #b25b90;
+}
+
+.menu a.activo {
+    color: #7a235f;
+    font-weight: bold;
+    border-bottom: 2px solid #b25b90;
+}
+
+/* ======= ICONOS ======= */
+
+.iconos {
+    display: flex;
+    align-items: center;
+}
+
+.iconos img {
+    width: 28px;
+    margin-left: 15px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.iconos img:hover {
+    transform: scale(1.15);
+}
+
+.botones {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 18px 34px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background-color: #e6e6e6;
+    color: black;
+    border: 2px solid #e6e6e6;
+}
+
+.btn:hover {
+    background-color: #dcdcdc;
+    color: #222;
+}
+
+.btn-primario,
+.btn-secundario,
+.btn-terciario,
+.btn-cuaternario {
+    background-color: #e6e6e6;
+    color: #797676;
+}
+
+.pie-pagina {
+    background-color: #e6e6e6;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 40px;
+    gap: 15px;
+    color: #000;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-top: 4px solid #d4a9c2;
+}
+
+.pie-pagina p {
+    margin: 0;
+}
+
+.iconos-redes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.iconos-redes img {
+    width: 20px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.iconos-redes img:hover {
+    transform: scale(1.1);
+}
+
+.pedidos-personalizados {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.pedidos-personalizados h2 {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.pedidos-personalizados p {
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+.productos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.producto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #dfa1b6;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.producto:hover {
+    transform: scale(1.03);
+}
+
+.producto img {
+    width: 360px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.boton-producto {
+    background-color: #fff;
+    color: #8b3e59;
+    border: none;
+    font-weight: bold;
+    padding: 10px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.boton-producto:hover {
+    background-color: #d4a9c2;
+    color: #fff;
+    text-transform: none;
+}

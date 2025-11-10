@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - GuramaOnline</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+
+<body>
+    <header>
+        <div class="header">
+            <nav>
+                <div class="logo">
+                    <a href="/index.html">
+                        <img src="../imagenes/Logo_GO.jpeg" alt="Logo de Gurama">
+                    </a>
+                </div>
+                <ul>
+                    <li><a href="../index.html">volver</a></li>
+                    <li><a href="registrarse.html">Registrarse</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- FORMULARIO DE ACCESO -->
+        <form>
+            <div class="subtitulo">
+                <h2>Iniciar sesión</h2>
+            </div>
+        
+            <label for="correo">Correo electrónico</label>
+            <input type="email" id="correo" placeholder="Ingresa tu correo">
+
+            <label for="contraseña">Contraseña</label>
+            <input type="password" id="contraseña" placeholder="Ingresa tu contraseña">
+
+            <button type="button" onclick="location.href='cliente.html'">Ingresar</button>
+
+            <div class="preguntas">
+                <p><a href="registrarse.html">¿No tienes cuenta? </a></p>
+                <p> <a href="olvidar_contra.html">¿Olvidó su contraseña?</a></p>
+            </div>
+        </form>
+    </main>
+    
+    <script src="../js/tocken.js" defer></script>
+</body>
+</html> 

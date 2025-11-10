@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Producto - Gurama Online</title>
+    <link rel="stylesheet" href="productos_form.css">
+</head>
+<body>
+    <div class="contenedor">
+        <aside class="menu">
+            <div class="logo">Gurama Online</div>
+            <nav>
+                <ul>
+                    <li><a href="#">Panel de control</a></li>
+                    <li><a href="#" class="activo">Productos</a></li>
+                    <li><a href="#">Confecciones</a></li>
+                    <li><a href="#">Pedidos realizados</a></li>
+                    <li><a href="#">Movimientos</a></li>
+                    <li><a href="#">Usuarios</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+
+        <main class="contenido">
+            <header class="encabezado">
+                <h1>Registrar nuevo producto</h1>
+                <span class="admin">Admin.gurama</span>
+            </header>
+
+            <section class="formulario">
+                <form action="#" method="post">
+                    <div class="campo">
+                        <label for="id">ID</label>
+                        <input type="number" id="id" name="id" placeholder="ingresa el id" required>
+                    </div>
+                    <div class="campo">
+                        <label for="producto">Producto</label>
+                        <input type="text" id="producto" name="producto" placeholder="Nombre del producto" required>
+                    </div>
+                    <div class="campo">
+                        <label for="categoria">Categor�a</label>
+                        <input type="text" id="categoria" name="categoria" placeholder="Escribe aqui la categoria" required>
+                    </div>
+                    <div class="campo">
+                        <label for="descripcion">Descripci�n</label>
+                        <textarea id="descripcion" name="descripcion" placeholder="Detalles del producto..." rows="3" required></textarea>
+                    </div>
+                    <div class="campo">
+                        <label for="precio">Precio</label>
+                        <input type="text" id="precio" name="precio" placeholder="$00.000" required>
+                    </div>
+                    <div class="campo">
+                        <label for="stock">Stock</label>
+                        <input type="number" id="stock" name="stock" placeholder="Cantidad disponible" required>
+                    </div>
+
+                    <div class="botones">
+                        <button type="submit" class="guardar">Guardar</button>
+                        <button type="reset" class="cancelar">Cancelar</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f6f3f5;
+}
+
+/* CONTENEDOR GENERAL */
+.contenedor {
+    display: flex;
+}
+
+/* PANEL LATERAL */
+.menu {
+    width: 220px;
+    background-color: #e4c7d3;
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+.menu .logo {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #3a3a3a;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu ul li {
+    margin: 15px 0;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #333;
+    padding: 8px 20px;
+    display: block;
+}
+
+.menu a.activo,
+.menu a:hover {
+    background-color: #c45a77;
+    color: white;
+    border-radius: 8px;
+}
+
+/* CONTENIDO PRINCIPAL */
+.contenido {
+    flex: 1;
+    background-color: #fff;
+    padding: 0 40px 40px 40px;
+}
+
+.encabezado {
+    background-color: #a96b7d;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 0 0 12px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.formulario {
+    margin-top: 40px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 30px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* CAMPOS DEL FORMULARIO */
+.campo {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+/* BOTONES */
+.botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+button {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.guardar {
+    background-color: #c45a77;
+    color: white;
+}
+
+.guardar:hover {
+    background-color: #b04e6a;
+}
+
+.cancelar {
+    background-color: #ddd;
+}
+
+.cancelar:hover {
+    background-color: #ccc;
+}

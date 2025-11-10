@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuramaOnline</title>
+    <link rel="stylesheet" href="personalizar_cubrelecho.css">
+</head>
+
+<body>
+    <header class="banner">
+        <div class="overlay"></div>
+        <div class="banner-content">
+            <div class="logo">
+                <img src="imagenes/logo_principal.jpg" alt="logo GUramaOnline">
+            </div>
+    
+            <nav class="botones">
+                <a href="#" class="btn btn-primario">inicio</a>
+                <a href="#" class="btn btn-secundario">Catalogo</a>
+                <a href="#" class="btn btn-terciario">Pedido personalizado</a>
+                <a href="#" class="btn btn-cuaternario">Cerrar Sesión</a>
+            </nav>
+
+            <div class="iconos">
+                <img src="imagenes/logo_perfil.webp" alt="perfil" class="icono">
+                <img src="imagenes/logo_carrito.png" alt="carrito de compras" class="icono">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="contenedor-imagen">
+            <div class="tarjeta-imagen">
+                <h2>personalizar cubrelecho</h2>
+                <img src="imagenes/cubrelecho.webp" alt="cubrelecho personalizado">
+                <p class="nota-precio">El precio puede variar segun la disponibilidad de materiales.</p>
+            </div>
+            
+            <div class="panel-opciones">
+            <!-- Tamaño -->
+                <div class="campo">
+                    <h3>Tamaño cama</h3>
+                    <select>
+                        <option value="">Seleccionar</option>
+                        <option value="sencilla">Sencilla</option>
+                        <option value="semidoble">Semidoble</option>
+                        <option value="doble">Doble</option>
+                        <option value="queen">Queen</option>
+                        <option value="king">King</option>
+                    </select>
+                </div>
+
+                <!-- Tipo de tela -->
+                <div class="opcion">
+                    <h3>Seleccionar tipo de tela</h3>
+                    <div class="botones-tela">
+                        <button class="btn-tela" id="btnLado1">Lado 1</button>
+                        <button class="btn-tela" id="btnLado1">Lado 2</button>
+                    </div>
+
+                <!-- Panel para Lado 1 -->
+                <div class="panel-tela" id="panelLado1">
+                    <div class="grupo-telas">
+                        <h4>Telas sin diseño <span>N/A</span></h4>
+                        <div class="opciones-tela">
+                            <p>Ovejero</p>
+                            <p>Conejo</p>
+                            <p>Venus pelo largo</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Panel para Lado 2 -->
+                <div class="panel-tela" id="panelLado2">
+                    <div class="grupo-telas">
+                        <h4>Telas sin diseño <span>N/A</span></h4>
+                        <div class="opciones-tela">
+                            <p>Ovejero</p>
+                            <p>Conejo</p>
+                            <p>Venus pelo largo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <!-- Vista del precio -->
+                <div class="vista-precio">
+                    <p>Vista previa del precio</p>
+                    <div class="rectangulo-precio" id="precio">—</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <p>Siguenos en nuestras redes sociales</p>
+        <div class="iconos-redes">
+            <img src="imagenes/logo_instagram.jpg" alt="Instagram">
+            <img src="imagenes/logo_tiktok.jpg" alt="Tiktok">
+        </div>
+    </footer> 
+        
+    <script src="personalizar_cubrelecho.js"></script>
+</body>
+</html>

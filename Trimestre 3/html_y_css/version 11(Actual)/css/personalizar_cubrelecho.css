@@ -1,0 +1,255 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    background-color: #b4788b;
+}
+
+.banner {
+    position: relative;
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.banner .overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: #e6e6e6;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 40px;
+}
+
+.banner-content img {
+    height: 70px;
+    width: auto;
+    border-radius: 10px;
+}
+
+.botones {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 18px 34px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background-color: #e6e6e6;
+    color: black;
+    border: 2px solid #e6e6e6;
+}
+
+.btn:hover {
+    background-color: #dcdcdc;
+    color: #222;
+}
+
+.btn-primario,
+.btn-secundario,
+.btn-terciario,
+.btn-cuaternario {
+    background-color: #e6e6e6;
+    color: #797676;
+}
+
+.contenedor-imagen {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 60px;
+    padding: 60px 80px;
+    background-color: #b4788b;
+}
+
+.tarjeta-imagen {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    text-align: center;
+    width: 460px;
+}
+
+.tarjeta-imagen h2 {
+    color: #8a2d48;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.tarjeta-imagen img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+}
+
+.panel-opciones {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 25px;
+    width: 350px;
+    color: #000;
+}
+
+.campo, .opcion {
+    background-color: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.campo h3,
+.opcion h3 {
+    background-color: #e6e6e6;
+    color: #000;
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0;
+    padding: 8px 12px;
+}
+
+.campo select {
+    width: calc(100% - 24px);
+    margin: 12px;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background-color: #f8f8f8;
+    color: #8a2d48;
+    font-family: 'Poppins', sans-serif;
+}
+
+.botones-tela {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px;
+}
+
+.btn-tela {
+    flex: 1;
+    background-color: #8a2d48;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 0;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-tela:hover {
+    background-color: #a94563;
+}
+
+.vista-precio {
+    color: #fff;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.rectangulo-precio {
+    background-color: #e6e6e6;
+    width: 320px;
+    height: 35px;
+    border-radius: 3px;
+}
+
+.nota-precio {
+    color: #000;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.pie-pagina {
+    background-color: #e6e6e6;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 40px;
+    gap: 15px;
+    color: #000;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-top: 4px solid #b4788b;
+}
+
+.pie-pagina p {
+    margin: 0;
+}
+
+.iconos-redes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.iconos-redes img {
+    width: 20px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.iconos-redes img:hover {
+    transform: scale(1.1);
+}
+
+.panel-tela {
+    display: none;
+    background-color: #fff;
+    border: 2px solid #8a2d48;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 10px;
+    color: #000;
+}
+
+.panel-tela h4 {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    color: #000;
+}
+
+.opciones-tela {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.opciones-tela p {
+    background-color: #e6e6e6;
+    margin: 0;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.opciones-tela p:hover {
+    background-color: #d2d2d2;
+    cursor: pointer;
+}
