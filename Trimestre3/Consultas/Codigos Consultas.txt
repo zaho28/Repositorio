@@ -1,0 +1,98 @@
+1. Total de productos por categoría:
+  SELECT 
+    c.nombre,
+    COUNT(p.id_producto) AS cantidad_productos
+  FROM productos p
+  INNER JOIN categoria c ON p.id_categoria = c.id_categria
+  GROUP BY c.nombre
+  ORDER BY cantidad_productos DESC;
+  
+2. Monto total vendido por cada método de pago
+  SELECT
+    m.nombre,
+    SUM(t.total_ticked) AS vendido_monto
+  FROM ticket_compra t 
+  INNER JOIN metodo_pago m ON t.id_metodopago = m.id_metodopago
+  GROUP BY m.nombre
+  
+3. Usuarios que han realizado pedidos (con conteo de pedidos)
+  SELECT
+    u.nombre_1,
+    u.apellido_1,
+    COUNT(p.id) AS cantidad_pedidos
+  FROM pedido p
+  INNER JOIN usuario u ON p.id_usuario = u.id_usuario
+  GROUP BY u.nombre_1, u.apellido_1
+  ORDER BY cantidad_pedidos DESC;
+  
+4. Producto más vendido y menos vendido
+  SELECT 
+    p.nombre,
+    SUM(d.cantidad) AS cantidad_vendida
+  FROM detalle_pedido d
+  INNER JOIN producto p ON d.id_producto = p.id_producto
+  GROUP BY p.nombre 
+  ORDER BY cantidad_vendida DESC;
+    
+5. Pedidos agrupados por estado de pago (pendiente, completado, etc.)
+  SELECT
+    e.estado_pago,
+    COUNT(t.id_ticketcompra) AS cantidad_pedidos
+  FROM ticket_compra t
+  INNER JOIN estado_pago e ON t.id_estado = e.id_estado
+  GROUP BY e.estado_pago;
+  
+6. monto total de cada pedido ( POSIBLE CORRECCION POR ERRORES  ) 
+  SELECT
+    d.id_pedido,
+    SUM(t.total_ticket) AS monto_total
+  FROM ticket_compra
+  GROUP BY d.id_pedido
+  ORDER BY monto_total DESC;
+  
+  posible solucion 
+  SELECT 
+    t.id_ticket_compra AS id_pedido,
+    t.total_ticket AS monto_total
+  FROM ticket_compra t
+  ORDER BY monto_total DESC;
+  
+7. Top 3 usuarios que más han comprado (por monto total)
+  SELECT 
+    u.nombre_1,
+    u.apellido_1,
+    SUM(t.total_ticket) AS total_monto
+  FROM ticked_compra t
+  INNER JOIN ticket_compra t ON t.id_usuario = u.id_usuario
+  GROUP BY u.nombre_1
+  ORDER BY total_monto DESC
+  LIMIT 3;
+  
+8. Cantidad total de productos vendidos por tipo de pedido
+  SELECT 
+    p.id_tipopedido,
+    SUM(d.cantidad) AS total_vendidos
+  FROM detalle_pedido d
+  INNER JOIN pedido p ON d.id_pedido = p.id_pedido
+  GROUP BY p.id_tipopedido
+  ORDER BY total_vendidos DESC;
+  
+9. Pedidos realizados en el último mes (o en una fecha específica)
+  SELECT 
+    p.id_pedido,
+    p.fecha,
+    u.nombre_1
+  FROM pedido p
+  INNER JOIN usuario u ON p.id_usuario = u.id_usuario
+  WHERE p.fecha >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+  ORDER BY u.nombre_1 DESC;
+  
+10. Promedio de monto por pedido, por usuario
+  SELECT 
+    u.nombre_1,
+    u.apellido_1,
+    AVG(t.total_ticket) AS promedio_total
+  FROM ticket_compra t
+  INNER JOIN usuario u ON t.id_usuario = u.id_usuario
+  GROUP BY u.nombre_1 
+  ORDER BY promedio_total DESC;
