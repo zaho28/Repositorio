@@ -1,0 +1,219 @@
+/*--------------------------*/
+/*    PASARELA DE PAGO     */
+/*-------------------------*/
+
+/* ---------------------------------------------------------------- */
+/* --- 1. Estilos Generales del Contenedor --- */
+/* ---------------------------------------------------------------- */
+.payment-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+.payment-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+/* ---------------------------------------------------------------- */
+/* --- 2. Estilos del Formulario y Grupos (Espaciado CORREGIDO) --- */
+/* ---------------------------------------------------------------- */
+.payment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ✅ CORRECCIÓN CLAVE: Reducimos el margen entre grupos de campos */
+.payment-container .form-group {
+    margin-bottom: 15px; 
+}
+
+/* ✅ CORRECCIÓN CLAVE: Reducimos el margen entre la etiqueta y el input */
+.payment-container label {
+    display: block;
+    margin-bottom: 5px; 
+    font-weight: bold;
+    color: #555;
+    font-size: 14px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="tel"],
+.select-method { /* Aseguramos que el select también tenga los estilos */
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box; 
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus,
+.select-method:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* ---------------------------------------------------------------- */
+/* --- 3. Estilos para campos en una sola fila --- */
+/* ---------------------------------------------------------------- */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.form-row .half-width {
+    flex: 1;
+}
+
+/* ---------------------------------------------------------------- */
+/* --- 4. Estilos del Selector de Método de Pago (Select) --- */
+/* ---------------------------------------------------------------- */
+.select-method {
+    /* Ajustes visuales para el dropdown */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.9L146.2%20210.7L5.4%2069.9z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 10px auto;
+}
+
+
+/* ---------------------------------------------------------------- */
+/* --- 5. Estilos del Botón de Pago --- */
+/* ---------------------------------------------------------------- */
+.pay-button { 
+    background-color: #28a745;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.pay-button:hover {
+    background-color: #218838;
+}
+
+.pay-button:active {
+    transform: translateY(1px);
+}
+
+/* ---------------------------------------------------------------- */
+/* --- 6. Notas y Campos Dinámicos --- */
+/* ---------------------------------------------------------------- */
+.security-note {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.small-note {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.dynamic-fields {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+/* ---------------------------------------------------------------- */
+/* --- 7. Estilos del Recibo (Para cuando el pago es exitoso) --- */
+/* ---------------------------------------------------------------- */
+.receipt-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.receipt-success-title {
+    color: #28a745;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.receipt-message {
+    color: #555;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.receipt-details {
+    background-color: #f8f9fa;
+    border: 1px dashed #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.receipt-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.receipt-item:last-child {
+    border-bottom: none;
+}
+
+.receipt-label {
+    font-weight: 600;
+    color: #333;
+}
+
+.receipt-value {
+    color: #000;
+}
+
+.receipt-amount {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.receipt-button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: opacity 0.3s;
+    text-decoration: none; 
+    display: inline-block;
+}
+
+.print-button {
+    background-color: #6c757d;
+    color: white;
+}
+
+.new-payment-button {
+    background-color: #007bff;
+    color: white;
+}
