@@ -1,0 +1,158 @@
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import * as bcrypt from 'bcrypt';
+
+const SALT_ROUNDS = 10;
+
+@Injectable()
+export class UsuariosService {
+  constructor(private prisma: PrismaService) {}
+
+  // --------------------------------------------------------
+  // CREAR USUARIO
+  // --------------------------------------------------------
+  async create(dto: CreateUsuarioDto) {
+    // hashear contraseña
+    const hashedPassword = await bcrypt.hash(dto.contrasena, SALT_ROUNDS);
+
+    // hashear código si es admin o trabajador
+    let hashedCodigo: string | null = null;
+    let codigoVisible: string | null = null;
+
+    if (dto.codigo) {
+      hashedCodigo = await bcrypt.hash(dto.codigo.toString(), SALT_ROUNDS);
+      codigoVisible = dto.codigo.toString();
+    }
+
+    return this.prisma.usuario.create({
+      data: {
+        id_usuario: dto.id_usuario,
+        nom_1: dto.nom_1,
+        nom_2: dto.nom_2 ?? null,
+        ape_1: dto.ape_1,
+        ape_2: dto.ape_2 ?? null,
+        correo: dto.correo,
+        telefono: dto.telefono,
+        contrasena: hashedPassword,
+        codigo: hashedCodigo,
+        codigo_visible: codigoVisible,
+        id_rol_usuario: dto.id_rol_usuario,
+        t_doc: dto.t_doc as any,
+        img_perfil: dto.img_perfil ?? null,
+      },
+    });
+  }
+
+  // --------------------------------------------------------
+  // OBTENER TODOS LOS USUARIOS (solo admin)
+  // --------------------------------------------------------
+  async findAll() {
+    const usuarios = await this.prisma.usuario.findMany({
+      select: {
+        id_usuario: true,
+        nom_1: true,
+        nom_2: true,
+        ape_1: true,
+        ape_2: true,
+        correo: true,
+        telefono: true,
+        id_rol_usuario: true,
+        t_doc: true,
+        img_perfil: true,
+        codigo_visible: true,
+        // contrasena y codigo omitidos por seguridad
+      },
+    });
+    return usuarios;
+  }
+
+  // --------------------------------------------------------
+  // OBTENER UN USUARIO POR ID
+  // --------------------------------------------------------
+  async findOne(id_usuario: string) {
+    const user = await this.prisma.usuario.findUnique({
+      where: { id_usuario },
+      select: {
+        id_usuario: true,
+        nom_1: true,
+        nom_2: true,
+        ape_1: true,
+        ape_2: true,
+        correo: true,
+        telefono: true,
+        id_rol_usuario: true,
+        t_doc: true,
+        img_perfil: true,
+        codigo_visible: true,
+      },
+    });
+
+    if (!user) throw new NotFoundException(`Usuario ${id_usuario} no encontrado`);
+
+    return user;
+  }
+
+  // --------------------------------------------------------
+  // ACTUALIZAR USUARIO
+  // --------------------------------------------------------
+  async update(id_usuario: string, dto: UpdateUsuarioDto) {
+    // verificar que existe
+    await this.findOne(id_usuario);
+
+    const data: any = { ...dto };
+
+    // hashear contraseña si se está actualizando
+    if (dto.contrasena) {
+      data.contrasena = await bcrypt.hash(dto.contrasena, SALT_ROUNDS);
+    }
+
+    // hashear código si se está actualizando
+    if (dto.codigo) {
+      data.codigo = await bcrypt.hash(dto.codigo.toString(), SALT_ROUNDS);
+      data.codigo_visible = dto.codigo.toString();
+    }
+
+    return this.prisma.usuario.update({
+      where: { id_usuario },
+      data,
+    });
+  }
+
+  // --------------------------------------------------------
+  // ELIMINAR USUARIO
+  // --------------------------------------------------------
+  async remove(id_usuario: string) {
+    await this.findOne(id_usuario);
+
+    await this.prisma.usuario.delete({
+      where: { id_usuario },
+    });
+
+    return { message: `Usuario ${id_usuario} eliminado exitosamente` };
+  }
+
+  // --------------------------------------------------------
+  // CAMBIAR CONTRASEÑA
+  // --------------------------------------------------------
+  async cambiarContrasena(id_usuario: string, contrasenaActual: string, nuevaContrasena: string) {
+    const user = await this.prisma.usuario.findUnique({
+      where: { id_usuario },
+    });
+
+    if (!user || !user.contrasena) throw new NotFoundException('Usuario no encontrado');
+
+    const passwordMatch = await bcrypt.compare(contrasenaActual, user.contrasena);
+    if (!passwordMatch) throw new BadRequestException('La contraseña actual es incorrecta');
+
+    const hashedPassword = await bcrypt.hash(nuevaContrasena, SALT_ROUNDS);
+
+    await this.prisma.usuario.update({
+      where: { id_usuario },
+      data: { contrasena: hashedPassword },
+    });
+
+    return { message: 'Contraseña actualizada exitosamente', success: true };
+  }
+}
