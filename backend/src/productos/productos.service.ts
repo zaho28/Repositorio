@@ -10,7 +10,8 @@ export class ProductosService {
   // --------------------------------------------------------
   // OBTENER TODOS LOS PRODUCTOS ACTIVOS
   // --------------------------------------------------------
-  async findAll() {
+  async findAll(query :any) {
+    console.log('Funcion que controla la creacion de productos')
     return this.prisma.producto.findMany({
       where: { estado: true },
       include: {
@@ -24,6 +25,7 @@ export class ProductosService {
   // OBTENER UN PRODUCTO POR ID
   // --------------------------------------------------------
   async findOne(id: number) {
+    console.log('service - detalle de producto:', JSON.stringify({ id }));
     const producto = await this.prisma.producto.findFirst({
       where: { id_producto: id, estado: true },
       include: {
@@ -40,6 +42,7 @@ export class ProductosService {
   // CREAR PRODUCTO
   // --------------------------------------------------------
   async create(dto: CreateProductoDto) {
+    console.log('service - crear producto:', JSON.stringify(dto));
     return this.prisma.producto.create({
       data: {
         nom_producto: dto.nom_producto,
@@ -63,6 +66,9 @@ export class ProductosService {
   // ACTUALIZAR PRODUCTO
   // --------------------------------------------------------
   async update(id: number, dto: UpdateProductoDto) {
+    console.log('service - actualizar producto:', { id, dto });
+    
+    // si no existe lanza 404 automáticamente
     await this.findOne(id);
 
     const data: any = { ...dto };
@@ -74,16 +80,24 @@ export class ProductosService {
 
     data.ultima_actualiz = new Date();
 
-    return this.prisma.producto.update({
+    const actualizado = await this.prisma.producto.update({
       where: { id_producto: id },
       data,
     });
+
+    // respuesta con mensaje
+    return {
+      statusCode: 200,
+      message: `Producto ${id} actualizado exitosamente`,
+      data: actualizado
+    };
   }
 
   // --------------------------------------------------------
-  // ELIMINACIÓN LÓGICA (estado = false)
+  // ELIMINAR (estado = false)
   // --------------------------------------------------------
   async remove(id: number) {
+    console.log('service - eliminar producto:', JSON.stringify({ id }));
     await this.findOne(id);
 
     await this.prisma.producto.update({
@@ -94,13 +108,17 @@ export class ProductosService {
       },
     });
 
-    return { message: `Producto ${id} eliminado exitosamente` };
+    return { 
+      statusCode: 200,
+      message: `Producto ${id} eliminado exitosamente`
+    };
   }
 
   // --------------------------------------------------------
   // VERIFICAR SI UN PRODUCTO EXISTE Y TIENE STOCK
   // --------------------------------------------------------
   async checkProducto(id: number) {
+    console.log('service - check producto:', JSON.stringify({ id }));
     const producto = await this.prisma.producto.findFirst({
       where: { id_producto: id, estado: true },
       select: { id_producto: true, nom_producto: true, stock_actual: true },

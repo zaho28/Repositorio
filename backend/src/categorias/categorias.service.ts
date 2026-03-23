@@ -5,8 +5,8 @@ import { PrismaService } from '../prisma/prisma.service';
 export class CategoriasService {
   constructor(private prisma: PrismaService) {}
 
-  // GET todas las categorías
-  findAll() {
+  findAll(query: any) {// se escribe el queri del controller para que se ejecute la lógica de negocio en el servicio y se retorne la respuesta al cliente
+    console.log('Servise - todas las categorias', JSON.stringify(query));//se imprime el objeto query en la consola para verificar su contenido
     return this.prisma.categoria.findMany({
       select: {
         id_categoria: true,
@@ -15,8 +15,8 @@ export class CategoriasService {
     });
   }
 
-  // GET todas las clasificaciones
-  findAllClasificaciones() {
+  findAllClasificaciones(query: any) {
+    console.log('Service - todas las clasificaciones', JSON.stringify(query));
     return this.prisma.clasificacion.findMany({
       select: {
         id_clasificacion: true,

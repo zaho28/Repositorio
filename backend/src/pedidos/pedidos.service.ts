@@ -18,7 +18,7 @@ export class PedidosService {
     }
 
     return this.prisma.$transaction(async (tx) => {
-      // 1. Crear el pedido
+      // Crear el pedido
       const pedido = await tx.pedido.create({
         data: {
           fecha: new Date(),
@@ -30,7 +30,7 @@ export class PedidosService {
 
       const resultados: { producto: string; cantidad: number; stock_restante: number }[] = [];
 
-      // 2. Procesar cada producto
+      // Procesar cada producto
       for (const item of items) {
         const { id_producto, cantidad, precio } = item;
 
@@ -83,7 +83,7 @@ export class PedidosService {
         });
       }
 
-      // 3. Crear el ticket de compra
+      // Crear el ticket de compra
       const num_ticket = Math.floor(100000 + Math.random() * 900000);
 
       const ticket = await tx.ticket_compra.create({
@@ -116,6 +116,7 @@ export class PedidosService {
   // OBTENER PEDIDOS DE UN USUARIO
   // -------------------------------------------------------
   async findByUsuario(id_usuario: string) {
+    console.log('service - pedidos por usuario:', JSON.stringify({ id_usuario }));
     return this.prisma.pedido.findMany({
       where: { id_usuario },
       orderBy: { fecha: 'desc' },
@@ -144,7 +145,8 @@ export class PedidosService {
   // -------------------------------------------------------
   // OBTENER TODOS LOS PEDIDOS (ADMIN)
   // -------------------------------------------------------
-  async findAll() {
+  async findAll(query : any) {
+    console.log('service - todos los pedidos:', JSON.stringify(query));
     return this.prisma.pedido.findMany({
       orderBy: { fecha: 'desc' },
       include: {
@@ -171,6 +173,7 @@ export class PedidosService {
   // DETALLE COMPLETO DE UN PEDIDO
   // -------------------------------------------------------
   async findOne(id_pedido: number) {
+    console.log('service - detalle de pedido:', JSON.stringify({ id_pedido }));
     const pedido = await this.prisma.pedido.findFirst({
       where: { id_pedido },
       include: {
@@ -213,6 +216,7 @@ export class PedidosService {
   // ACTUALIZAR ESTADO DE UN PEDIDO
   // -------------------------------------------------------
   async update(id_pedido: number, dto: UpdatePedidoDto) {
+    console.log('service - actualizar pedido:', { id_pedido, dto });
     await this.findOne(id_pedido);
 
     return this.prisma.pedido.update({
@@ -225,6 +229,7 @@ export class PedidosService {
   // ELIMINAR PEDIDO
   // -------------------------------------------------------
   async remove(id_pedido: number) {
+    console.log('service - eliminar pedido:', JSON.stringify({ id_pedido }));
     await this.findOne(id_pedido);
 
     return this.prisma.pedido.delete({

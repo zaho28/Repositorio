@@ -72,6 +72,7 @@ model pedido {
   tipo_pedido     tipo_pedido       @relation(fields: [id_tipo], references: [id_tipo])
   detalles_pedido detalles_pedido[]
   ticket_compra   ticket_compra[]
+  pedidos_personalizados pedido_personalizado[] // ← agregar esta línea
 
   @@index([id_tipo], map: "id_tipo")
   @@index([id_usuario], map: "id_usuario")
@@ -167,6 +168,44 @@ model usuario {
   @@index([t_doc], map: "t_doc")
 }
 
+model material {
+  id_material     Int                      @id @default(autoincrement())
+  nombre          String                   @db.VarChar(60)
+  tipo            material_tipo
+  unidad          material_unidad
+  precio_unitario Decimal                  @db.Decimal(10, 2)
+  stock_actual    Int                      @default(0)
+  stock_minimo    Int                      @default(5)
+  ruta_imagen     String?                  @db.VarChar(255)
+  estado          Boolean?                 @default(true)
+  detalles        detalle_ped_personal[]
+}
+
+model pedido_personalizado {
+  id_ped_personal Int                      @id @default(autoincrement())
+  id_pedido       Int
+  tipo_producto   ped_personal_tipo
+  tamanio         String                   @db.VarChar(30)
+  precio_total    Decimal                  @db.Decimal(10, 2)
+  pedido          pedido                   @relation(fields: [id_pedido], references: [id_pedido])
+  detalles        detalle_ped_personal[]
+
+  @@index([id_pedido], map: "id_pedido")
+}
+
+model detalle_ped_personal {
+  id_detalle      Int                      @id @default(autoincrement())
+  id_ped_personal Int
+  id_material     Int
+  cantidad        Decimal                  @db.Decimal(10, 2)
+  subtotal        Decimal                  @db.Decimal(10, 2)
+  pedido_personal pedido_personalizado     @relation(fields: [id_ped_personal], references: [id_ped_personal])
+  material        material                 @relation(fields: [id_material], references: [id_material])
+
+  @@index([id_ped_personal], map: "id_ped_personal")
+  @@index([id_material], map: "id_material")
+}
+
 // -------------------------------------------------------
 // ENUMS
 // -------------------------------------------------------
@@ -240,6 +279,24 @@ enum tipo_movimiento_nom_movimiento {
 enum tipo_pedido_tipo_pedido {
   Personalizado
   Estandar
+}
+
+enum material_tipo {
+  Tela
+  Bordado
+  Diseno   @map("Diseño")
+  Relleno
+  Accesorio
+}
+
+enum material_unidad {
+  metro
+  unidad
+}
+
+enum ped_personal_tipo {
+  Sabana    @map("Sábana")
+  Cubrelecho
 }
 
 

@@ -8,7 +8,8 @@ export class NotificacionesService {
   // -------------------------------------------------------
   // TODAS LAS NOTIFICACIONES ACTIVAS
   // -------------------------------------------------------
-  async findAll() {
+  async findAll(query: any) {
+    
     const hace7Dias = new Date();
     hace7Dias.setDate(hace7Dias.getDate() - 7);
 
@@ -50,7 +51,8 @@ export class NotificacionesService {
       const nombre = usuario ? `${usuario.nom_1} ${usuario.ape_1}` : p.id_usuario;
       const ticket = (p as any).ticket_compra?.[0];
       const tipo_pedido = p.id_tipo === 'P_P' ? 'Personalizado' : 'Estándar';
-
+      
+      console.log('controller - todas las notificaciones:', JSON.stringify(query));
       return {
         tipo: 'pedido',
         id_notificacion: `pedido-${p.id_pedido}`,
@@ -74,7 +76,8 @@ export class NotificacionesService {
   // -------------------------------------------------------
   // CONTAR NOTIFICACIONES
   // -------------------------------------------------------
-  async count() {
+  async count(query : any) {
+    console.log('controller - contar notificaciones:', JSON.stringify(query));
     const hace7Dias = new Date();
     hace7Dias.setDate(hace7Dias.getDate() - 7);
 
@@ -97,21 +100,23 @@ export class NotificacionesService {
   // -------------------------------------------------------
   // STOCK BAJO
   // -------------------------------------------------------
-  async stockBajo() {
+  async stockBajo(query : any) {
+    console.log('controller - notificaciones de stock bajo:', JSON.stringify(query));
     return this._getStockBajo();
   }
 
   // -------------------------------------------------------
   // AGOTADOS
   // -------------------------------------------------------
-  async agotados() {
+  async agotados(query : any) {
+    console.log('controller - notificaciones de productos agotados:', JSON.stringify(query));
     return this._getAgotados();
   }
 
   // -------------------------------------------------------
   // PEDIDOS RECIENTES
   // -------------------------------------------------------
-  async pedidosRecientes(dias = 7) {
+async pedidosRecientes(dias = 7) {
     const fecha = new Date();
     fecha.setDate(fecha.getDate() - dias);
 
@@ -140,7 +145,7 @@ export class NotificacionesService {
       return acc;
     }, {} as Record<number, number>);
 
-    return pedidos.map((p) => {
+    const resultado = pedidos.map((p) => {
       const u = usuarioMap[p.id_usuario];
       const t = ticketMap[p.id_pedido];
       return {
@@ -156,12 +161,15 @@ export class NotificacionesService {
         total_productos: detalleCount[p.id_pedido] ?? 0,
       };
     });
+    console.log(`service - pedidos recientes | días: ${dias} | encontrados: ${resultado.length}`);
+    return resultado;
   }
 
   // -------------------------------------------------------
   // ESTADÍSTICAS
   // -------------------------------------------------------
-  async estadisticas() {
+  async estadisticas(query :  any) {
+    console.log('controller - estadísticas:', JSON.stringify(query));
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
     const hace7Dias = new Date();
@@ -187,7 +195,7 @@ export class NotificacionesService {
   private async _getStockBajo() {
     const productos = await this.prisma.$queryRaw<any[]>`
       SELECT p.id_producto, p.nom_producto, p.stock_actual, p.stock_minimo,
-            p.ultima_actualiz, c.nombre_c as categoria, p.ruta_imagen
+          p.ultima_actualiz, c.nombre_c as categoria, p.ruta_imagen
       FROM producto p
       LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
       WHERE p.estado = 1 AND p.stock_actual <= p.stock_minimo AND p.stock_actual > 0

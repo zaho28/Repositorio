@@ -14,6 +14,7 @@ export class UsuariosService {
   // CREAR USUARIO
   // --------------------------------------------------------
   async create(dto: CreateUsuarioDto) {
+    console.log('service - crear usuario:', JSON.stringify(dto));
     // hashear contraseña
     const hashedPassword = await bcrypt.hash(dto.contrasena, SALT_ROUNDS);
 
@@ -48,7 +49,8 @@ export class UsuariosService {
   // --------------------------------------------------------
   // OBTENER TODOS LOS USUARIOS (solo admin)
   // --------------------------------------------------------
-  async findAll() {
+  async findAll(query : any) {
+    console.log('service - todos los usuarios:', JSON.stringify(query));
     const usuarios = await this.prisma.usuario.findMany({
       select: {
         id_usuario: true,
@@ -72,6 +74,7 @@ export class UsuariosService {
   // OBTENER UN USUARIO POR ID
   // --------------------------------------------------------
   async findOne(id_usuario: string) {
+    console.log('service - detalle de usuario:', JSON.stringify({ id_usuario }));
     const user = await this.prisma.usuario.findUnique({
       where: { id_usuario },
       select: {
@@ -98,6 +101,7 @@ export class UsuariosService {
   // ACTUALIZAR USUARIO
   // --------------------------------------------------------
   async update(id_usuario: string, dto: UpdateUsuarioDto) {
+    console.log('service - actualizar usuario:', { id_usuario, dto });
     // verificar que existe
     await this.findOne(id_usuario);
 
@@ -124,6 +128,7 @@ export class UsuariosService {
   // ELIMINAR USUARIO
   // --------------------------------------------------------
   async remove(id_usuario: string) {
+    console.log('service - eliminar usuario:', JSON.stringify({ id_usuario }));
     await this.findOne(id_usuario);
 
     await this.prisma.usuario.delete({
@@ -137,6 +142,7 @@ export class UsuariosService {
   // CAMBIAR CONTRASEÑA
   // --------------------------------------------------------
   async cambiarContrasena(id_usuario: string, contrasenaActual: string, nuevaContrasena: string) {
+    console.log('service - cambiar contraseña:', JSON.stringify({ id_usuario, contrasenaActual, nuevaContrasena }));    
     const user = await this.prisma.usuario.findUnique({
       where: { id_usuario },
     });
@@ -152,7 +158,28 @@ export class UsuariosService {
       where: { id_usuario },
       data: { contrasena: hashedPassword },
     });
-
     return { message: 'Contraseña actualizada exitosamente', success: true };
+  }
+
+// --------------------------------------------------------
+// ACTUALIZAR IMAGEN DE PERFIL
+// --------------------------------------------------------
+  async actualizarImagen(id_usuario: string, file: Express.Multer.File) {
+    if (!file) throw new BadRequestException('No se recibió ningún archivo');
+
+    await this.findOne(id_usuario); // verifica que existe
+
+    const ruta_imagen = `/uploads/perfiles/${file.filename}`;
+
+    await this.prisma.usuario.update({
+      where: { id_usuario },
+      data: { img_perfil: ruta_imagen },
+    });
+
+    return {
+      statusCode: 200,
+      message: 'Imagen actualizada exitosamente',
+      img_perfil: ruta_imagen,
+    };
   }
 }

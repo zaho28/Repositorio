@@ -1,13 +1,13 @@
-import { IsNotEmpty, IsString, IsOptional, IsNumber, IsDate, IsBoolean, MaxLength, Min, MaxDate } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsDate, MaxLength, Min, MaxDate } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateMovimientoDto {
 
     @IsNumber()
-    @IsNotEmpty({ message: 'La cantidad debe ser obligatoria ' })
-    @Min(1)
-    @Type(() => Number)
-    cantidad_m: number;
+    @IsNotEmpty({ message: 'La cantidad es obligatoria ' })
+    @Min(1, { message: 'La cantidad debe ser un número positivo' })
+    @Type(() => Number) 
+    Cantidad_m: number;
 
     @IsDate()
     @IsNotEmpty({ message: 'La fecha es obligatoria' })
@@ -16,12 +16,12 @@ export class CreateMovimientoDto {
     fecha_m: Date;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Las observaciones son obligatorias' })
     @MaxLength(255)
     observaciones?: string;
 
     @IsNumber()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'El ID de la categoría es obligatorio' })
     @Type(() => Number)
     id_categoria: number;
 
@@ -29,13 +29,11 @@ export class CreateMovimientoDto {
     @IsNotEmpty({ message: 'El tipo de movimiento es obligatorio' })
     id_m: string; // 'M-E' o 'M-S'
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty({ message: 'El ID del producto es obligatorio' })
-    @Type(() => Number)
     id_producto: Number; 
 
     @IsString()
     @IsNotEmpty({ message: 'El ID del usuario es obligatorio' })
-    @Type(() => Number)
-    id_usuario: Number
+    id_usuario: String;
 }

@@ -5,22 +5,27 @@ import { UpdateMovimientoDto } from './dto/update-movimiento.dto';
 @Injectable()
 export class MovimientosService {
   create(createMovimientoDto: CreateMovimientoDto) {
-    return 'This action adds a new movimiento';
+    console.log('service - crear movimiento:', JSON.stringify(createMovimientoDto));
+    return 'Esta acción crea un nuevo movimiento';
   }
 
-  findAll() {
-    return `This action returns all movimientos`;
+  findAll(query: any) {
+    console.log('service - todos los movimientos:', JSON.stringify(query));
+    return `Esta acción devuelve todos los movimientos`;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} movimiento`;
+    console.log('service - encontrar movimiento: ID' , id);
+    return `Esta acción devuelve un movimiento con ID #${id}`;
   }
 
   update(id: number, updateMovimientoDto: UpdateMovimientoDto) {
-    return `This action updates a #${id} movimiento`;
+    console.log('service - actualizar movimiento: ID', id, { updateMovimientoDto });
+    return `Esta acción actualiza un movimiento con ID #${id}`;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} movimiento`;
+    console.log('service - eliminar movimiento: ID', id);
+    return `Esta acción elimina un movimiento con ID #${id}`;
   }
 }
