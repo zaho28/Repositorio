@@ -1,0 +1,225 @@
+/* header.css */
+
+.Header {
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 3px solid #d4a9c2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0; 
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 40px;
+}
+
+.Header .Header-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; 
+    max-width: 1200px;
+    flex: 1;
+}
+
+/* ======= LOGO ======= */
+
+.Header .logoG {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: auto; 
+    flex-shrink: 0;
+}
+
+.Header .logoG a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.Header .logoG img {
+    height: 70px;
+    width: auto;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    display: block;
+    margin: 0;
+}
+
+.Header .logoG img:hover {
+    transform: scale(1.05);
+}
+
+/* ======= BOTÓN VOLVER ======= */
+
+.Header .volver {
+    background-color: #c5749d;
+    color: white;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(197, 116, 157, 0.25);
+}
+
+.Header .volver:hover {
+    background-color: #a85c85;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(197, 116, 157, 0.35);
+}
+
+.Header .volver:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(197, 116, 157, 0.25);
+}
+
+/* ======= NAVEGACIÓN ======= */
+
+.Header .Menu {
+    display: flex;
+    align-items: center;
+    margin-left: auto; 
+}
+
+.Header .Menu ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.Header .Menu li {
+    margin: 0;
+    padding: 0;
+}
+
+.Header .Menu a {
+    text-decoration: none;
+    color: #5a3d54;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+}
+
+.Header .Menu a:hover {
+    color: #c45a77;
+}
+
+.Header .Menu a.activo {
+    color: #7a235f;
+    font-weight: bold;
+    border-bottom: 2px solid #c45a77;
+}
+
+/* ======= ICONOS ======= */
+
+.iconos {
+    display: flex;
+    align-items: center;
+}
+
+.iconos img {
+    width: 28px;
+    margin-left: 15px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.iconos img:hover {
+    transform: scale(1.15);
+}
+
+.iconos2 {
+    display: flex;
+    align-items: center;
+}
+
+.iconos2 img {
+    width: 28px;
+    margin-left: 15px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.iconos2 img:hover {
+    transform: scale(1.15);
+}
+
+
+/* ============================== */
+/*      RESPONSIVE - HEADER       */
+/* ============================== */
+
+/* Tablet/Intermedio */
+@media (max-width: 1024px) {
+    .Header {
+        padding: 15px 30px;
+    }
+}
+
+/* Móvil */
+@media (max-width: 768px) {
+    .Header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px 20px;
+    }
+
+    .Header .Header-container {
+        flex-direction: column;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .Header .logoG {
+        margin-right: 0;
+    }
+
+    .Header .Menu {
+        margin-left: 0;
+    }
+
+    .Header .Menu ul {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .Header .logoG img {
+        height: 65px; 
+    }
+
+    .Header .volver {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* Móvil Pequeño */
+@media (max-width: 480px) {
+    .Header {
+        padding: 8px 15px;
+    }
+    
+    .Header .logoG img {
+        height: 50px;
+    }
+    
+    .Header .Menu a {
+        font-size: 0.9rem;
+    }
+
+    .Header .volver {
+        font-size: 14px;
+        padding: 9px 24px;
+    }
+}
