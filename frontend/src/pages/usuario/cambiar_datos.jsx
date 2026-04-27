@@ -4,9 +4,9 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import HeaderPerfilC from "../../components/HeaderPerfilC";
 import "../../components/css/styles.css";
 
-const API_URL = 'http://localhost:3000'; 
+import { apiPatch } from "../../context/api.js";
 
-export default function CambiarDatosAdmin() { 
+export default function CambiarDatosCliente() { 
     const { usuarioActual, updateusuarioActual } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -28,15 +28,14 @@ export default function CambiarDatosAdmin() {
     // Cargar datos del usuario actual
     useEffect(() => {
         if (usuarioActual) {
-            console.log("Objeto usuarioActual cargado:", usuarioActual);
             setFormData({
-                nom_1: usuarioActual.nom_1 || '',
-                nom_2: usuarioActual.nom_2 || '',
-                ape_1: usuarioActual.ape_1 || '',
-                ape_2: usuarioActual.ape_2 || '',
-                correo: usuarioActual.correo || '',
-                telefono: usuarioActual.telefono || '',
-                t_doc: usuarioActual.t_doc || '',
+                nom_1:      usuarioActual.nom_1      || '',
+                nom_2:      usuarioActual.nom_2      || '',
+                ape_1:      usuarioActual.ape_1      || '',
+                ape_2:      usuarioActual.ape_2      || '',
+                correo:     usuarioActual.correo     || '',
+                telefono:   usuarioActual.telefono   || '',
+                t_doc:      usuarioActual.t_doc      || 'CC',
                 id_usuario: usuarioActual.id_usuario || ''
             });
         }
@@ -44,10 +43,7 @@ export default function CambiarDatosAdmin() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
@@ -63,35 +59,22 @@ export default function CambiarDatosAdmin() {
         }
 
         try {
-            const response = await fetch(`${API_URL}/update/${usuarioActual.id_usuario}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nom_1: formData.nom_1,
-                    nom_2: formData.nom_2 || null,
-                    ape_1: formData.ape_1,
-                    ape_2: formData.ape_2 || null,
-                    correo: formData.correo,
-                    telefono: formData.telefono, 
-                    t_doc: formData.t_doc
-                })
+            const data = await apiPatch(`/usuarios/${usuarioActual.id_usuario}`, {
+                nom_1:    formData.nom_1,
+                nom_2:    formData.nom_2    || null,
+                ape_1:    formData.ape_1,
+                ape_2:    formData.ape_2    || null,
+                correo:   formData.correo,
+                telefono: Number(formData.telefono),
+                t_doc:    formData.t_doc
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
+            if (data?.statusCode === 200 || data?.id_usuario || data?.nom_1) {
                 setMensaje('¡Datos actualizados exitosamente!');
-                
-                updateusuarioActual({
-                    ...usuarioActual,
-                    ...formData
-                });
-
-                setTimeout(() => {
-                    navigate('/perfil');
-                }, 1500);
+                updateusuarioActual({ ...usuarioActual, ...formData });
+                setTimeout(() => navigate('/perfil'), 1500);
             } else {
-                setError(data.error || data.message || 'Error al actualizar los datos.');
+                setError(data?.message || data?.error || 'Error al actualizar los datos.');
             }
         } catch (err) {
             console.error('Error:', err);
@@ -116,15 +99,11 @@ export default function CambiarDatosAdmin() {
                     </div>
 
                     {error && (
-                        <div className="alerta error">
-                            {error}
-                        </div>
+                        <div className="alerta error">{error}</div>
                     )}
                     
                     {mensaje && (
-                        <div className="alerta success">
-                            {mensaje}
-                        </div>
+                        <div className="alerta success">{mensaje}</div>
                     )}
 
                     <label htmlFor="nom_1">Primer nombre *</label>
@@ -215,10 +194,7 @@ export default function CambiarDatosAdmin() {
                         style={{ backgroundColor: '#f0f0f0', cursor: 'not-allowed' }}
                     />
 
-                    <button 
-                        type="submit"
-                        disabled={loading}
-                    >
+                    <button type="submit" disabled={loading}>
                         {loading ? 'Guardando...' : 'Guardar'}
                     </button>
 

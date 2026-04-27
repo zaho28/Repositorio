@@ -8,7 +8,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles as RolesDecorator } from '../auth/decorators/roles.decorator';
 import { Roles } from '../auth/enums/roles.enum';
-
+ 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth()
 @Controller('pedidos')
@@ -40,7 +40,7 @@ export class PedidosController {
   }
 
   @Patch(':id_pedido')
-  @RolesDecorator(Roles.ADMIN, Roles.TRABAJADOR)
+  @RolesDecorator(Roles.ADMIN, Roles.TRABAJADOR, Roles.USUARIO)
   update(@Param('id_pedido', ParseIntPipe) id_pedido: number, @Body() dto: UpdatePedidoDto) {
     return this.pedidosService.update(id_pedido, dto);
   }

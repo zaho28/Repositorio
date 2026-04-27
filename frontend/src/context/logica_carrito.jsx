@@ -42,7 +42,7 @@ export const CartProvider = ({ children }) => {
                     id: itemId,
                     name: product.nom_producto || product.name,
                     price: Number(product.precio_unitario || product.price),
-                    image: product.ruta_imagen || product.image, // ✅ IMAGEN INCLUIDA
+                    image: product.ruta_imagen || product.image, //  IMAGEN INCLUIDA
                     category: product.nombre_c || product.category || 'N/A',
                     stock_actual: product.stock_actual || 0, // Añadir stock disponible
                     cantidad: 1,

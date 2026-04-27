@@ -10,8 +10,7 @@ export class ProductosService {
   // --------------------------------------------------------
   // OBTENER TODOS LOS PRODUCTOS ACTIVOS
   // --------------------------------------------------------
-  async findAll(query :any) {
-    console.log('Funcion que controla la creacion de productos')
+  async findAll(query: any) {
     return this.prisma.producto.findMany({
       where: { estado: true },
       include: {
@@ -25,7 +24,6 @@ export class ProductosService {
   // OBTENER UN PRODUCTO POR ID
   // --------------------------------------------------------
   async findOne(id: number) {
-    console.log('service - detalle de producto:', JSON.stringify({ id }));
     const producto = await this.prisma.producto.findFirst({
       where: { id_producto: id, estado: true },
       include: {
@@ -67,17 +65,29 @@ export class ProductosService {
   // --------------------------------------------------------
   async update(id: number, dto: UpdateProductoDto) {
     console.log('service - actualizar producto:', { id, dto });
-    
-    // si no existe lanza 404 automáticamente
+
+    // Verifica que el producto existe, lanza 404 si no
     await this.findOne(id);
 
-    const data: any = { ...dto };
+    // ✅ Construimos el objeto de datos de forma explícita
+    // para evitar mandar campos undefined o campos que no existen en Prisma
+    const data: any = {};
 
-    if (dto.tamaño !== undefined) {
-      data.tama_o = dto.tamaño;
-      delete data.tamaño;
-    }
+    if (dto.nom_producto !== undefined)     data.nom_producto = dto.nom_producto;
+    if (dto.precio_unitario !== undefined)  data.precio_unitario = dto.precio_unitario;
+    if (dto.stock_minimo !== undefined)     data.stock_minimo = dto.stock_minimo;
+    if (dto.color !== undefined)            data.color = dto.color;
+    if (dto.talla !== undefined)            data.talla = dto.talla;
+    if (dto.descripcion !== undefined)      data.descripcion = dto.descripcion;
+    if (dto.id_categoria !== undefined)     data.id_categoria = dto.id_categoria;
+    if (dto.id_clasificacion !== undefined) data.id_clasificacion = dto.id_clasificacion;
+    if (dto.ruta_imagen !== undefined)      data.ruta_imagen = dto.ruta_imagen;
+    if (dto.estado !== undefined)           data.estado = dto.estado;
 
+    // ✅ El campo en la BD se llama tama_o, no tamaño
+    if (dto.tamaño !== undefined)           data.tama_o = dto.tamaño;
+
+    // Siempre actualizamos la fecha
     data.ultima_actualiz = new Date();
 
     const actualizado = await this.prisma.producto.update({
@@ -85,11 +95,10 @@ export class ProductosService {
       data,
     });
 
-    // respuesta con mensaje
     return {
       statusCode: 200,
       message: `Producto ${id} actualizado exitosamente`,
-      data: actualizado
+      data: actualizado,
     };
   }
 
@@ -108,9 +117,9 @@ export class ProductosService {
       },
     });
 
-    return { 
+    return {
       statusCode: 200,
-      message: `Producto ${id} eliminado exitosamente`
+      message: `Producto ${id} eliminado exitosamente`,
     };
   }
 
@@ -118,13 +127,42 @@ export class ProductosService {
   // VERIFICAR SI UN PRODUCTO EXISTE Y TIENE STOCK
   // --------------------------------------------------------
   async checkProducto(id: number) {
-    console.log('service - check producto:', JSON.stringify({ id }));
     const producto = await this.prisma.producto.findFirst({
       where: { id_producto: id, estado: true },
-      select: { id_producto: true, nom_producto: true, stock_actual: true },
+      select: {
+        id_producto: true,
+        nom_producto: true,
+        stock_actual: true,
+        precio_unitario: true,
+      },
     });
 
     if (!producto) return { found: false, message: 'Producto no encontrado' };
     return { found: true, product: producto };
+  }
+
+  // --------------------------------------------------------
+  // ACTUALIZAR IMAGEN DE PRODUCTO
+  // --------------------------------------------------------
+  async actualizarImagen(id: number, file: Express.Multer.File) {
+    if (!file) throw new BadRequestException('No se recibió ningún archivo');
+
+    await this.findOne(id); // verifica que existe, lanza 404 si no
+
+    const ruta_imagen = `/uploads/productos/${file.filename}`;
+
+    await this.prisma.producto.update({
+      where: { id_producto: id },
+      data: {
+        ruta_imagen,
+        ultima_actualiz: new Date(),
+      },
+    });
+
+    return {
+      statusCode: 200,
+      message: 'Imagen actualizada exitosamente',
+      ruta_imagen,
+    };
   }
 }

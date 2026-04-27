@@ -7,7 +7,7 @@ const API_KEY = import.meta.env.VITE_API_KEY;
 export const AuthContext = createContext();
 
 const esAdministrador = (user) => {
-    return user?.id_rol_usuario === '1' || user?.id_rol_usuario === '3'; // ← string, no número
+    return user?.id_rol_usuario === '1' || user?.id_rol_usuario === '3'; 
 };
 
 const getInitialUser = () => {

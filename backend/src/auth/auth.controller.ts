@@ -4,7 +4,7 @@ import { Public } from './decorators/public.decorator';
 import { LoginDto } from './dto/login.dto';
 import { VerifyCodeDto } from './dto/verify-code.dto';
 
-@Controller('auth')
+@Controller('auth') 
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 

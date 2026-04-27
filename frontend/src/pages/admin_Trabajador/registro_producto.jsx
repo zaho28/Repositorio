@@ -3,10 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar_p-a";
 import HeaderPanel from "../../components/HeaderPanel";
 import "../../components/css/styles.css"; 
-import axios from 'axios'; 
 import { AuthContext } from "../../context/AuthContext.jsx";  
 
-const API_URL = 'http://localhost:3000'; 
+import { apiGet, apiPost } from "../../context/api.js";
 
 export default function FormularioProductoNuevo() {
     const { userId } = useContext(AuthContext);
@@ -46,13 +45,13 @@ export default function FormularioProductoNuevo() {
         const fetchExternalData = async () => {
             try {
                 const [catRes, clasRes] = await Promise.all([
-                    axios.get(CATEGORIAS_URL),
-                    axios.get(CLASIFICACIONES_URL),
+                    apiGet('/categorias'),
+                    apiGet('/categorias/clasificaciones'),
                 ]);
-                setCategorias(catRes.data);
-                setClasificaciones(clasRes.data);
+                setCategorias(catRes);
+                setClasificaciones(clasRes);
 
-                const sinClasif = clasRes.data.find(c =>
+                const sinClasif = clasRes.find(c =>
                     c.nombre_clas?.toLowerCase().includes('sin clasificac')
                 );
                 if (sinClasif) {
@@ -103,54 +102,72 @@ export default function FormularioProductoNuevo() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setCargando(true);
-        setMensaje({ text: '', type: '' });
+    e.preventDefault();
+    setCargando(true);
+    setMensaje({ text: '', type: '' });
 
-        if (!formData.nom_producto || !formData.precio_unitario || !formData.id_categoria ||
-            !formData.id_clasificacion || !formData.stock_actual || !formData.descripcion ||
-            formData.stock_minimo === '' || formData.stock_minimo === null) {
-            setMensaje({ 
-                text: "Faltan campos obligatorios: Nombre, Precio, Categoría, Clasificación, Stock Inicial, Descripción, o Stock Mínimo.", 
-                type: 'error' 
-            });
-            setCargando(false); 
-            return;
-        }
-
-        if (!formData.id_usuario) {
-            setMensaje({ text: "Error: No se pudo identificar al usuario de la sesión.", type: 'error' });
-            setCargando(false); 
-            return;
-        }
-
-        const data = new FormData();
-        Object.keys(formData).forEach(key => {
-            data.append(key === 'stock_actual' ? 'cantidad_m' : key, formData[key]);
+    if (!formData.nom_producto || !formData.precio_unitario || !formData.id_categoria ||
+        !formData.id_clasificacion || !formData.stock_actual || !formData.descripcion ||
+        formData.stock_minimo === '' || formData.stock_minimo === null) {
+        setMensaje({ 
+            text: "Faltan campos obligatorios: Nombre, Precio, Categoría, Clasificación, Stock Inicial, Descripción, o Stock Mínimo.", 
+            type: 'error' 
         });
-        data.append('es_nuevo_producto', 'true');
-        if (imagen) data.append('imagen_producto', imagen);
+        setCargando(false); 
+        return;
+    }
 
-        try {
-            const response = await axios.post(`${API_URL}/inventario`, data, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+    if (!formData.id_usuario) {
+        setMensaje({ text: "Error: No se pudo identificar al usuario de la sesión.", type: 'error' });
+        setCargando(false); 
+        return;
+    }
+
+    try { 
+        const productoData = {
+            nom_producto: formData.nom_producto,
+            precio_unitario: parseFloat(formData.precio_unitario),
+            stock_actual: parseInt(formData.stock_actual),
+            stock_minimo: parseInt(formData.stock_minimo),
+            color: formData.color || null,
+            talla: formData.talla || null,
+            tamaño: formData.tamaño || null,
+            descripcion: formData.descripcion,
+            id_categoria: parseInt(formData.id_categoria),
+            id_clasificacion: parseInt(formData.id_clasificacion),
+        };
+
+        const response = await apiPost('/productos', productoData);
+        const idNuevo = response.id_producto;
+
+        if (imagen && idNuevo) {
+            const formDataImagen = new FormData();
+            formDataImagen.append('imagen_producto', imagen);
+
+            await fetch(`http://localhost:3000/productos/${idNuevo}/imagen`, {
+                method: 'POST',
+                headers: {
+                    'x-api-key': import.meta.env.VITE_API_KEY,
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: formDataImagen,
             });
-            setMensaje({ 
-                text: response.data.message || `Producto registrado. ID: ${response.data.id_producto}`, 
-                type: 'success' 
-            });
-            handleReset();
-            setTimeout(() => { navigate('/productos'); }, 2000);
-        } catch (error) {
-            const errorMessage = error.response?.data?.details || 
-                                 error.response?.data?.error || 
-                                 error.message || 
-                                 "Error al registrar el producto.";
-            setMensaje({ text: errorMessage, type: 'error' });
-        } finally {
-            setCargando(false);
         }
-    };
+
+        setMensaje({ 
+            text: `Producto registrado exitosamente. ID: ${idNuevo}`, 
+            type: 'success' 
+        });
+        handleReset();
+        setTimeout(() => navigate('/productos'), 2000);
+
+    } catch (error) {  
+        const errorMessage = error.response?.data?.error || error.message || "Error al registrar el producto.";
+        setMensaje({ text: errorMessage, type: 'error' });
+    } finally {
+        setCargando(false);
+    }
+};
 
     const handleCancel = () => navigate('/productos');
     

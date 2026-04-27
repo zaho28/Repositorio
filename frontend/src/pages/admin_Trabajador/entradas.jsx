@@ -2,11 +2,10 @@ import React, { useState, useContext } from "react";
 import Sidebarmov from "../../components/Sidebarmov";
 import HeaderPanel from "../../components/HeaderPanel";
 import "../../components/css/styles.css"; 
-import axios from 'axios';
 import { AuthContext } from "../../context/AuthContext.jsx"; 
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = 'http://localhost:3000'; 
+import { apiGet, apiPost } from '../../context/api.js';
 
 export default function FormularioEntradaProducto() {
     
@@ -40,86 +39,74 @@ export default function FormularioEntradaProducto() {
     // BUSCAR PRODUCTO AL PRESIONAR ENTER
     const handleCheckProducto = async (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); 
+            e.preventDefault();
             const id = formData.id_producto;
             if (!id || cargando) return;
-            
+
             setCargando(true);
             setMensaje({ text: '', type: '' });
             setProductoEncontrado(null);
 
             try {
-                const response = await axios.get(`${API_URL}/check/${id}`);
+                const response = await apiGet(`/productos/check/${id}`); 
                 
-                if (response.data.found) {
-                    setProductoEncontrado(response.data.product);
+                if (response.found) {  
+                    setProductoEncontrado(response.product);
                     setMensaje({ 
-                        text: `Producto encontrado: ${response.data.product.nom_producto} | Stock Actual: ${response.data.product.stock_actual}`, 
+                        text: `Producto encontrado: ${response.product.nom_producto} | Stock: ${response.product.stock_actual}`, 
                         type: 'success' 
                     });
-                    // Enfocamos el campo de cantidad automáticamente para mejor UX
-                    document.getElementById('cantidad_m').focus(); 
+                    document.getElementById('cantidad_m').focus();
+                } else {
+                    setMensaje({ text: 'Producto no encontrado o inactivo.', type: 'error' });
                 }
             } catch (error) {
-                const errorMsg = error.response && error.response.status === 404 
-                    ? 'Producto no encontrado o inactivo.' 
-                    : 'Error al buscar el producto. Intente nuevamente.';
-                
-                setMensaje({ text: errorMsg, type: 'error' });
-                console.error("Error al buscar el producto:", error);
+                setMensaje({ text: 'Error al buscar el producto.', type: 'error' });
             } finally {
                 setCargando(false);
             }
         }
     };
-    
-    // 2. ENVIAR FORMULARIO (SUMAR STOCK)
+
+    // ENVIAR FORMULARIO (SUMAR STOCK)
     const handleSubmit = async (e) => {
         e.preventDefault();
         
         if (!productoEncontrado) {
-            setMensaje({ text: 'Primero valide el producto con el ID y ENTER.', type: 'error' });
-            return;
+        setMensaje({ text: 'Primero valide el producto con el ID y ENTER.', type: 'error' });
+        return;
         }
         if (!formData.cantidad_m || parseInt(formData.cantidad_m) <= 0) {
-            setMensaje({ text: 'La cantidad a ingresar debe ser un número positivo.', type: 'error' });
+            setMensaje({ text: 'La cantidad debe ser un número positivo.', type: 'error' });
             return;
         }
 
         setCargando(true);
         setMensaje({ text: '', type: '' });
 
-        // FormData sin archivos, solo datos JSON
         const dataToSend = {
+            Cantidad_m: parseInt(formData.cantidad_m),
+            observaciones: formData.observaciones || null,
+            id_m: 'M-E',  
+            id_producto: parseInt(formData.id_producto),
             id_usuario: userId || 'Adm-01',
-            cantidad_m: formData.cantidad_m,
-            observaciones: formData.observaciones,
-            es_nuevo_producto: 'false', // Indicamos al backend que es solo una entrada de stock
-            id_producto_existente: formData.id_producto,
         };
-        
+
         try {
-            const response = await axios.post(`${API_URL}/inventario`, dataToSend, {
-                headers: { 'Content-Type': 'application/json' },
-            });
-            
-            setMensaje({ text: `¡Stock actualizado! Nuevo ID: ${response.data.id_producto}. Redirigiendo...`, type: 'success' });
-            
-            // 3. REDIRECCIÓN AUTOMÁTICA
+            const response = await apiPost('/movimientos', dataToSend); 
+            setMensaje({ text: '¡Stock actualizado exitosamente! Redirigiendo...', type: 'success' });
             setTimeout(() => {
                 handleReset();
-                navigate('/productos'); // Redirige a la lista de productos
+                navigate('/productos');
             }, 1500);
-
         } catch (error) {
-            const details = error.response?.data?.details || error.message;
-            console.error("Error al enviar el formulario:", error);
-            setMensaje({ text: `Error al actualizar el stock: ${details}`, type: 'error' });
+            setMensaje({ text: `Error al actualizar el stock: ${error.message}`, type: 'error' });
         } finally {
             setCargando(false);
         }
     };
-    
+
+    // Reiniciar formulario
     const handleReset = () => {
         setFormData(prev => ({
             ...prev,
@@ -160,7 +147,7 @@ export default function FormularioEntradaProducto() {
                                 onKeyDown={handleCheckProducto} 
                                 disabled={cargando}
                                 // Estilo para resaltar si el campo está listo o no
-                                style={{ borderColor: productoEncontrado ? '#2ecc71' : (formData.id_producto ? '#f39c12' : '#ccc') }}
+                                style={{ borderColor: productoEncontrado ? '#2ecc71' : (formData.id_producto ? '#fff0f3e8' : '#ccc') }}
                             />
                         </div>
 

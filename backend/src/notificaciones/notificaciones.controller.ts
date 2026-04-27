@@ -48,4 +48,4 @@ export class NotificacionesController {
     console.log('controller - estadísticas:', JSON.stringify(query));
     return this.notificacionesService.estadisticas(query);
   }
-}
+} 

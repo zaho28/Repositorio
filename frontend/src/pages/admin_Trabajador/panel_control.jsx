@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../../components/Sidebar_p-a.jsx";
 import HeaderPanel from "../../components/HeaderPanel";
 import "../../components/css/styles.css";
-import axios from 'axios';
+import { apiGet } from "../../context/api.js";
 import {
     BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -12,8 +12,6 @@ import { Link } from 'react-router-dom';
 // ─────────────────────────────────────────────
 //  SUBCOMPONENTE: HISTORIAL DE VENTAS
 // ─────────────────────────────────────────────
-const API_URL = 'http://localhost:3000'; 
-
 function HistorialVentas() {
     const [estadisticas, setEstadisticas] = React.useState({
         totalEntradas: 0,
@@ -32,18 +30,17 @@ function HistorialVentas() {
         try {
             setCargando(true);
             setError(null);
-            const [resumenGeneral, , , topProductos, resumenMensual] = await Promise.all([
-                axios.get(`${API_MOV}/resumen-general`, { params: rangoFechas }),
-                axios.get(`${API_MOV}/por-dia`, { params: rangoFechas }),
-                axios.get(`${API_MOV}/por-tipo`, { params: rangoFechas }),
-                axios.get(`${API_MOV}/top-productos`, { params: { ...rangoFechas, limit: 10 } }),
-                axios.get(`${API_MOV}/resumen-mensual`)
+            const params = new URLSearchParams(rangoFechas).toString();
+            const [resumenGeneral, topProductos, resumenMensual] = await Promise.all([
+                apiGet(`/movimientos/resumen-general?${params}`),
+                apiGet(`/movimientos/top-productos?${params}&limit=10`),
+                apiGet(`/movimientos/resumen-mensual`),
             ]);
             setEstadisticas({
-                totalEntradas: resumenGeneral.data.totalEntradas || 0,
-                totalSalidas: resumenGeneral.data.totalSalidas || 0,
-                productosMasMovidos: topProductos.data || [],
-                resumenMensual: resumenMensual.data || []
+                totalEntradas: resumenGeneral.totalEntradas || 0,
+                totalSalidas: resumenGeneral.totalSalidas || 0,
+                productosMasMovidos: topProductos || [],
+                resumenMensual: resumenMensual || []
             });
         } catch {
             setError("Error al cargar las estadísticas. Verifica que el backend esté funcionando.");
@@ -64,7 +61,6 @@ function HistorialVentas() {
 
     return (
         <div>
-            {/* Filtros de fecha */}
             <div className="panel-filtros-fila">
                 <div>
                     <label className="filtro-label">Desde:</label>
@@ -81,21 +77,19 @@ function HistorialVentas() {
                 <button className="btn-registrar" onClick={fetchEstadisticas}>Actualizar</button>
             </div>
 
-            {/* Tarjetas resumen */}
             <div className="panel-stats-grid">
                 <div className="panel-stat-card verde">
                     <div className="panel-stat-label">Total Entradas</div>
-                    <div className="panel-stat-value">{estadisticas.totalEntradas.toLocaleString()}</div>
+                    <div className="panel-stat-value">{Number(estadisticas.totalEntradas).toLocaleString()}</div>
                     <div className="panel-stat-sub">unidades recibidas</div>
                 </div>
                 <div className="panel-stat-card rojo">
                     <div className="panel-stat-label">Total Salidas</div>
-                    <div className="panel-stat-value">{estadisticas.totalSalidas.toLocaleString()}</div>
+                    <div className="panel-stat-value">{Number(estadisticas.totalSalidas).toLocaleString()}</div>
                     <div className="panel-stat-sub">unidades vendidas</div>
                 </div>
             </div>
 
-            {/* Gráfico mensual */}
             <div className="panel-chart-box">
                 <h3 className="panel-chart-titulo">Resumen Mensual (Último Año)</h3>
                 <ResponsiveContainer width="100%" height={300}>
@@ -111,7 +105,6 @@ function HistorialVentas() {
                 </ResponsiveContainer>
             </div>
 
-            {/* Tabla productos más movidos */}
             <div className="panel-chart-box">
                 <h3 className="panel-chart-titulo">Productos Más Movidos</h3>
                 <div className="tabla-scroll">
@@ -128,16 +121,14 @@ function HistorialVentas() {
                         </thead>
                         <tbody>
                             {estadisticas.productosMasMovidos.length === 0 ? (
-                                <tr>
-                                    <td colSpan="6" className="tabla-vacia-mensaje">No hay datos para mostrar</td>
-                                </tr>
+                                <tr><td colSpan="6" className="tabla-vacia-mensaje">No hay datos para mostrar</td></tr>
                             ) : estadisticas.productosMasMovidos.map((prod, i) => (
                                 <tr key={prod.id_producto}>
                                     <td>{i + 1}</td>
                                     <td>{prod.producto}</td>
-                                    <td><strong>{prod.total_movimientos}</strong></td>
-                                    <td className="celda-entrada">+{prod.entradas || 0}</td>
-                                    <td className="celda-salida">-{prod.salidas || 0}</td>
+                                    <td><strong>{Number(prod.total_movimientos)}</strong></td>
+                                    <td className="celda-entrada">+{Number(prod.entradas) || 0}</td>
+                                    <td className="celda-salida">-{Number(prod.salidas) || 0}</td>
                                     <td>
                                         <span className={`stock-badge ${prod.stock_actual <= prod.stock_minimo ? 'stock-bajo' : 'stock-ok'}`}>
                                             {prod.stock_actual}
@@ -156,12 +147,11 @@ function HistorialVentas() {
 // ─────────────────────────────────────────────
 //  SUBCOMPONENTE: NOTIFICACIONES
 // ─────────────────────────────────────────────
-
 const NOTIF_FILTROS = [
-    { key: 'todas',      clase: 'activo-todas',      label: 'Todas',      tipo: null },
-    { key: 'stock-bajo', clase: 'activo-stockbajo',   label: 'Stock Bajo', tipo: 'stock-bajo' },
-    { key: 'agotado',    clase: 'activo-agotado',     label: 'Agotados',   tipo: 'agotado' },
-    { key: 'pedidos',    clase: 'activo-pedidos',     label: 'Pedidos',    tipo: 'pedido' },
+    { key: 'todas',      clase: 'activo-todas',    label: 'Todas',      tipo: null },
+    { key: 'stock-bajo', clase: 'activo-stockbajo', label: 'Stock Bajo', tipo: 'stock-bajo' },
+    { key: 'agotado',    clase: 'activo-agotado',   label: 'Agotados',   tipo: 'agotado' },
+    { key: 'pedidos',    clase: 'activo-pedidos',   label: 'Pedidos',    tipo: 'pedido' },
 ];
 
 const BADGE_TIPO = {
@@ -187,8 +177,8 @@ function Notificaciones() {
     const cargarNotificaciones = async () => {
         try {
             setCargando(true);
-            const res = await axios.get(API_NOTIF);
-            setNotificaciones(res.data);
+            const data = await apiGet('/notificaciones');
+            setNotificaciones(data);
             setError(null);
         } catch {
             setError("No se pudieron cargar las notificaciones");
@@ -199,8 +189,8 @@ function Notificaciones() {
 
     const cargarEstadisticas = async () => {
         try {
-            const res = await axios.get(`${API_NOTIF}/estadisticas`);
-            setEstadisticas(res.data);
+            const data = await apiGet('/notificaciones/estadisticas');
+            setEstadisticas(data);
         } catch {}
     };
 
@@ -228,7 +218,6 @@ function Notificaciones() {
 
     return (
         <div>
-            {/* Tarjetas de estadísticas */}
             {estadisticas && (
                 <div className="panel-stats-grid">
                     <div className="panel-stat-card amarillo">
@@ -250,23 +239,17 @@ function Notificaciones() {
                 </div>
             )}
 
-            {/* Filtros */}
             <div className="notif-filtros-fila">
                 {NOTIF_FILTROS.map(({ key, clase, label }) => (
-                    <button
-                        key={key}
+                    <button key={key}
                         className={`btn-notif-filtro ${filtro === key ? clase : ''}`}
-                        onClick={() => setFiltro(key)}
-                    >
+                        onClick={() => setFiltro(key)}>
                         {label} ({countPor(key)})
                     </button>
                 ))}
-                <button className="btn-notif-actualizar" onClick={cargarNotificaciones}>
-                    Actualizar
-                </button>
+                <button className="btn-notif-actualizar" onClick={cargarNotificaciones}>Actualizar</button>
             </div>
 
-            {/* Contenido */}
             {cargando ? (
                 <p className="panel-loading">Cargando notificaciones...</p>
             ) : error ? (
@@ -280,12 +263,8 @@ function Notificaciones() {
                     <table className="tabla">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Tipo</th>
-                                <th>Mensaje</th>
-                                <th>Detalles</th>
-                                <th>Fecha</th>
-                                <th>Acción</th>
+                                <th>#</th><th>Tipo</th><th>Mensaje</th>
+                                <th>Detalles</th><th>Fecha</th><th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -311,9 +290,7 @@ function Notificaciones() {
                                                 </small>
                                             )}
                                         </td>
-                                        <td>
-                                            <small className="mov-usuario-id">{formatearFecha(notif.fecha)}</small>
-                                        </td>
+                                        <td><small className="mov-usuario-id">{formatearFecha(notif.fecha)}</small></td>
                                         <td>
                                             <Link to={notif.ruta_destino}>
                                                 <button className={`btn-filtro-mov ${notif.tipo === 'pedido' ? 'todos activo' : 'entradas activo'}`}>
@@ -336,6 +313,102 @@ function Notificaciones() {
 //  SUBCOMPONENTE: REPORTES
 // ─────────────────────────────────────────────
 const TARJETAS_CLIENTES = ['oro', 'plata', 'bronce'];
+
+const handlePrint = () => {
+    // Abre una ventana nueva solo con el contenido del reporte
+    const contenido = document.querySelector('.reporte-imprimible');
+    if (!contenido) return;
+ 
+    const ventana = window.open('', '_blank', 'width=900,height=700');
+    ventana.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8" />
+            <title>Reporte — Gurama Online</title>
+            <style>
+                /* Reset básico */
+                * { box-sizing: border-box; margin: 0; padding: 0; }
+                body { font-family: 'Segoe UI', sans-serif; font-size: 13px; color: #2d1f27; padding: 24px; }
+                h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: #a0405f; }
+
+                /* Stats grid */
+                .panel-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+                .panel-stat-card  { border-radius: 10px; padding: 14px 18px; }
+                .panel-stat-card.verde      { background: #edf7ed; border: 1px solid #c8e6c9; }
+                .panel-stat-card.rojo       { background: #fdecea; border: 1px solid #ffcdd2; }
+                .panel-stat-card.azul       { background: #e8f4fd; border: 1px solid #b3d9f8; }
+                .panel-stat-card.rosa       { background: #fdf0f4; border: 1px solid #f0d0db; }
+                .panel-stat-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; color: #7a5060; }
+                .panel-stat-value { font-size: 26px; font-weight: 800; color: #2d1f27; }
+                .panel-stat-value-sm { font-size: 18px; }
+                .panel-stat-sub   { font-size: 11px; color: #6b7280; margin-top: 2px; }
+
+                /* Chart box */
+                .panel-chart-box  { background: #fff; border: 1px solid #e8d5dc; border-radius: 10px; padding: 18px; margin-bottom: 18px; page-break-inside: avoid; }
+                .panel-chart-box.alerta { border-color: #f9a8a8; background: #fff8f8; }
+                .panel-chart-titulo { font-size: 14px; font-weight: 700; color: #a0405f; margin-bottom: 14px; }
+                .panel-chart-titulo.danger { color: #c62828; }
+
+                /* Top clientes */
+                .panel-top-clientes-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+                .panel-cliente-card  { border-radius: 10px; padding: 16px; text-align: center; }
+                .panel-cliente-card.oro    { background: linear-gradient(135deg,#fffde7,#fff9c4); border: 2px solid #f9a825; }
+                .panel-cliente-card.plata  { background: linear-gradient(135deg,#f5f5f5,#eeeeee); border: 2px solid #bdbdbd; }
+                .panel-cliente-card.bronce { background: linear-gradient(135deg,#fbe9e7,#ffccbc); border: 2px solid #e64a19; }
+                .panel-cliente-puesto  { font-size: 22px; font-weight: 900; }
+                .panel-cliente-nombre  { font-weight: 700; margin: 4px 0; }
+                .panel-cliente-telefono{ font-size: 12px; color: #666; }
+                .panel-cliente-monto   { font-size: 16px; font-weight: 800; color: #a0405f; margin-top: 6px; }
+                .panel-cliente-pedidos { font-size: 12px; color: #888; }
+ 
+                /* Tabla */
+                table  { width: 100%; border-collapse: collapse; font-size: 12px; }
+                thead  { background: #c45c7e; color: #fff; }
+                th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #f0e6ea; }
+                .celda-right       { text-align: right; }
+                .celda-center      { text-align: center; }
+                .celda-bold        { font-weight: 700; }
+                .celda-gris        { color: #6b7280; }
+                .celda-gris-oscuro { color: #374151; }
+                .celda-total-verde { color: #2e7d32; font-weight: 800; }
+                .celda-id-pedido   { font-weight: 700; color: #a0405f; }
+                tfoot td           { background: #fdf0f4; }
+ 
+                /* Badges */
+                .stock-badge   { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+                .stock-bajo    { background: #fdecea; color: #c62828; }
+                .badge-urgente { background: #c62828; color: #fff; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+                .pedido-estado-inline  { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+                .pedido-estado-pagado  { background: #edf7ed; color: #2e7d32; }
+                .pedido-estado-pendiente { background: #fff3cd; color: #856404; }
+                .pedido-estado-otro    { background: #e8f4fd; color: #1565c0; }
+ 
+                /* Gráficos — recharts no imprime bien, los ocultamos */
+                .panel-graficos-grid { display: none; }
+ 
+                /* Footer */
+                .panel-reporte-footer { margin-top: 20px; text-align: center; font-size: 11px; color: #9e8a92; border-top: 1px solid #e8d5dc; padding-top: 12px; }
+ 
+                @media print {
+                    body { padding: 10px; }
+                    .panel-chart-box { page-break-inside: avoid; }
+                }
+            </style>
+        </head>
+        <body>
+            <h2 style="margin-bottom:16px;color:#a0405f;font-size:18px;"> Reporte — Gurama Online</h2>
+            ${contenido.innerHTML}
+        </body>
+        </html>
+    `);
+    ventana.document.close();
+    ventana.focus();
+    setTimeout(() => {
+        ventana.print();
+        ventana.close();
+    }, 500); // espera a que cargue antes de imprimir
+};
 
 function Reportes() {
     const [loading, setLoading] = React.useState(false);
@@ -364,21 +437,22 @@ function Reportes() {
     const cargarDatos = async () => {
         setLoading(true);
         try {
-            const params = { desde: fechaDesde, hasta: fechaHasta };
+            const params = `desde=${fechaDesde}&hasta=${fechaHasta}`;
             const [resumenRes, topProdRes, mensualRes, movimientosRes] = await Promise.all([
-                axios.get(`${API_REP}/movimientos/resumen-general`, { params }),
-                axios.get(`${API_REP}/movimientos/top-productos`, { params: { ...params, limit: 10 } }),
-                axios.get(`${API_REP}/movimientos/resumen-mensual`),
-                axios.get(`${API_REP}/movimientos`, { params: { ...params, limit: 1000 } })
+                apiGet(`/movimientos/resumen-general?${params}`),
+                apiGet(`/movimientos/top-productos?${params}&limit=10`),
+                apiGet(`/movimientos/resumen-mensual`),
+                apiGet(`/movimientos?${params}&limit=1000`),
             ]);
-            setResumenGeneral(resumenRes.data);
-            setResumenMensual(mensualRes.data);
-            setProductosStockBajo(topProdRes.data
+
+            setResumenGeneral(resumenRes);
+            setResumenMensual(mensualRes);
+            setProductosStockBajo((topProdRes || [])
                 .filter(p => p.stock_actual < p.stock_minimo || p.stock_actual < 5)
                 .sort((a, b) => a.stock_actual - b.stock_actual).slice(0, 5));
 
             const origen = { online: 0, manual: 0, admin: 0 };
-            movimientosRes.data.forEach(mov => {
+            (movimientosRes || []).forEach(mov => {
                 if (mov.id_m === 'M-S') {
                     const obs = mov.observaciones || '';
                     if (obs.includes('Pedido #') || obs.includes('Venta Online')) origen.online++;
@@ -389,8 +463,9 @@ function Reportes() {
             setVentasPorOrigen([
                 { name: 'Online', value: origen.online, color: '#c45a77' },
                 { name: 'Manual', value: origen.manual, color: '#ec4899' },
-                { name: 'Admin',  value: origen.admin,  color: '#f59e0b' }
+                { name: 'Admin',  value: origen.admin,  color: '#f59e0b' },
             ]);
+
             await cargarDatosPedidos();
         } catch (e) { console.error(e); }
         finally { setLoading(false); }
@@ -398,14 +473,14 @@ function Reportes() {
 
     const cargarDatosPedidos = async () => {
         try {
-            const pedidosRes = await axios.get(`${API_REP}/pedidos/todos`);
-            const pedidos = pedidosRes.data;
+            const pedidos = await apiGet('/pedidos');
 
             const metodosPago = {};
             pedidos.forEach(p => {
-                const m = p.metodo_pago || 'Sin definir';
+                const ticket = p.ticket_compra?.[0];
+                const m = ticket?.metodo_pago?.nom_metodo || 'Sin definir';
                 if (!metodosPago[m]) metodosPago[m] = { metodo: m, monto_total: 0, cantidad: 0 };
-                metodosPago[m].monto_total += parseFloat(p.total_ticket) || 0;
+                metodosPago[m].monto_total += parseFloat(ticket?.total_ticket) || 0;
                 metodosPago[m].cantidad += 1;
             });
             setVentasPorMetodoPago(Object.values(metodosPago));
@@ -413,25 +488,32 @@ function Reportes() {
             const clientes = {};
             pedidos.forEach(p => {
                 const id = p.id_usuario;
-                if (!clientes[id]) clientes[id] = { id_usuario: id, nombre: p.cliente, telefono: p.telefono, cantidad_pedidos: 0, total_monto: 0 };
+                const nombre = p.usuario ? `${p.usuario.nom_1} ${p.usuario.ape_1}` : id;
+                const ticket = p.ticket_compra?.[0];
+                if (!clientes[id]) clientes[id] = { id_usuario: id, nombre, telefono: p.usuario?.telefono, cantidad_pedidos: 0, total_monto: 0 };
                 clientes[id].cantidad_pedidos += 1;
-                clientes[id].total_monto += parseFloat(p.total_ticket) || 0;
+                clientes[id].total_monto += parseFloat(ticket?.total_ticket) || 0;
             });
             setTopClientes(Object.values(clientes).sort((a, b) => b.total_monto - a.total_monto).slice(0, 3));
 
             setIngresosPorPedido(pedidos
                 .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).slice(0, 10)
-                .map(p => ({
-                    id_pedido: p.id_pedido, cliente: p.cliente,
-                    fecha: new Date(p.fecha).toLocaleDateString(),
-                    metodo: p.metodo_pago, estado: p.estado_pago,
-                    total: parseFloat(p.total_ticket) || 0
-                })));
+                .map(p => {
+                    const ticket = p.ticket_compra?.[0];
+                    return {
+                        id_pedido: p.id_pedido,
+                        cliente: p.usuario ? `${p.usuario.nom_1} ${p.usuario.ape_1}` : p.id_usuario,
+                        fecha: new Date(p.fecha).toLocaleDateString(),
+                        metodo: ticket?.metodo_pago?.nom_metodo || '-',
+                        estado: ticket?.estado_pago?.nom_metodo || p.estado,
+                        total: parseFloat(ticket?.total_ticket) || 0,
+                    };
+                }));
         } catch (e) { console.error(e); }
     };
 
     const getEstadoClase = (estado) => {
-        if (estado === 'Pagado')   return 'pedido-estado-pagado';
+        if (estado === 'Pagado')    return 'pedido-estado-pagado';
         if (estado === 'Pendiente') return 'pedido-estado-pendiente';
         return 'pedido-estado-otro';
     };
@@ -442,8 +524,7 @@ function Reportes() {
     if (loading) return <p className="panel-loading">Generando reportes...</p>;
 
     return (
-        <div>
-            {/* Filtros */}
+        <div className="reporte-imprimible">
             <div className="panel-filtros-fila">
                 <div>
                     <label className="filtro-label">Desde:</label>
@@ -457,28 +538,25 @@ function Reportes() {
                         onChange={e => setFechaHasta(e.target.value)}
                         className="filtro-date-input" />
                 </div>
-                <button className="btn-registrar" onClick={() => window.print()}>
-                    Imprimir Reporte
-                </button>
+                <button className="btn-registrar btn-no-imprimir" onClick={handlePrint}>Imprimir Reporte</button>
             </div>
 
-            {/* Tarjetas */}
             {resumenGeneral && (
                 <div className="panel-stats-grid">
                     <div className="panel-stat-card verde">
                         <div className="panel-stat-label">Total Entradas</div>
-                        <div className="panel-stat-value">{resumenGeneral.totalEntradas || 0}</div>
+                        <div className="panel-stat-value">{Number(resumenGeneral.totalEntradas) || 0}</div>
                         <div className="panel-stat-sub">unidades recibidas</div>
                     </div>
                     <div className="panel-stat-card rojo">
                         <div className="panel-stat-label">Total Salidas</div>
-                        <div className="panel-stat-value">{resumenGeneral.totalSalidas || 0}</div>
+                        <div className="panel-stat-value">{Number(resumenGeneral.totalSalidas) || 0}</div>
                         <div className="panel-stat-sub">unidades vendidas</div>
                     </div>
                     <div className="panel-stat-card azul">
                         <div className="panel-stat-label">Balance Neto</div>
                         <div className="panel-stat-value">
-                            {(resumenGeneral.totalEntradas || 0) - (resumenGeneral.totalSalidas || 0)}
+                            {(Number(resumenGeneral.totalEntradas) || 0) - (Number(resumenGeneral.totalSalidas) || 0)}
                         </div>
                         <div className="panel-stat-sub">diferencia</div>
                     </div>
@@ -492,7 +570,6 @@ function Reportes() {
                 </div>
             )}
 
-            {/* Top 3 Clientes */}
             {topClientes.length > 0 && (
                 <div className="panel-chart-box">
                     <h3 className="panel-chart-titulo">Top 3 Mejores Clientes</h3>
@@ -501,7 +578,7 @@ function Reportes() {
                             <div key={idx} className={`panel-cliente-card ${TARJETAS_CLIENTES[idx]}`}>
                                 <div className="panel-cliente-puesto">{idx + 1}</div>
                                 <div className="panel-cliente-nombre">{cliente.nombre}</div>
-                                <div className="panel-cliente-telefono">{cliente.telefono}</div>
+                                <div className="panel-cliente-telefono">{String(cliente.telefono || '')}</div>
                                 <div className="panel-cliente-monto">${cliente.total_monto.toLocaleString('es-CO')}</div>
                                 <div className="panel-cliente-pedidos">{cliente.cantidad_pedidos} pedidos</div>
                             </div>
@@ -510,7 +587,6 @@ function Reportes() {
                 </div>
             )}
 
-            {/* Gráficos */}
             <div className="panel-graficos-grid">
                 {ventasPorOrigen.length > 0 && (
                     <div className="panel-chart-box">
@@ -542,7 +618,6 @@ function Reportes() {
                 )}
             </div>
 
-            {/* Tendencia mensual */}
             {resumenMensual.length > 0 && (
                 <div className="panel-chart-box">
                     <h3 className="panel-chart-titulo">Tendencia de Ventas Mensual</h3>
@@ -560,7 +635,6 @@ function Reportes() {
                 </div>
             )}
 
-            {/* Stock bajo */}
             {productosStockBajo.length > 0 && (
                 <div className="panel-chart-box alerta">
                     <h3 className="panel-chart-titulo danger">⚠ Productos con Stock Bajo</h3>
@@ -568,10 +642,8 @@ function Reportes() {
                         <table className="tabla">
                             <thead>
                                 <tr>
-                                    <th>Producto</th>
-                                    <th>Stock Actual</th>
-                                    <th>Stock Mínimo</th>
-                                    <th>Estado</th>
+                                    <th>Producto</th><th>Stock Actual</th>
+                                    <th>Stock Mínimo</th><th>Estado</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -593,7 +665,6 @@ function Reportes() {
                 </div>
             )}
 
-            {/* Últimos pedidos */}
             {ingresosPorPedido.length > 0 && (
                 <div className="panel-chart-box">
                     <h3 className="panel-chart-titulo">Últimos 10 Ingresos por Pedido</h3>
@@ -601,12 +672,8 @@ function Reportes() {
                         <table className="tabla">
                             <thead>
                                 <tr>
-                                    <th>Pedido</th>
-                                    <th>Cliente</th>
-                                    <th>Fecha</th>
-                                    <th>Método</th>
-                                    <th>Estado</th>
-                                    <th className="celda-right">Total</th>
+                                    <th>Pedido</th><th>Cliente</th><th>Fecha</th>
+                                    <th>Método</th><th>Estado</th><th className="celda-right">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -636,7 +703,6 @@ function Reportes() {
                 </div>
             )}
 
-            {/* Footer */}
             <div className="panel-reporte-footer">
                 <p>Sistema de Gestión de Inventario — Gurama Online</p>
                 <p>Reporte generado el {new Date().toLocaleString('es-CO')}</p>
@@ -646,7 +712,7 @@ function Reportes() {
 }
 
 // ─────────────────────────────────────────────
-//  COMPONENTE PRINCIPAL: PANEL DE CONTROL
+//  COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────────
 const OPCIONES_PANEL = [
     { key: 'reportes',         label: 'Reportes' },
@@ -666,7 +732,7 @@ export default function PanelControl() {
             case 'notificaciones':   return <Notificaciones />;
             default: return (
                 <div className="panel-placeholder">
-                    <div className="panel-placeholder-icono">☝</div>
+                    <div className="panel-placeholder-icono"></div>
                     <p>Seleccione una opción para ver su contenido aquí</p>
                 </div>
             );
@@ -679,23 +745,19 @@ export default function PanelControl() {
             <main className="contenido">
                 <HeaderPanel />
 
-                {/* Selector — border-radius solo arriba, se fusiona con cuadro-blanco */}
                 <section className="opciones panel-selector">
                     <h2>Selecciona una opción</h2>
                     <div className="opciones-botones">
                         {OPCIONES_PANEL.map(({ key, label }) => (
-                            <div
-                                key={key}
+                            <div key={key}
                                 className={`opcion ${activo === key ? 'opcion-activa' : ''}`}
-                                onClick={() => handleOpcion(key)}
-                            >
+                                onClick={() => handleOpcion(key)}>
                                 <p>{label}</p>
                             </div>
                         ))}
                     </div>
                 </section>
 
-                {/* Contenido dinámico — border-radius solo abajo */}
                 <section className="cuadro-blanco panel-contenido">
                     {renderContenido()}
                 </section>

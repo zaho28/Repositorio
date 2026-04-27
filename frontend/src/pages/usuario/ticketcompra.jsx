@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useCart } from '../../context/logica_carrito.jsx';
 import Header from '../../components/Header_c.jsx';
 import Footer from '../../components/Footer.jsx';
 import '../../components/css/styles.css';
 
-const API_URL = 'http://localhost:3000';
+import { apiPost} from '../../context/api.js';
 
 const TicketCompra = () => {
     const { clearCart } = useCart();
@@ -20,7 +19,7 @@ const TicketCompra = () => {
         const storedData    = sessionStorage.getItem('paymentData');
         const yaProcesado   = sessionStorage.getItem('pedidoProcesado');
 
-        if (storedData && !yaProcesado) {
+        if (storedData && !yaProcesado) { 
             try {
                 const data = JSON.parse(storedData);
                 sessionStorage.setItem('pedidoProcesado', 'true');
@@ -31,7 +30,6 @@ const TicketCompra = () => {
         } else if (!storedData) {
             setError('No hay información de pedido');
         }
-        // Si ya fue procesado, ticketData se mantiene vacío → se muestra estado sin datos
     }, []);
 
     const procesarPedido = async (pedidoData) => {
@@ -40,8 +38,8 @@ const TicketCompra = () => {
 
         try {
             const datosUsuarioString = localStorage.getItem('user');
-            const datosUsuario       = datosUsuarioString ? JSON.parse(datosUsuarioString) : {};
-            const id_usuario     = datosUsuario.id_usuario || 'GUEST';
+            const datosUsuario = datosUsuarioString ? JSON.parse(datosUsuarioString) : {};
+            const id_usuario = datosUsuario.id_usuario || 'GUEST';
 
             if (!pedidoData.cartItems || pedidoData.cartItems.length === 0) {
                 throw new Error('No hay productos en el pedido');
@@ -49,45 +47,43 @@ const TicketCompra = () => {
 
             const items = pedidoData.cartItems.map(item => ({
                 id_producto: item.id,
-                cantidad:    item.cantidad,
-                precio:      item.price,
+                cantidad: item.cantidad,
+                precio: item.price,
             }));
 
             const apiData = {
                 items,
                 id_usuario,
-                metodo_pago: pedidoData.metodoPago || 'Mtd-PE',
-                subtotal:    pedidoData.subtotal,
-                total:       pedidoData.total,
+                metodo_pago: pedidoData.metodoPago || 'Mtd-TJ', 
+                subtotal: pedidoData.subtotal,
+                total: pedidoData.total,
             };
 
-            const response = await axios.post(`${API_URL}/pedidos`, apiData);
+            const response = await apiPost('/pedidos/crear', apiData);
 
-            if (!response.data || !response.data.success) {
-                throw new Error(response.data?.error || 'Respuesta inválida del servidor');
+            if (!response || !response.success) {
+                throw new Error(response?.message || 'Respuesta inválida del servidor');
             }
 
-            const resData = response.data.data;
+            const resData = response.data;
 
             const ticket = {
-                num_ticket:         `TKT-${resData.num_ticket}`,
-                id_pedido:          resData.id_pedido,
-                fecha_emision:      new Date().toLocaleString('es-CO', {
+                num_ticket: `TKT-${resData.num_ticket}`,
+                id_pedido: resData.id_pedido,
+                fecha_emision: new Date().toLocaleString('es-CO', {
                     year: 'numeric', month: '2-digit', day: '2-digit',
                     hour: '2-digit', minute: '2-digit', second: '2-digit',
                 }),
-                cliente:            `${datosUsuario.nom_1 || 'Cliente'} ${datosUsuario.ape_1 || ''}`.trim() || 'Cliente',
-                id_usuario:         datosUsuario.id_usuario || 'N/A',
-                correo:             datosUsuario.correo    || 'N/A',
-                telefono:           datosUsuario.telefono  || 'N/A',
-                productos:          pedidoData.cartItems,
-                subtotal:           pedidoData.subtotal,
-                total:              pedidoData.total,
-                metodo_pago:        pedidoData.metodoPago === 'transferencia'
-                                        ? 'Transferencia bancaria'
-                                        : 'Pago en tienda',
-                estado:             resData.estado || 'Pendiente',
-                nota:               'Puede realizar el pago en la tienda física o coordinar con el administrador.',
+                cliente: `${datosUsuario.nom_1 || 'Cliente'} ${datosUsuario.ape_1 || ''}`.trim(),
+                id_usuario: datosUsuario.id_usuario || 'N/A',
+                correo: datosUsuario.correo || 'N/A',
+                telefono: datosUsuario.telefono || 'N/A',
+                productos: pedidoData.cartItems,
+                subtotal: pedidoData.subtotal,
+                total: pedidoData.total,
+                metodo_pago: 'Pago en tienda',
+                estado: resData.estado || 'Pendiente',
+                nota: 'Puede realizar el pago en la tienda física o coordinar con el administrador.',
             };
 
             setTicketData(ticket);
@@ -97,12 +93,7 @@ const TicketCompra = () => {
 
         } catch (err) {
             sessionStorage.removeItem('pedidoProcesado');
-
-            let msg = 'Error al procesar el pedido. Por favor contacte al administrador.';
-            if (err.response?.data?.details) msg = err.response.data.details;
-            else if (err.response?.data?.error) msg = err.response.data.error;
-            else if (err.message) msg = err.message;
-
+            const msg = err.message || 'Error al procesar el pedido.';
             setError(msg);
         } finally {
             setLoading(false);
@@ -141,7 +132,7 @@ const TicketCompra = () => {
                 <Header />
                 <main className="ticket-error-main">
                     <div className="ticket-error-content">
-                        <h2 className="ticket-error-title">⚠️ {error}</h2>
+                        <h2 className="ticket-error-title"> {error}</h2>
                         <p style={{ marginBottom: '20px', color: '#666' }}>
                             Por favor, intente nuevamente o contacte al administrador.
                         </p>
@@ -239,7 +230,7 @@ const TicketCompra = () => {
                                         <div className="ticket-producto-info">
                                             <p className="ticket-producto-nombre">{producto.name}</p>
                                             <p className="ticket-producto-cantidad">
-                                                {producto.cantidad} × {formatPrice(producto.price)}
+                                                {producto.cantidad} x {formatPrice(producto.price)}
                                             </p>
                                         </div>
                                         <p className="ticket-producto-total">
@@ -290,7 +281,7 @@ const TicketCompra = () => {
                 {/* Botones */}
                 <div className="ticket-acciones">
                     <button onClick={() => window.print()} className="ticket-btn-descargar">
-                        🖨️ Descargar / Imprimir
+                        Descargar / Imprimir
                     </button>
                     <button onClick={handleVolverInicio} className="ticket-btn-inicio">
                         Volver al Inicio

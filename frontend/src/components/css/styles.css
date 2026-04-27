@@ -5658,3 +5658,57 @@ body {
         font-size: 1.4rem;
     }
 }
+
+/* ============================================================
+   ESTILOS DE IMPRESIÓN — Solo imprime la sección de reportes
+   Agrega esto al final de tu styles.css
+   ============================================================ */
+
+@media print {
+
+    /* Ocultar todo lo que NO es el reporte */
+    body * {
+        visibility: hidden;
+    }
+
+    /* Mostrar solo el contenido del reporte */
+    .reporte-imprimible,
+    .reporte-imprimible * {
+        visibility: visible;
+    }
+
+    /* Posicionar el reporte para que ocupe toda la página */
+    .reporte-imprimible {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px;
+        background: white;
+    }
+
+    /* Ocultar el botón de imprimir dentro del reporte */
+    .btn-no-imprimir {
+        display: none !important;
+    }
+
+    /* Forzar colores en impresión (algunos navegadores los quitan) */
+    .panel-stat-card,
+    .panel-cliente-card,
+    .stock-badge,
+    .badge-urgente {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Evitar cortes de página dentro de tablas y charts */
+    .panel-chart-box {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Salto de página entre secciones grandes */
+    .panel-top-clientes-grid {
+        page-break-before: auto;
+    }
+}

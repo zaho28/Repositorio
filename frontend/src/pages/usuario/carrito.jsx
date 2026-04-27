@@ -92,7 +92,7 @@ const Carrito = () => {
                 <Header />
                 <main className="carrito-vacio-container">
                     <div className="carrito-vacio-content">
-                        <div className="carrito-vacio-icono">🛒</div>
+                        <div className="carrito-vacio-icono"></div>
                         <h2>Tu carrito está vacío</h2>
                         <p>Agrega productos desde nuestro catálogo</p>
                         <Link to="/catalogo_c">

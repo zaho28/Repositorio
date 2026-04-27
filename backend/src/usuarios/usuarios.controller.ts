@@ -7,7 +7,6 @@ import { Public } from '../auth/decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express'; // interceptor de archivos
 import { diskStorage } from 'multer'; // almacenamiento en disco de Multer
 import { extname } from 'path'; // para obtener la extensión del archivo
-import { mkdirSync } from 'fs'; // para crear directorios si no existen
 
 @ApiBearerAuth()
 @Controller('usuarios')
@@ -39,6 +38,7 @@ export class UsuariosController {
     return this.usuariosService.update(id, updateUsuarioDto);
   }
 
+  @Public()
   @Patch(':id/cambiar-contrasena')
   cambiarContrasena(@Param('id') id: string,
   @Body() body: { contrasenaActual: string; nuevaContrasena: string }) {
@@ -52,6 +52,7 @@ export class UsuariosController {
     return this.usuariosService.remove(id);
   }
 
+  @Public()
   @Post(':id/imagen')
   @UseInterceptors(FileInterceptor('profileImage', {
     storage: diskStorage({
@@ -76,5 +77,24 @@ export class UsuariosController {
   ) {
     console.log('controller - subir imagen:', { id, file: file?.filename });
     return this.usuariosService.actualizarImagen(id, file);
+  }
+
+  // POST /usuarios/solicitar-reset
+  @Public()
+  @Post('solicitar-reset')
+  solicitarReset(@Body() body: { correo: string }) {
+      return this.usuariosService.solicitarReset(body.correo);
+  }
+
+  // POST /usuarios/reset-contrasena
+  @Public()
+  @Post('reset-contrasena')
+  resetContrasena(@Body() body: { correo: string; codigo: string; nuevaContrasena: string }) {
+      return this.usuariosService.resetContrasena(body.correo, body.codigo, body.nuevaContrasena);
+  }
+
+  @Patch(':id/estado')
+  toggleEstado(@Param('id') id: string) {
+    return this.usuariosService.toggleEstado(id);
   }
 }

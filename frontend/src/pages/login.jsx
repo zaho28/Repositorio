@@ -90,7 +90,7 @@ export default function Login() {
               <Link to="/registro">¿No tiene cuenta?</Link>
             </p>
             <p>
-              <Link to="/olvidar_c">¿Olvidó su contraseña?</Link>
+              <Link to="/olvide_c">¿Olvidó su contraseña?</Link>
             </p>
           </div>
         </form>

@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // archivos estáticos desde la carpeta "uploads"
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+  app.useStaticAssets('C:/Users/angie/backend/uploads', {
     prefix: '/uploads/', // Accede a las imágenes con /uploads/filename.jpg
   });
 
@@ -45,7 +45,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({
     transform: true, // Transforma los datos entrantes a los tipos definidos en los DTOs
-    whitelist: true, // Elimina propiedades no definidas en los DTOs
+    whitelist: false, // Elimina propiedades no definidas en los DTOs
   }));
 
   await app.listen(3000);

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 //estilos
 import "../../components/css/styles.css"; 
@@ -10,7 +9,7 @@ import Footer from '../../components/Footer.jsx';
 // Importar el hook del carrito
 import { useCart } from '../../context/logica_carrito.jsx';
 
-const API_URL = 'http://localhost:3000'; 
+import { apiGet } from '../../context/api.js'; 
 
 const Catalogo_c = () => {
     const [searchParams] = useSearchParams();
@@ -36,18 +35,22 @@ const Catalogo_c = () => {
     const fetchProductos = async () => {
         try {
             setCargando(true);
-            const response = await axios.get(API_URL);
-            const productosAPI = response.data;
+            const response = await apiGet('/productos');
+            const productosAPI = Array.isArray(response) ? response : [];
+
+            const productosMapeados = productosAPI.map(p => ({
+                ...p,
+                nombre_c:    p.categoria?.nombre_c    || null,
+                nombre_clas: p.clasificacion?.nombre_clas || null,
+            }));
+
+            setProducts(productosMapeados);
             
-            setProducts(productosAPI);
-            
-            // Extraer categorías únicas
-            const categoriasUnicas = ['Todo', ...new Set(productosAPI.map(p => p.nombre_c))];
+            const categoriasUnicas = ['Todo', ...new Set(productosMapeados.map(p => p.nombre_c).filter(Boolean))];
             setCategorias(categoriasUnicas);
             
-            // Extraer clasificaciones únicas (excluyendo "Sin clasificar")
             const clasificacionesUnicas = ['Todas', 'Últimas Unidades', ...new Set(
-                productosAPI
+                productosMapeados
                     .filter(p => p.nombre_clas && p.nombre_clas.toLowerCase() !== 'sin clasificar')
                     .map(p => p.nombre_clas)
             )];
@@ -61,7 +64,7 @@ const Catalogo_c = () => {
             setCargando(false);
         }
     };
-
+    
     useEffect(() => {
         fetchProductos();
     }, []);

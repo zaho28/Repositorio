@@ -1,0 +1,8 @@
+code .dockerignore
+```
+
+Pega esto:
+```
+node_modules
+dist
+.env

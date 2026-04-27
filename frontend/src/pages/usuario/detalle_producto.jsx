@@ -22,8 +22,13 @@ const ProductoDetalle = () => {
         const fetchProducto = async () => {
             try {
                 setIsLoading(true);
-                const producto = await apiGet(`/productos/${id}`);
-                setProducto(producto);
+                const response = await apiGet(`/productos/${id}`); 
+                const prod = {
+                    ...response,
+                    nombre_clas: response.clasificacion?.nombre_clas || null,
+                    nombre_c: response.categoria?.nombre_c || null,
+                };
+                setProducto(prod);
                 setError(null);
             } catch (err) {
                 console.error("Error al cargar el producto:", err);
@@ -32,7 +37,6 @@ const ProductoDetalle = () => {
                 setIsLoading(false);
             }
         };
-
         fetchProducto();
     }, [id]);
 

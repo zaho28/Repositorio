@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Sidebar from "../../components/Sidebar_p-a";
 import HeaderPedidos from "../../components/HeaderPedidos";
 import "../../components/css/styles.css";
 
-const API_URL = 'http://localhost:3003/api';
+import { apiGet, apiPatch } from '../../context/api.js';
 
 export default function PedidosRealizados() {
     const [pedidos, setPedidos] = useState([]);
@@ -14,7 +13,7 @@ export default function PedidosRealizados() {
     const [editandoId, setEditandoId] = useState(null);
     const [nuevoEstadoTemp, setNuevoEstadoTemp] = useState('');
 
-    const opcionesEstado = ['Pendiente', 'En proceso', 'Enviado', 'Entregado', 'Cancelado'];
+    const opcionesEstado = ['Pendiente', 'Pagado', 'Entegado', 'Finalizado'];
 
     useEffect(() => {
         cargarPedidos();
@@ -22,9 +21,9 @@ export default function PedidosRealizados() {
 
     const cargarPedidos = async () => {
         try {
-            const response = await axios.get(`${API_URL}/pedidos/todos`);
-            setPedidos(response.data);
-            console.log('Pedidos cargados:', response.data);
+            const response = await apiGet('/pedidos');
+            const data = Array.isArray(response) ? response : response.data || [];
+            setPedidos(data);
         } catch (error) {
             console.error('Error al cargar pedidos:', error);
             alert('Error al cargar los pedidos');
@@ -38,18 +37,14 @@ export default function PedidosRealizados() {
             setExpandedPedido(null);
             return;
         }
-
         if (detallesPedido[id_pedido]) {
             setExpandedPedido(id_pedido);
             return;
         }
-
         try {
-            const response = await axios.get(`${API_URL}/pedidos/detalle/${id_pedido}`);
-            setDetallesPedido(prev => ({
-                ...prev,
-                [id_pedido]: response.data
-            }));
+            const response = await apiGet(`/pedidos/detalle/${id_pedido}`);
+            const data = Array.isArray(response) ? response : response.data || [];
+            setDetallesPedido(prev => ({ ...prev, [id_pedido]: data }));
             setExpandedPedido(id_pedido);
         } catch (error) {
             console.error('Error al cargar detalle:', error);
@@ -64,15 +59,10 @@ export default function PedidosRealizados() {
 
     const handleGuardarEstado = async (id_pedido) => {
         try {
-            await axios.put(`${API_URL}/pedidos/estado/${id_pedido}`, {
-                estado: nuevoEstadoTemp
-            });
-
-            const pedidosActualizados = pedidos.map(p =>
+            await apiPatch(`/pedidos/${id_pedido}`, { estado: nuevoEstadoTemp }); // 
+            setPedidos(prev => prev.map(p =>
                 p.id_pedido === id_pedido ? { ...p, estado: nuevoEstadoTemp } : p
-            );
-            
-            setPedidos(pedidosActualizados);
+            ));
             setEditandoId(null);
             alert('Estado actualizado correctamente');
         } catch (error) {
@@ -109,11 +99,9 @@ export default function PedidosRealizados() {
     const getEstadoClass = (estado) => {
         const clases = {
             'Pendiente': 'estado-pendiente',
-            'En proceso': 'estado-en-proceso',
-            'Entregado': 'estado-entregado',
-            'Cancelado': 'estado-cancelado',
-            'Pagado': 'estado-pagado',
-            'Enviado': 'estado-enviado'
+            'pagado': 'estado-en-proceso',
+            'Finalizado': 'estado-Finalizado',
+            'Entegado': 'estado-Entegado'
         };
         return `pedido-estado-badge ${clases[estado] || ''}`;
     };
@@ -240,14 +228,14 @@ export default function PedidosRealizados() {
                                                                 onClick={() => handleEditarEstado(pedido)}
                                                                 className="btn-editar-estado"
                                                             >
-                                                                ✎ Editar Estado
+                                                                Editar Estado
                                                             </button>
                                                         )}
                                                         <button
                                                             onClick={() => cargarDetallePedido(pedido.id_pedido)}
                                                             className={`btn-ver-detalles ${expandedPedido === pedido.id_pedido ? 'activo' : ''}`}
                                                         >
-                                                            {expandedPedido === pedido.id_pedido ? '▼ Ocultar' : '▶ Ver Detalles'}
+                                                            {expandedPedido === pedido.id_pedido ? 'Ocultar' : ' Ver Detalles'}
                                                         </button>
                                                     </div>
                                                 </td>

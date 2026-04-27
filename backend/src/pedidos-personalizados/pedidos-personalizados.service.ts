@@ -44,6 +44,77 @@ export class PedidosPersonalizadosService {
   }
 
   // --------------------------------------------------------
+  // CREAR MATERIAL
+  // --------------------------------------------------------
+  async crearMaterial(dto: {
+      nombre: string;
+      tipo: string;
+      unidad: string;
+      precio_unitario: number;
+      stock_actual: number;
+      stock_minimo: number;
+  }) {
+      return this.prisma.material.create({
+          data: {
+              nombre: dto.nombre,
+              tipo: dto.tipo as any,
+              unidad: dto.unidad as any,
+              precio_unitario: dto.precio_unitario,
+              stock_actual: dto.stock_actual,
+              stock_minimo: dto.stock_minimo,
+              estado: true,
+          },
+      });
+  }
+
+  // --------------------------------------------------------
+  // ACTUALIZAR MATERIAL
+  // --------------------------------------------------------
+  async actualizarMaterial(id: number, dto: {
+      nombre?: string;
+      tipo?: string;
+      unidad?: string;
+      precio_unitario?: number;
+      stock_actual?: number;
+      stock_minimo?: number;
+  }) {
+      const material = await this.prisma.material.findUnique({
+          where: { id_material: id }
+      });
+      if (!material) throw new NotFoundException(`Material ${id} no encontrado`);
+
+      return this.prisma.material.update({
+          where: { id_material: id },
+          data: {
+              ...dto,
+              tipo: dto.tipo as any,
+              unidad: dto.unidad as any,
+          },
+      });
+  }
+
+  // --------------------------------------------------------
+  // ACTUALIZAR IMAGEN DE MATERIAL
+  // --------------------------------------------------------
+  async actualizarImagenMaterial(id: number, file: Express.Multer.File) {
+      if (!file) throw new BadRequestException('No se recibió ningún archivo');
+
+      const material = await this.prisma.material.findUnique({
+          where: { id_material: id }
+      });
+      if (!material) throw new NotFoundException(`Material ${id} no encontrado`);
+
+      const ruta_imagen = `/uploads/materiales/${file.filename}`;
+
+      await this.prisma.material.update({
+          where: { id_material: id },
+          data: { ruta_imagen },
+      });
+
+      return { statusCode: 200, message: 'Imagen actualizada', ruta_imagen };
+  }
+
+  // --------------------------------------------------------
   // CREAR PEDIDO PERSONALIZADO
   // --------------------------------------------------------
   async crearPedido(dto: {
@@ -99,7 +170,7 @@ export class PedidosPersonalizadosService {
       const pedidoPersonal = await tx.pedido_personalizado.create({
         data: {
           id_pedido: pedido.id_pedido,
-          tipo_producto: dto.tipo_producto as any,
+          tipo_producto: (dto.tipo_producto === 'Sábana' ? 'Sabana' : dto.tipo_producto) as any,
           tamanio: dto.tamanio,
           precio_total,
           detalles: {

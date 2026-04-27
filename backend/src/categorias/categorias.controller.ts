@@ -7,7 +7,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 export class CategoriasController {
   constructor(private readonly categoriasService: CategoriasService) {}
 
-  @Get()
+  @Get() 
   findAll(@Query() query: any) { 
     console.log('controller - todas las categorias:', JSON.stringify(query)); 
     return this.categoriasService.findAll(query); 

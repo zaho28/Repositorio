@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateMovimientoDto } from './create-movimiento.dto';
-
-export class UpdateMovimientoDto extends PartialType(CreateMovimientoDto) {}
+export class UpdateMovimientoDto {
+    Cantidad_m?: number;
+    observaciones?: string;
+}

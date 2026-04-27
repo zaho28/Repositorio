@@ -35,6 +35,14 @@ export default function Sidebar() {
                     <span>Productos</span>
                 </Link>
 
+                {/* Materiales } */}
+                <Link 
+                    to="/materiales" 
+                    className={isLinkActive('/materiales') ? 'activo' : ''}
+                >
+                    <span>Materiales</span>
+                </Link>
+
                 {/* Movimientos */}
                 <Link 
                     to="/movimientos"
@@ -74,14 +82,6 @@ export default function Sidebar() {
                 >
                     <span>Pedidos realizados</span>
                 </Link>
-                {/* 5. Pedidos Realizados - Usamos <Link> en lugar de <a> */}
-                    <Link 
-                        to="/pedidos_realizados"
-                        className={isLinkActive('/pedidos_realizados') ? 'activo' : ''}
-                    >
-                        <i className="fa-solid fa-receipt" /> 
-                        <span>Pedidos realizados</span>
-                    </Link>
             </nav>
         </aside>
     );

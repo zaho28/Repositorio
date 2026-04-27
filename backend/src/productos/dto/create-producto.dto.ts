@@ -28,17 +28,17 @@ export class CreateProductoDto {
 
     @IsString()
     @IsOptional()
-    @MaxLength(20, { message: 'El color no puede tener más de 20 caracteres' })
+    @MaxLength(60, { message: 'El color no puede tener más de 60 caracteres' })
     color?: string;
 
     @IsString()
     @IsOptional()
-    @MaxLength(20, { message: 'La talla no puede tener más de 20 caracteres' })
+    @MaxLength(60, { message: 'La talla no puede tener más de 60 caracteres' })
     talla?: string;
 
     @IsString()
     @IsOptional()
-    @MaxLength(20, { message: 'El tamaño no puede tener más de 20 caracteres' })
+    @MaxLength(60, { message: 'El tamaño no puede tener más de 60 caracteres' })
     tamaño?: string;
 
     @IsString()

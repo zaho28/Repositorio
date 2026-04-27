@@ -31,9 +31,11 @@ const OlvideMiContrasena = () => {
         }
 
         try {
-            const response = await fetch(`${API_URL}/olvidar-contrasena`, {
+            const response = await fetch(`${API_URL}/usuarios/solicitar-reset`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    'x-api-key': API_KEY,
+                 },
                 body: JSON.stringify({ correo })
             });
 
@@ -83,9 +85,11 @@ const OlvideMiContrasena = () => {
         setLoading(true);
 
         try {
-            const response = await fetch(`${API_URL}/restablecer-contrasena`, {
+            const response = await fetch(`${API_URL}/usuarios/reset-contrasena`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    'x-api-key': API_KEY,
+                },
                 body: JSON.stringify({ 
                     correo, 
                     codigo, 

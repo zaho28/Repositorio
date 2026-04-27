@@ -66,4 +66,7 @@ export class CreateUsuarioDto {
     @IsString()
     @IsOptional()
     img_perfil?: string;
+
+    @IsOptional()
+    estado?: number
 }
