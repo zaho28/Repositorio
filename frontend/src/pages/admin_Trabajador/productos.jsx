@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Sidebar from "../../components/Sidebar_p-a";
 import HeaderProductos from "../../components/HeaderProductos";
 import "../../components/css/styles.css";
 
-const API_URL = 'http://localhost:3000'; 
+import { apiGet, apiDelete } from '../../context/api.js';
 
 export default function Productos(){
     const [productos, setProductos] = useState([]);
@@ -43,16 +42,16 @@ export default function Productos(){
         if (isStockBajo(producto)) {
             return ' Últimas Unidades';
         }
-        return producto.nombre_clas || producto.id_clasificacion;
+        return producto.clasificacion?.nombre_clas || producto.id_clasificacion;
     };
 
     // Cargar productos
     const fetchProductos = async () => {
         try {
             setCargando(true);
-            const response = await axios.get(API_URL);
-            setProductos(response.data); 
-            setProductosFiltrados(response.data);
+            const response = await apiGet('/productos');
+            setProductos(response); 
+            setProductosFiltrados(response);
             setError(null);
         } catch (err) {
             console.error("Error al cargar los productos:", err);
@@ -65,8 +64,8 @@ export default function Productos(){
     // Cargar categorías
     const fetchCategorias = async () => {
         try {
-            const response = await axios.get(CATEGORIAS_URL);
-            setCategorias(response.data);
+            const response = await apiGet('/categorias');
+            setCategorias(response);
         } catch (err) {
             console.error("Error al cargar categorías:", err);
         }
@@ -160,8 +159,8 @@ export default function Productos(){
                     valorB = new Date(b.ultima_actualiz);
                     break;
                 case 'nombre_c':
-                    valorA = a.nombre_c?.toLowerCase() || '';
-                    valorB = b.nombre_c?.toLowerCase() || '';
+                    valorA = a.categoria?.nombre_c?.toLowerCase() || '';
+                    valorB = b.categoria?.nombre_c?.toLowerCase() || '';
                     break;
                 default:
                     return 0;
@@ -190,7 +189,7 @@ export default function Productos(){
     };
 
     const handleEditar = (producto) => {
-        navigate(`/editar_producto/${producto.id_producto}`, { 
+        navigate(`/editar_productos/${producto.id_producto}`, { 
             state: { producto } 
         });
     };
@@ -199,16 +198,15 @@ export default function Productos(){
         const confirmar = window.confirm(
             "¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer."
         );
-        
         if (!confirmar) return;
 
         try { 
-            await axios.delete(`${API_URL}/${id_producto}`);
-            setProductos(productos.filter(p => p.id_producto !== id_producto));
+            await apiDelete(`/productos/${id_producto}`);  
+            setProductos(prev => prev.filter(p => p.id_producto !== id_producto));
             alert("Producto eliminado con éxito");
         } catch (error) {
             console.error("Error al eliminar:", error);
-            alert("Error al eliminar el producto: " + (error.response?.data?.error || error.message));
+            alert("Error al eliminar el producto");
         }
     };
 
@@ -552,7 +550,7 @@ export default function Productos(){
                                             <td>
                                                 {producto.ruta_imagen ? (
                                                     <img 
-                                                        src={`http://localhost:3003${producto.ruta_imagen}`} 
+                                                        src={`http://localhost:3000${producto.ruta_imagen}`}
                                                         alt={producto.nom_producto} 
                                                         style={{ 
                                                             width: '50px', 
@@ -567,7 +565,7 @@ export default function Productos(){
                                             </td>
 
                                             <td>{producto.nom_producto}</td>
-                                            <td>{producto.nombre_c || producto.id_categoria}</td>
+                                            <td>{producto.categoria?.nombre_c || producto.id_categoria}</td>
                                             <td>
                                                 <span style={{
                                                     padding: '4px 8px',

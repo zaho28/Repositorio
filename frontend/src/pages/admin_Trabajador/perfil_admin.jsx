@@ -1,9 +1,10 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';import { Link } from 'react-router-dom';
 import HeaderPerfil from '../../components/HeaderPerfil'; 
 import "../../components/css/styles.css"; 
-
+import sinFoto from '../../assets/sin_foto_p.webp'; 
 import { AuthContext } from '../../context/AuthContext';
-const API_URL = 'http://localhost:3000'; 
+
+import { apiGet } from '../../context/api.js';
 
 export default function PerfilAdmin() {
 
@@ -25,29 +26,16 @@ export default function PerfilAdmin() {
                 setLoading(false);
                 return;
             }
-
             try {
-                const response = await fetch(`${API_URL}/${usuarioActual.id_usuario}`);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    setDatosUsuario(data);
-                    
-                    // Actualizar el contexto con los datos completos
-                    updateusuarioActual({
-                        ...usuarioActual,
-                        ...data
-                    });
-                } else {
-                    console.error('Error al obtener datos del usuario');
-                }
+                const data = await apiGet(`/usuarios/${usuarioActual.id_usuario}`);
+                setDatosUsuario(data);
+                updateusuarioActual({ ...usuarioActual, ...data });
             } catch (error) {
                 console.error('Error de conexión:', error);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchdatosUsuario();
     }, [usuarioActual?.id_usuario]);
 
@@ -65,10 +53,6 @@ export default function PerfilAdmin() {
     const nombreCompleto = `${user.nom_1 } ${user.nom_2 || ''} ${user.ape_1} ${user.ape_2 || ''}`.trim();
     const tipoDocumento = user.desc_doc || user.t_doc || '';
     const identificacion = `${tipoDocumento} ${user.id_usuario}`.trim();
-
-    // --------------------------------------------------------------
-    // HANDLERS
-    // --------------------------------------------------------------
     
     const handlePlaceholderClick = () => {
         if (fileInputRef.current) {
@@ -95,18 +79,23 @@ export default function PerfilAdmin() {
         formData.append('profileImage', archivoSeleccionado); 
 
         try {
-            const response = await fetch(`${API_URL}/upload-image/${user.id_usuario}`, {
-                method: 'POST',
-                body: formData,
-            });
+            const response = await fetch(
+                `http://localhost:3000/usuarios/${user.id_usuario}/imagen`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'x-api-key': import.meta.env.VITE_API_KEY,
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                    body: formData,
+                }
+            );
 
             const data = await response.json();
-            
+
             if (response.ok) {
                 setUploadMessage('Imagen subida con éxito. Actualizando vista...');
                 setArchivoSeleccionado(null);
-                
-                // Actualizar contexto y forzar recarga
                 updateusuarioActual({ ...user, img_perfil: data.img_perfil });
                 setReloadKey(Date.now());
             } else {
@@ -114,7 +103,6 @@ export default function PerfilAdmin() {
                 setUploadMessage('');
             }
         } catch (error) {
-            console.error('Error en la subida:', error);
             setUploadError('Error de conexión o subida fallida.');
             setUploadMessage('');
         }

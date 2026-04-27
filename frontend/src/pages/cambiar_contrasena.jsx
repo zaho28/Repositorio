@@ -47,7 +47,9 @@ const CambiarContrasena = () => {
         const response = await axios.patch(
             `${API_URL}/usuarios/${usuarioActual.id_usuario}/cambiar-contrasena`,
             { contrasenaActual, nuevaContrasena },
-            { headers: { Authorization: `Bearer ${token}` } }
+            { headers: { Authorization: `Bearer ${token}`,
+            'x-api-key' : import.meta.env.VITE_API_KEY, //esta linea es para agregar la API KEY a la cabecera de la solicitud
+        } }
         );
 
         setMensaje(response.data.message || "¡Contraseña actualizada exitosamente!");

@@ -40,8 +40,9 @@ export class CreateUsuarioDto {
     correo: string;
 
     //@ApiProperty({ example: 1234567890, description: 'Número de teléfono del usuario' }) //datos para Swagger
+    @IsString()
     @IsNotEmpty({ message: 'El teléfono es obligatorio' })
-    telefono: number;
+    telefono: string;
 
     //@ApiProperty({ example: 'password123', description: 'Contraseña del usuario', minLength: 6 }) //datos para Swagger
     @IsString()
@@ -66,4 +67,7 @@ export class CreateUsuarioDto {
     @IsString()
     @IsOptional()
     img_perfil?: string;
+
+    @IsOptional()
+    estado?: number
 }

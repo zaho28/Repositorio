@@ -26,17 +26,17 @@ import Carrito from './pages/usuario/carrito.jsx';
 import Perfil from './pages/usuario/perfil.jsx';
 import Cambiar_datos from './pages/usuario/cambiar_datos.jsx';
 import Ticketcompra from './pages/usuario/ticketcompra.jsx';
+import TicketPersonalizado from './pages/usuario/ticket_p-p.jsx';  
 
 // Admin
 import Panel_control from './pages/admin_Trabajador/panel_control.jsx';
 import Productos from './pages/admin_Trabajador/productos.jsx';
-import Editar_productos from './pages/admin_Trabajador/editar_productos.jsx';
+import EditarProducto from './pages/admin_Trabajador/editar_productos.jsx';
 import Movimientos from './pages/admin_Trabajador/movimientos.jsx';
 import Entradas from './pages/admin_Trabajador/entradas.jsx';
 import Salidas from './pages/admin_Trabajador/salidas.jsx';
 import Usuarios from './pages/admin_Trabajador/usuarios.jsx';
 import Pedidos_realizados from './pages/admin_Trabajador/pedidos_realizados.jsx';
-import Registrar_usuarios from './pages/admin_Trabajador/registrar_usuario.jsx';
 import Perfil_admin from './pages/admin_Trabajador/perfil_admin.jsx';
 import Cambiardatos_a from './pages/admin_Trabajador/cambiar_datos-a.jsx'; 
 import Registro_prod from "./pages/admin_Trabajador/registro_producto.jsx";
@@ -71,7 +71,7 @@ function App() {
             } />
             <Route path="/editar_productos/:id" element={
               <RutasProtegidas rolesPermitidos={['1', '3']}>
-                <Editar_productos />
+                <EditarProducto />
               </RutasProtegidas>
             } />
             <Route path="/movimientos" element={
@@ -121,24 +121,63 @@ function App() {
                 <Usuarios />
               </RutasProtegidas>
             } />
-            <Route path="/registrar_usuario" element={
-              <RutasProtegidas rolesPermitidos={['1']}>
-                <Registrar_usuarios />
-              </RutasProtegidas>
-            } />
 
             {/* Rutas Cliente */}
-            <Route path="/cliente" element={<Cliente />} />
-            <Route path="/catalogo_c" element={<Catalogo_c />} />
-            <Route path="/producto/:id" element={<Detalle_producto />} />
-            <Route path="/pedidos_personalizados" element={<P_personalizados />} />
-            <Route path="/p_sabanas" element={<P_sabanas />} />
-            <Route path="/p_cubrelecho" element={<P_cubrelecho />} />
-            <Route path="/carrito" element={<Carrito />} />
-            <Route path="/perfil" element={<Perfil />} />
-            <Route path="/cambiar_datos" element={<Cambiar_datos />} />
-            <Route path="/ticket-compra" element={<Ticketcompra />} />
-
+            <Route path="/cliente" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <Cliente />
+              </RutasProtegidas>
+            } />
+            <Route path="/catalogo_c" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <Catalogo_c />
+              </RutasProtegidas>
+            } />
+            <Route path="/producto/:id" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <Detalle_producto />
+              </RutasProtegidas>
+            } />
+            <Route path="/pedidos_personalizados" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <P_personalizados />
+              </RutasProtegidas>
+            } />
+            <Route path="/p_sabanas" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <P_sabanas />
+              </RutasProtegidas>
+            } />
+            <Route path="/p_cubrelecho" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <P_cubrelecho />
+              </RutasProtegidas>
+            } />
+            <Route path="/carrito" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <Carrito />
+              </RutasProtegidas>
+            } />
+            <Route path="/perfil" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <Perfil />
+              </RutasProtegidas>
+            } />
+            <Route path="/cambiar_datos" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <Cambiar_datos />
+              </RutasProtegidas>
+            } />
+            <Route path="/ticket-compra" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <Ticketcompra />
+              </RutasProtegidas>
+            } />
+            <Route path="/ticket_personalizado" element={
+              <RutasProtegidas rolesPermitidos={['2']}>
+                <TicketPersonalizado />
+              </RutasProtegidas>
+            } />
           </Routes>
         </Router>
       </CartProvider>

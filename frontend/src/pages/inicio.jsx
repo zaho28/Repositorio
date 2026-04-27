@@ -92,7 +92,7 @@ function Inicio() {
     // Manejar clic en "Ver ofertas" - aplica filtro de ofertas y cierra ventana
     const handleVerOfertas = () => {
         setMostrarVentana(false);
-        setClas_seleccionada('En Oferta');
+        setClas_seleccionada('En_oferta');
         // Hacer scroll hacia el catálogo
         setTimeout(() => {
             const catalogo = document.querySelector('.contenido-inicio');
@@ -113,16 +113,16 @@ function Inicio() {
             try {
                 setCargando(true);
                 const response = await apiGet('/productos');
-                const productosAPI = Array.isArray(response) ? response : response.data || [];
-                setProducts(productosAPI);
+                const productos = Array.isArray(response) ? response : response.data || [];
+                setProducts(productos);
                 
                 // Extraer categorías únicas
-                const categoriasUnicas = ['Todo', ...new Set(productosAPI.map(p => p.nombre_c))];
+                const categoriasUnicas = ['Todo', ...new Set(productos.map(p => p.nombre_c))];
                 setCategorias(categoriasUnicas);
                 
                 // Extraer clasificaciones únicas (excluyendo "Sin clasificar")
                 const clasificacionesUnicas = ['Todas', 'Últimas Unidades', ...new Set(
-                    productosAPI
+                    productos
                         .filter(p => p.nombre_clas && p.nombre_clas.toLowerCase() !== 'sin clasificar')
                         .map(p => p.nombre_clas)
                 )];

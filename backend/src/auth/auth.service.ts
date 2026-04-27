@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-    export class AuthService {
+export class AuthService {
     constructor(
         private prisma: PrismaService,
         private jwtService: JwtService,
@@ -12,34 +12,31 @@ import * as bcrypt from 'bcrypt';
 
     // LOGIN 
     async login(correo: string, contrasena: string) {
-        // buscar usuario por correo
         const user = await this.prisma.usuario.findFirst({
-        where: { correo },
+            where: { correo },
         });
 
-        // si no existe o la contraseña es incorrecta
         if (!user || !user.contrasena) throw new UnauthorizedException('Credenciales inválidas');
 
         const passwordValid = await bcrypt.compare(contrasena, user.contrasena);
         if (!passwordValid) throw new UnauthorizedException('Credenciales inválidas');
 
-        // si es admin o trabajador necesita código
+        // Admin o trabajador = necesita código
         if (user.id_rol_usuario === '1' || user.id_rol_usuario === '3') {
-        return { needs_code: true, user };
+            return { needs_code: true, user: this._safeUser(user) };
         }
 
-        // si es cliente genera token directo
+        // Cliente
         return {
-        success: true,
-        token: this._generateToken(user),
-        user,
+            success: true,
+            user: this._safeUser(user),
         };
     }
 
     // VERIFICAR CÓDIGO (admin y trabajador)
     async verifyCode(id_usuario: string, codigo: string) {
         const user = await this.prisma.usuario.findUnique({
-        where: { id_usuario },
+            where: { id_usuario },
         });
 
         if (!user || !user.codigo) throw new UnauthorizedException('Usuario no encontrado');
@@ -48,18 +45,21 @@ import * as bcrypt from 'bcrypt';
         if (!codeValid) throw new UnauthorizedException('Código incorrecto');
 
         return {
-        success: true,
-        token: this._generateToken(user),
-        user,
+            success: true,
+            user: this._safeUser(user),
         };
     }
 
-    // GENERAR TOKEN JWT
-    private _generateToken(user: any) {
+    generateToken(user: any) {
         const payload = {
-        sub: user.id_usuario,   // cédula del usuario
-        rol: user.id_rol_usuario, // rol del usuario
+            sub: user.id_usuario,
+            rol: user.id_rol_usuario,
         };
         return this.jwtService.sign(payload);
+    }
+
+    private _safeUser(user: any) {
+        const { contrasena, codigo, ...safeUser } = user;
+        return safeUser;
     }
 }

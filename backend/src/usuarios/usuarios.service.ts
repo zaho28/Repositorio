@@ -3,12 +3,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import * as bcrypt from 'bcrypt';
+import { TaskService } from '../task/task.service';
 
 const SALT_ROUNDS = 10;
 
 @Injectable()
+
 export class UsuariosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private taskService: TaskService,) {}
 
   // --------------------------------------------------------
   // CREAR USUARIO
@@ -27,6 +29,8 @@ export class UsuariosService {
       codigoVisible = dto.codigo.toString();
     }
 
+    const rol = dto.id_rol_usuario || '1';
+
     return this.prisma.usuario.create({
       data: {
         id_usuario: dto.id_usuario,
@@ -35,11 +39,11 @@ export class UsuariosService {
         ape_1: dto.ape_1,
         ape_2: dto.ape_2 ?? null,
         correo: dto.correo,
-        telefono: dto.telefono,
+        telefono: Number(dto.telefono),
         contrasena: hashedPassword,
         codigo: hashedCodigo,
         codigo_visible: codigoVisible,
-        id_rol_usuario: dto.id_rol_usuario,
+        id_rol_usuario: rol,
         t_doc: dto.t_doc as any,
         img_perfil: dto.img_perfil ?? null,
       },
@@ -64,6 +68,7 @@ export class UsuariosService {
         t_doc: true,
         img_perfil: true,
         codigo_visible: true,
+        estado: true,
         // contrasena y codigo omitidos por seguridad
       },
     });
@@ -129,13 +134,22 @@ export class UsuariosService {
   // --------------------------------------------------------
   async remove(id_usuario: string) {
     console.log('service - eliminar usuario:', JSON.stringify({ id_usuario }));
-    await this.findOne(id_usuario);
+    await this.findOne(id_usuario); // lanza NotFoundException si no existe
 
-    await this.prisma.usuario.delete({
-      where: { id_usuario },
-    });
+    try {
+      await this.prisma.usuario.delete({
+        where: { id_usuario },
+      });
 
-    return { message: `Usuario ${id_usuario} eliminado exitosamente` };
+      return { message: `Usuario ${id_usuario} eliminado exitosamente` };
+    } catch (error : any) {
+      if (error.code === 'P2003') {
+        throw new BadRequestException(
+          'No se puede eliminar este usuario porque tiene registros relacionados.',
+        );
+      }
+      throw error;
+    }
   }
 
   // --------------------------------------------------------
@@ -181,5 +195,75 @@ export class UsuariosService {
       message: 'Imagen actualizada exitosamente',
       img_perfil: ruta_imagen,
     };
+  }
+
+  // --------------------------------------------------------
+  // SOLICITAR RESET DE CONTRASEÑA
+  // --------------------------------------------------------
+  async solicitarReset(correo: string) {
+      const user = await this.prisma.usuario.findFirst({
+          where: { correo },
+      });
+
+      if (!user) throw new NotFoundException('No existe un usuario con ese correo');
+
+      const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // Guardar código visible temporalmente en codigo_visible
+      await this.prisma.usuario.update({
+          where: { id_usuario: user.id_usuario },
+          data: { codigo_visible: codigo },
+      });
+
+      await this.taskService.enviarCodigoReset(correo, codigo);
+
+      return { message: 'Código enviado a tu correo' };
+  }
+
+  // --------------------------------------------------------
+  // RESET DE CONTRASEÑA
+  // --------------------------------------------------------
+  async resetContrasena(correo: string, codigo: string, nuevaContrasena: string) {
+      const user = await this.prisma.usuario.findFirst({
+          where: { correo },
+      });
+
+      if (!user) throw new NotFoundException('Usuario no encontrado');
+      if (!user.codigo_visible) throw new BadRequestException('No hay solicitud de reset activa');
+      if (user.codigo_visible !== codigo) throw new BadRequestException('Código incorrecto');
+
+      const hashedPassword = await bcrypt.hash(nuevaContrasena, SALT_ROUNDS);
+
+      await this.prisma.usuario.update({
+          where: { id_usuario: user.id_usuario },
+          data: {
+              contrasena: hashedPassword,
+              codigo_visible: null,
+          },
+      });
+
+      return { message: 'Contraseña actualizada exitosamente', success: true };
+  }
+
+// --------------------------------------------------------
+  // TOGGLE ESTADO (ACTIVO/INACTIVO)
+  // --------------------------------------------------------
+  async toggleEstado(id: string) {
+    const usuario = await this.prisma.usuario.findUnique({
+      where: { id_usuario: id },
+      select: { estado: true } 
+    });
+
+    if (!usuario) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    // Determinar el nuevo valor (si es 1 pasa a 0, si es 0 pasa a 1)
+    const nuevoEstado = usuario.estado === 1 ? 0 : 1;
+
+    return this.prisma.usuario.update({
+      where: { id_usuario: id },
+      data: { estado: nuevoEstado },
+    });
   }
 }

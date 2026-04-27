@@ -4,6 +4,7 @@ import { useCart } from '../../context/logica_carrito.jsx';
 import Header from '../../components/Header_c.jsx';
 import Footer from '../../components/Footer.jsx';
 import '../../components/css/styles.css';
+import { secureStorage } from '../../utils/storage';
 
 const Carrito = () => {
     const navigate = useNavigate();
@@ -36,6 +37,15 @@ const Carrito = () => {
 
     // FUNCIÓN MEJORADA: Genera el ticket con validaciones
     const handleGenerarTicket = () => {
+        // Validar que el usuario esté autenticado
+        const user = secureStorage.getItem('user', localStorage) || secureStorage.getItem('user', sessionStorage);
+        const isLoggedIn = !!user;
+
+        if (!isLoggedIn) {
+            alert('Debes iniciar sesión para generar un pedido');
+            navigate('/login'); 
+            return;
+        }
         if (cartItems.length === 0) {
             alert('El carrito está vacío');
             return;
@@ -92,7 +102,7 @@ const Carrito = () => {
                 <Header />
                 <main className="carrito-vacio-container">
                     <div className="carrito-vacio-content">
-                        <div className="carrito-vacio-icono">🛒</div>
+                        <div className="carrito-vacio-icono"></div>
                         <h2>Tu carrito está vacío</h2>
                         <p>Agrega productos desde nuestro catálogo</p>
                         <Link to="/catalogo_c">

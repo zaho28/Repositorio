@@ -1,12 +1,11 @@
 // Detalle de prodicto individual - inicio
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import axios from 'axios';
 import Headeri from "../components/Header.jsx";
 import Footer from '../components/Footer.jsx';
 import '../components/css/styles.css';  
 
-const API_URL = 'http://localhost:3000'; 
+import { apiGet } from '../context/api.js';
 
 const ProductoDetalles = () => {
     const navigate = useNavigate();
@@ -21,8 +20,13 @@ const ProductoDetalles = () => {
         const fetchProducto = async () => {
             try {
                 setIsLoading(true);
-                const response = await axios.get(`${API_URL}/${id}`);
-                setProducto(response.data);
+                const response = await apiGet(`/productos/${id}`); 
+                const prod = {
+                    ...response,
+                    nombre_clas: response.clasificacion?.nombre_clas || null,
+                    nombre_c: response.categoria?.nombre_c || null,
+                };
+                setProducto(prod);
                 setError(null);
             } catch (err) {
                 console.error("Error al cargar el producto:", err);
@@ -31,7 +35,6 @@ const ProductoDetalles = () => {
                 setIsLoading(false);
             }
         };
-
         fetchProducto();
     }, [id]);
 

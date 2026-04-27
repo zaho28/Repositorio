@@ -1,8 +1,9 @@
 /* Estilos del Footer (pie de pagina para todas las vistas menos las de admin) */
+
 footer {
     background-color: #ffffff;
     color: #7a235f;
-    text-align: center; 
+    text-align: center;
     padding: 25px 15px;
     border-top: 3px solid #d4a9c2;
     margin-top: 50px;
@@ -17,20 +18,21 @@ footer {
 }
 
 .redes-icon-link {
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    text-decoration: none; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
     transition: color 0.3s;
 }
 
 .redes-icon-link img {
-    width: 30px; 
+    width: 30px;
     height: 30px;
-    margin-bottom: 5px; }
+    margin-bottom: 5px;
+}
 
 .redes-icon-link span {
-    font-size: 0.8em; 
+    font-size: 0.8em;
 }
 
 .redes-icon-link:hover {
@@ -39,10 +41,10 @@ footer {
 }
 
 footer a {
-    color: #c45a77; 
+    color: #c45a77;
     font-weight: bold;
-    margin: 0 10px; 
-    text-decoration: none; 
+    margin: 0 10px;
+    text-decoration: none;
     transition: color 0.3s;
 }
 
@@ -50,3 +52,90 @@ footer a:hover {
     color: #7a235f;
     text-decoration: underline;
 }
+
+/* ============================== */
+/*         RESPONSIVE             */
+/* ============================== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    footer {
+        padding: 22px 20px;
+        margin-top: 40px;
+    }
+
+    .redes {
+        gap: 24px;
+    }
+
+    .redes-icon-link img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .redes-icon-link span {
+        font-size: 0.78em;
+    }
+
+    footer a {
+        margin: 0 8px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Móvil grande (480px - 768px) */
+@media (max-width: 768px) {
+    footer {
+        padding: 20px 16px;
+        margin-top: 32px;
+    }
+
+    .redes {
+        gap: 18px;
+        flex-wrap: wrap;
+    }
+
+    .redes-icon-link img {
+        width: 26px;
+        height: 26px;
+    }
+
+    .redes-icon-link span {
+        font-size: 0.75em;
+    }
+
+    footer a {
+        margin: 0 6px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Móvil pequeño (< 480px) */
+@media (max-width: 480px) {
+    footer {
+        padding: 16px 12px;
+        margin-top: 24px;
+        border-top-width: 2px;
+    }
+
+    .redes {
+        gap: 14px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    .redes-icon-link img {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 4px;
+    }
+
+    .redes-icon-link span {
+        font-size: 0.7em;
+    }
+
+    footer a {
+        margin: 0 5px;
+        font-size: 0.85rem;
+    }
+} 

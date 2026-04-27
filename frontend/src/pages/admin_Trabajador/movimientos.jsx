@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import Sidebarmov from "../../components/Sidebarmov";
 import HeaderMovimientos from "../../components/HeaderMovimientos";
 import "../../components/css/styles.css";
 
-const API_URL = 'http://localhost:3003/api';
+import { apiGet } from "../../context/api.js";
 
 export default function Movimientos(){
     const [movimientos, setMovimientos] = useState([]);
@@ -20,8 +19,9 @@ export default function Movimientos(){
     const cargarMovimientos = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${API_URL}/movimientos`);
-            setMovimientos(response.data);
+            const response = await apiGet(`/movimientos`);
+            const data = Array.isArray(response) ? response : response.data || [];
+            setMovimientos(data);
         } catch (error) {
             console.error('Error al cargar movimientos:', error);
             alert('Error al cargar los movimientos');
@@ -44,8 +44,8 @@ export default function Movimientos(){
 
     const movimientosFiltrados = movimientos.filter(mov => {
         const coincideFiltro = filtro === 'todos' || 
-            (filtro === 'entradas' && mov.id_m === 'M-E') ||
-            (filtro === 'salidas' && mov.id_m === 'M-S');
+            (filtro === 'entradas' && mov.tipo === 'entrada') ||
+            (filtro === 'salidas' && mov.tipo === 'salida');
         
         const coincideBusqueda = busqueda === '' ||
             mov.nom_producto?.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -162,8 +162,8 @@ export default function Movimientos(){
 
                                                     {/* Tipo */}
                                                     <td>
-                                                        <span className={mov.id_m === 'M-E' ? 'badge-entrada' : 'badge-salida'}>
-                                                            {mov.id_m === 'M-E' ? '↑Entrada' : '↓ Salida'}
+                                                        <span className={mov.tipo === 'entrada' ? 'badge-entrada' : 'badge-salida'}>
+                                                            {mov.tipo === 'entrada' ? '↑ Entrada' : '↓ Salida'}
                                                         </span>
                                                     </td>
 
@@ -183,7 +183,7 @@ export default function Movimientos(){
                                                     <td style={{ textAlign: 'center' }}>
                                                         {mov.ruta_imagen ? (
                                                             <img 
-                                                                src={`http://localhost:3003${mov.ruta_imagen}`}
+                                                                src={`http://localhost:3000${mov.ruta_imagen}`}
                                                                 alt={mov.nom_producto}
                                                                 style={{
                                                                     width: '60px',
@@ -205,7 +205,7 @@ export default function Movimientos(){
 
                                                     {/* Cantidad */}
                                                     <td>
-                                                        <span className={mov.id_m === 'M-E' ? 'cantidad-entrada' : 'cantidad-salida'}>
+                                                        <span className={mov.tipo === 'entrada' ? 'cantidad-entrada' : 'cantidad-salida'}>
                                                             {mov.Cantidad_m}
                                                         </span>
                                                     </td>

@@ -31,7 +31,6 @@ export default function Sidebar() {
                     // Si el path es '/panel_control' O solo '/', lo marcamos como activo
                     className={location.pathname === '/panel_control' || location.pathname === '/' ? 'activo' : ''}
                 >
-                    <i className="fa-solid fa-gauge" />
                     <span>Panel de control</span>
                 </Link>
 
@@ -41,7 +40,6 @@ export default function Sidebar() {
                     // Usamos la función auxiliar, excluyendo la raíz si es necesario
                     className={isLinkActive('/productos') ? 'activo' : ''}
                 >
-                    <i className="fa-solid fa-box" />
                     <span>Productos</span>
                 </Link>
 
@@ -51,7 +49,6 @@ export default function Sidebar() {
                     // Usamos la función auxiliar, excluyendo la raíz si es necesario
                     className={isLinkActive('/materiales') ? 'activo' : ''}
                 >
-                    <i className="fa-solid fa-box" />
                     <span>Materiales</span>
                 </Link>
 
@@ -60,7 +57,6 @@ export default function Sidebar() {
                     to="/movimientos"
                     className={isLinkActive('/movimientos') ? 'activo' : ''}
                 > 
-                    <i className="fa-solid fa-arrow-right-arrow-left" />
                     <span>Movimientos</span>
                 </Link>
 
@@ -69,8 +65,6 @@ export default function Sidebar() {
                     to="/usuarios"
                     className={isLinkActive('/usuarios') ? 'activo' : ''}
                 >
-                    {/* Nota: Corregido el ícono de FontAwesome (era 'fe-user') */}
-                    <i className="fa-solid fa-users" /> 
                     <span>Usuarios</span>
                 </Link>
 
@@ -79,7 +73,6 @@ export default function Sidebar() {
                     to="/pedidos_realizados"
                     className={isLinkActive('/pedidos_realizados') ? 'activo' : ''}
                 >
-                    <i className="fa-solid fa-receipt" /> 
                     <span>Pedidos realizados</span>
                 </Link>
             </nav>

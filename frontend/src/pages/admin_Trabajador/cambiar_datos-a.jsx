@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import HeaderPerfil from "../../components/HeaderPerfil.jsx";
 import "../../components/css/styles.css";
 
-const API_URL = 'http://localhost:3000'; 
+import { apiPatch } from '../../context/api.js';
 
 export default function CambiarDatosAdmin() { 
     const { usuarioActual, updateusuarioActual } = useContext(AuthContext);
@@ -63,38 +63,24 @@ export default function CambiarDatosAdmin() {
         }
 
         try {
-            const response = await fetch(`${API_URL}/update/${usuarioActual.id_usuario}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nom_1: formData.nom_1,
-                    nom_2: formData.nom_2 || null,
-                    ape_1: formData.ape_1,
-                    ape_2: formData.ape_2 || null,
-                    correo: formData.correo,
-                    telefono: formData.telefono, 
-                    t_doc: formData.t_doc
-                })
+            const response = await apiPatch(`/usuarios/${usuarioActual.id_usuario}`, {
+                nom_1: formData.nom_1,
+                nom_2: formData.nom_2 || null,
+                ape_1: formData.ape_1,
+                ape_2: formData.ape_2 || null,
+                correo: formData.correo,
+                telefono: parseInt(formData.telefono),
+                t_doc: formData.t_doc
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
+            if (response.id_usuario || response.nom_1) {
                 setMensaje('¡Datos actualizados exitosamente!');
-                
-                updateusuarioActual({
-                    ...usuarioActual,
-                    ...formData
-                });
-
-                setTimeout(() => {
-                    navigate('/perfil_admin');
-                }, 1500);
+                updateusuarioActual({ ...usuarioActual, ...formData });
+                setTimeout(() => navigate('/perfil_admin'), 1500);
             } else {
-                setError(data.error || data.message || 'Error al actualizar los datos.');
+                setError(response.error || response.message || 'Error al actualizar.');
             }
         } catch (err) {
-            console.error('Error:', err);
             setError('Error de conexión. Intenta de nuevo.');
         } finally {
             setLoading(false);

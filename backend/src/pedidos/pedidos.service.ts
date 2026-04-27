@@ -11,6 +11,7 @@ export class PedidosService {
   // CREAR PEDIDO COMPLETO CON TICKET (transacción)
   // -------------------------------------------------------
   async create(dto: CreatePedidoDto) {
+    console.log('controller - Crear pedido:', JSON.stringify(dto));
     const { items, id_usuario, metodo_pago, subtotal, total } = dto;
 
     if (!items || items.length === 0 || !id_usuario || !metodo_pago) {
@@ -94,7 +95,7 @@ export class PedidosService {
           total_ticket: total,
           id_pedido: pedido.id_pedido,
           id_estado: 'E_pd',
-          id_met_pago: metodo_pago as any,
+          id_met_pago: 'Mtd_PD',
         },
       });
 

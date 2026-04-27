@@ -1,25 +1,26 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
+import { secureStorage } from '../utils/storage'; // ← importa el helper
 
-const API_URL = 'http://localhost:3000'; 
+const API_URL = 'http://localhost:3000';
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 export const AuthContext = createContext();
 
 const esAdministrador = (user) => {
-    return user?.id_rol_usuario === '1' || user?.id_rol_usuario === '3'; // ← string, no número
+    return user?.id_rol_usuario === '1' || user?.id_rol_usuario === '3';
 };
 
 const getInitialUser = () => {
-    const sessionUser = sessionStorage.getItem('user');
-    if (sessionUser) return JSON.parse(sessionUser);
-    const localUser = localStorage.getItem('user');
-    if (localUser) return JSON.parse(localUser);
+    const sessionUser = secureStorage.getItem('user', sessionStorage);
+    if (sessionUser) return sessionUser;
+    const localUser = secureStorage.getItem('user', localStorage);
+    if (localUser) return localUser;
     return null;
 };
 
 const initialState = getInitialUser();
-const initialusuarioPendiente = JSON.parse(sessionStorage.getItem('usuarioPendiente')) || null;
+const initialusuarioPendiente = secureStorage.getItem('usuarioPendiente', sessionStorage) || null;
 
 export const AuthProvider = ({ children }) => {
     const [usuarioActual, setUsuarioActual] = useState(initialState);
@@ -27,45 +28,44 @@ export const AuthProvider = ({ children }) => {
 
     const saveusuarioPendiente = (user) => {
         setUsuarioPendiente(user);
-        sessionStorage.setItem('usuarioPendiente', JSON.stringify(user));
+        secureStorage.setItem('usuarioPendiente', user, sessionStorage); // ← encriptado
     };
 
     const clearusuarioPendiente = () => {
         setUsuarioPendiente(null);
-        sessionStorage.removeItem('usuarioPendiente');
+        secureStorage.removeItem('usuarioPendiente', sessionStorage);
     };
 
     const updateusuarioActual = (newdatosUsuario) => {
         setUsuarioActual(newdatosUsuario);
         if (esAdministrador(newdatosUsuario)) {
-            sessionStorage.setItem('user', JSON.stringify(newdatosUsuario));
-            localStorage.removeItem('user');
+            secureStorage.setItem('user', newdatosUsuario, sessionStorage); // ← encriptado
+            secureStorage.removeItem('user', localStorage);
         } else {
-            localStorage.setItem('user', JSON.stringify(newdatosUsuario));
-            sessionStorage.removeItem('user');
+            secureStorage.setItem('user', newdatosUsuario, localStorage); // ← encriptado
+            secureStorage.removeItem('user', sessionStorage);
         }
     };
 
-    // --------------------------------------------------------
-    // LOGIN - backend devuelve: { needs_code, user } o { success, token, user }
-    // --------------------------------------------------------
+    /* ==========LOGIN============ */
+
     const login = async (correo, contrasena) => {
         try {
             const response = await axios.post(`${API_URL}/auth/login`,
-            { correo, contrasena },
-            { headers: { 'x-api-key': API_KEY } } 
+                { correo, contrasena },
+                {
+                    headers: { 'x-api-key': API_KEY },
+                    withCredentials: true,
+                }
             );
             const data = response.data;
             const user = data.user;
 
-            // Admin o trabajador → necesita código
             if (data.needs_code) {
                 saveusuarioPendiente(user);
                 return { needs_code: true, user };
             }
 
-            // Cliente → token directo
-            localStorage.setItem('token', data.token); // guardar token
             updateusuarioActual(user);
             clearusuarioPendiente();
             return { success: true, user };
@@ -76,11 +76,9 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // --------------------------------------------------------
-    // VERIFY CODE - backend devuelve: { success, token, user }
-    // --------------------------------------------------------
+    /* ==========CODIGO ADMIN============ */
     const verifyAdminCode = async (codigo) => {
-        const userToVerify = usuarioPendiente || JSON.parse(sessionStorage.getItem('usuarioPendiente'));
+        const userToVerify = usuarioPendiente || secureStorage.getItem('usuarioPendiente', sessionStorage);
 
         if (!userToVerify) {
             return { success: false, message: "No hay sesión pendiente. Vuelve a iniciar sesión." };
@@ -88,15 +86,17 @@ export const AuthProvider = ({ children }) => {
 
         try {
             const response = await axios.post(`${API_URL}/auth/verify-code`,
-            { id_usuario: userToVerify.id_usuario, codigo },
-            { headers: { 'x-api-key': API_KEY } }
+                { id_usuario: userToVerify.id_usuario, codigo },
+                {
+                    headers: { 'x-api-key': API_KEY },
+                    withCredentials: true,
+                }
             );
 
             const data = response.data;
 
             if (data.success) {
-                localStorage.setItem('token', data.token); // ← guardar token
-                updateusuarioActual(data.user);              // ← usar user del backend
+                updateusuarioActual(data.user);
                 clearusuarioPendiente();
                 return { success: true, user: data.user };
             }
@@ -109,15 +109,20 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // --------------------------------------------------------
-    // LOGOUT
-    // --------------------------------------------------------
-    const logout = () => {
+    /* ==========CERRAR SESIÓN============ */
+    
+    const logout = async () => {
+        try {
+            await axios.post(`${API_URL}/auth/logout`, {}, {
+                headers: { 'x-api-key': API_KEY },
+                withCredentials: true,
+            });
+        } catch (_) {}
+
         setUsuarioActual(null);
         clearusuarioPendiente();
-        localStorage.removeItem('user');
-        localStorage.removeItem('token'); // ← limpiar token también
-        sessionStorage.removeItem('user');
+        secureStorage.removeItem('user', localStorage);
+        secureStorage.removeItem('user', sessionStorage);
     };
 
     const userId = usuarioActual ? usuarioActual.id_usuario : null;

@@ -3,11 +3,12 @@ const API_URL = 'http://localhost:3000';
 
 // Obtiene los headers con token y authorization
 const getHeaders = () => {
-    console.log('API_KEY:', import.meta.env.VITE_API_KEY); 
+    //console.log('API_KEY:', import.meta.env.VITE_API_KEY); 
+    //const token = localStorage.getItem('token');
+    //console.log('Token enviado:', token);
     return {
         'Content-Type': 'application/json',
         'x-api-key': import.meta.env.VITE_API_KEY,
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
     };
 };
 
@@ -15,7 +16,13 @@ const getHeaders = () => {
 export const apiGet = async (endpoint) => {
     const response = await fetch(`${API_URL}${endpoint}`, {
         headers: getHeaders(),
+        credentials: 'include',
     });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Error ${response.status}`);
+    }
+
     return response.json();
 };
 
@@ -25,7 +32,13 @@ export const apiPost = async (endpoint, data) => {
         method: 'POST',
         headers: getHeaders(),
         body: JSON.stringify(data),
+        credentials: 'include',
     });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Error ${response.status}`);
+    }
+
     return response.json();
 };
 
@@ -35,7 +48,13 @@ export const apiPatch = async (endpoint, data) => {
         method: 'PATCH',
         headers: getHeaders(),
         body: JSON.stringify(data),
+        credentials: 'include',
     });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Error ${response.status}`);
+    }
+
     return response.json();
 };
 
@@ -44,7 +63,13 @@ export const apiDelete = async (endpoint) => {
     const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'DELETE',
         headers: getHeaders(),
+        credentials: 'include',
     });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Error ${response.status}`);
+    }
+
     return response.json();
 };
 
