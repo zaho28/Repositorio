@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "nombre": "Juan Cliente",
+    "correo": "cliente@test.com",
+    "contrasena": "1234",
+    "rol": "cliente"
+  },
+  {
+    "id": 2,
+    "nombre": "Admin Gurama",
+    "correo": "admin@test.com",
+    "contrasena": "admin123",
+    "rol": "admin",
+    "codigo": "9999"
+  }
+]
