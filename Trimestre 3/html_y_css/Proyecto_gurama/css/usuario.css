@@ -1,0 +1,148 @@
+/* ================================
+   USUARIOS - PANEL ADMINISTRATIVO
+   ================================ */
+
+/* Contenedor principal */
+.usuarios-section {
+    padding: 30px;
+    border-radius: 12px;
+    background: linear-gradient(to bottom, #f7f2f4, #ffffff);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-top: 30px;
+}
+
+/* Encabezado de la sección */
+.usuarios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.btn-activo {
+    background-color: #c45a77;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 25px;
+    cursor: default;
+    font-size: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-registrar {
+    background-color: #a96b7d;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-registrar:hover {
+    background-color: #8e5766;
+}
+
+/* TABLA DE USUARIOS */
+.tabla-usuarios {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.tabla-usuarios table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.tabla-usuarios th {
+    background-color: #d7b7c4;
+    color: #333;
+    text-align: left;
+    padding: 12px 15px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.tabla-usuarios td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #444;
+}
+
+.tabla-usuarios tr:last-child td {
+    border-bottom: none;
+}
+
+/* Íconos dentro de la tabla */
+.tabla-usuarios i {
+    color: #a96b7d;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.tabla-usuarios i:hover {
+    color: #c45a77;
+}
+
+/* Botón de ver (...) */
+.btn-ver {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    cursor: pointer;
+    color: #a96b7d;
+}
+
+/* TARJETA DE DETALLE DE PEDIDO */
+.detalle-pedido {
+    background-color: #f8f4f6;
+    border-radius: 12px;
+    padding: 20px 25px;
+    width: 350px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 14px;
+    color: #444;
+}
+
+.detalle-pedido h4 {
+    margin-top: 0;
+    color: #a44e68;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.detalle-pedido ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.detalle-pedido li {
+    margin-bottom: 6px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .usuarios-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .detalle-pedido {
+        width: 100%;
+        margin-top: 20px;
+    }
+}

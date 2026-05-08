@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../models/usuario.dart';
-import 'admin_panel_page.dart';
 
 class AdminCodePage extends StatefulWidget {
-
   final Usuario usuario;
 
   const AdminCodePage({
@@ -13,108 +10,251 @@ class AdminCodePage extends StatefulWidget {
   });
 
   @override
-  State<AdminCodePage> createState() =>
-      _AdminCodePageState();
+  State<AdminCodePage> createState() => _AdminCodePageState();
 }
 
-class _AdminCodePageState
-    extends State<AdminCodePage> {
+class _AdminCodePageState extends State<AdminCodePage> {
+  final TextEditingController codigoController = TextEditingController();
 
-  final TextEditingController codigoController =
-      TextEditingController();
+  void verificarCodigo() {
+    final codigoIngresado = codigoController.text.trim();
+
+    if (codigoIngresado.isEmpty) {
+      mostrarMensaje('Ingrese el código de administrador');
+      return;
+    }
+
+    if (codigoIngresado == widget.usuario.codigo.toString()) {
+      mostrarMensaje(
+        'Bienvenido Administrador ${widget.usuario.nombre}',
+      );
+
+      Navigator.pushReplacementNamed(
+        context,
+        '/admin-panel',
+      );
+    } else {
+      mostrarMensaje('Código incorrecto');
+    }
+  }
+
+  void mostrarMensaje(String mensaje) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensaje)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: const Color(0xFFFAEDF4),
+      backgroundColor: const Color(0xFFE7CDD7),
 
-      appBar: AppBar(
-        title: const Text(
-          "Código Administrador",
-        ),
-      ),
+      body: Column(
+        children: [
 
-      body: Center(
-        child: Container(
-          width: 350,
-          padding: const EdgeInsets.all(25),
+          // HEADER
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 30,
+              vertical: 20,
+            ),
 
-          decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+
+            child: SafeArea(
+              child: Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+
+                children: [
+
+                  // LOGO
+                  Image.asset(
+                    'assets/images/Gurama_Logo.jpeg',
+                    height: 80,
+                  ),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color(0xFFC45A77),
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(25),
+                      ),
+
+                      padding:
+                          const EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: 12,
+                      ),
+                    ),
+
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/register',
+                      );
+                    },
+
+                    child: const Text(
+                      'Registrarse',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
 
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          // CONTENIDO
+          Expanded(
+            child: Center(
+              child: Container(
+                width: 380,
+                padding: const EdgeInsets.all(35),
 
-            children: [
+                decoration: BoxDecoration(
+                  color: Colors.white,
 
-              const Text(
-                "Verificación Admin",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
+                  borderRadius:
+                      BorderRadius.circular(15),
+
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 15,
+                      color: Colors.black.withOpacity(0.2),
+                    ),
+                  ],
                 ),
-              ),
 
-              const SizedBox(height: 25),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
 
-              TextField(
-                controller: codigoController,
+                  children: [
 
-                decoration: InputDecoration(
-                  labelText: "Código",
+                    const Text(
+                      'Iniciar sesión',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF7D2B46),
+                      ),
+                    ),
 
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(15),
-                  ),
-                ),
-              ),
+                    const SizedBox(height: 20),
 
-              const SizedBox(height: 25),
+                    const Text(
+                      'Estas ingresando como administrador, para continuar ingrese su código',
+                      textAlign: TextAlign.center,
+                    ),
 
-              SizedBox(
-                width: double.infinity,
+                    const SizedBox(height: 25),
 
-                child: ElevatedButton(
-                  onPressed: () {
-
-                    if (codigoController.text ==
-                        widget.usuario.codigo) {
-
-                      Navigator.pushReplacement(
-                        context,
-
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              const AdminPanelPage(),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Código de administrador',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
+                      ),
+                    ),
 
-                    } else {
+                    const SizedBox(height: 8),
 
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(
+                    TextField(
+                      controller: codigoController,
 
-                        const SnackBar(
-                          content: Text(
-                            "Código incorrecto",
+                      obscureText: true,
+
+                      decoration: InputDecoration(
+                        hintText:
+                            'Ingresa tu código',
+
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 25),
+
+                    SizedBox(
+                      width: double.infinity,
+
+                      child: ElevatedButton(
+                        style:
+                            ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color(0xFFC45A77),
+
+                          padding:
+                              const EdgeInsets.symmetric(
+                            vertical: 14,
+                          ),
+
+                          shape:
+                              RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(25),
                           ),
                         ),
-                      );
-                    }
-                  },
 
-                  child: const Text(
-                    "Verificar",
-                  ),
+                        onPressed: verificarCodigo,
+
+                        child: const Text(
+                          'Ingresar',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    SizedBox(
+                      width: double.infinity,
+
+                      child: ElevatedButton(
+                        style:
+                            ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey,
+                          padding:
+                              const EdgeInsets.symmetric(
+                            vertical: 14,
+                          ),
+
+                          shape:
+                              RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(25),
+                          ),
+                        ),
+
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+
+                        child: const Text(
+                          'Volver',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

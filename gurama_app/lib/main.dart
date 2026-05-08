@@ -5,6 +5,9 @@ import 'screens/login_page.dart';
 import 'screens/register_page.dart';
 import 'screens/cliente_page.dart';
 import 'screens/admin_panel_page.dart';
+import 'screens/admin_code_page.dart';
+import 'models/usuario.dart';
+import 'screens/recower_password_page.dart';
 
 void main() {
   runApp(const GuramaApp());
@@ -38,6 +41,17 @@ class GuramaApp extends StatelessWidget {
         '/cliente': (context) => const ClientePage(),
 
         '/admin-panel': (context) => const AdminPanelPage(),
+
+        '/recover-password': (context) =>
+          const RecoverPasswordPage(),
+
+        '/admin-code': (context) {
+          final usuario = ModalRoute.of(context)!
+            .settings
+            .arguments as Usuario;
+          
+          return AdminCodePage(usuario: usuario);
+        },
       },
     );
   }

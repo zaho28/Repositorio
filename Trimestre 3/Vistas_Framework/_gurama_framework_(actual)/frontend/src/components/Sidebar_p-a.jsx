@@ -1,0 +1,78 @@
+import React from "react";
+// Importamos useLocation y Link
+import { Link, useLocation } from 'react-router-dom';
+// imágenes
+import logo from '../assets/Logo_GO.jpeg'; 
+import "./Sidebar_p-a.css";
+
+export default function Sidebar() {
+    // OBTENER la ubicación actual para saber qué enlace está activo
+    const location = useLocation();
+
+    // Función auxiliar para chequear si la ruta es la actual (o una sub-ruta)
+    const isLinkActive = (path) => {
+        // Chequea si el pathname actual comienza con la ruta del enlace.
+        // Esto permite que /productos/editar también active /productos
+        return location.pathname.startsWith(path);
+    };
+
+    return(
+        <aside className="sidebar">
+            <div className="logo">
+                <Link to="/panel_control">
+                    <img src={logo} alt="Logo GuramaOnline" />
+                </Link>
+            </div>
+
+            <nav className="menu">
+                {/* 1. Panel de Control */}
+                <Link 
+                    to="/panel_control" 
+                    // Si el path es '/panel_control' O solo '/', lo marcamos como activo
+                    className={location.pathname === '/panel_control' || location.pathname === '/' ? 'activo' : ''}
+                >
+                    <i className="fa-solid fa-gauge" />
+                    <span>Panel de control</span>
+                </Link>
+
+                {/* 2. Productos */}
+                <Link 
+                    to="/productos" 
+                    // Usamos la función auxiliar, excluyendo la raíz si es necesario
+                    className={isLinkActive('/productos') ? 'activo' : ''}
+                >
+                    <i className="fa-solid fa-box" />
+                    <span>Productos</span>
+                </Link>
+
+                {/* 3. Movimientos - Usamos <Link> en lugar de <a> */}
+                <Link 
+                    to="/movimientos"
+                    className={isLinkActive('/movimientos') ? 'activo' : ''}
+                > 
+                    <i className="fa-solid fa-arrow-right-arrow-left" />
+                    <span>Movimientos</span>
+                </Link>
+
+                {/* 4. Usuarios - Usamos <Link> en lugar de <a> */}
+                <Link 
+                    to="/usuarios"
+                    className={isLinkActive('/usuarios') ? 'activo' : ''}
+                >
+                    {/* Nota: Corregido el ícono de FontAwesome (era 'fe-user') */}
+                    <i className="fa-solid fa-users" /> 
+                    <span>Usuarios</span>
+                </Link>
+
+                {/* 5. Pedidos Realizados - Usamos <Link> en lugar de <a> */}
+                <Link 
+                    to="/pedidos_realizados"
+                    className={isLinkActive('/pedidos_realizados') ? 'activo' : ''}
+                >
+                    <i className="fa-solid fa-receipt" /> 
+                    <span>Pedidos realizados</span>
+                </Link>
+            </nav>
+        </aside>
+    );
+}

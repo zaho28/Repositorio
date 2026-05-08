@@ -1,0 +1,120 @@
+/* Header.css */
+.header {
+    width: 100%;
+    background-color: #ffffff; /* Fondo gris claro */
+    border-bottom: 3px solid #d4a9c2; /* Borde sutil del color rosa */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 15px 40px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: auto; /* Empuja el logo a la izquierda */
+}
+
+.logo img {
+    height: 80px;
+    width: auto;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+/* ======= NAVEGACIÓN ======= */
+
+.menu {
+    margin-left: auto; /* Mantiene el menú a la derecha */
+}
+
+.menu ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #5a3d54;
+    font-weight: 500;
+    transition: color 0.3s ease, border-bottom 0.3s;
+    padding-bottom: 4px;
+}
+
+.header .menu a:hover {
+    color: #c45a77;
+}
+
+.header .menu a.activo {
+    background-color: transparent;
+    color: #7a235f;
+    font-weight: bold;
+    border-bottom: 2px solid #c45a77;
+}
+
+
+/* RESPONSIVE Tablet/Intermedio */
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 15px 30px;
+    }
+}
+
+/* RESPONSIVE Móvil */
+@media (max-width: 768px) {
+    .header-container{
+        padding: 10px 20px;
+        flex-direction: column; /* Apila logo y menú */
+        text-align: center;
+    }
+
+    .logo {
+        margin-right: 0; /* Resetea el margen en móvil */
+    }
+
+    .menu {
+        margin-left: 0; /* Resetea el margen en móvil */
+    }
+
+    .menu ul {
+        flex-direction: column; /* Apila enlaces */
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .logo img {
+        height: 65px; 
+    }
+
+}
+
+/* RESPONSIVE Móvil Pequeño */
+@media (max-width: 480px) {
+    .header-container {
+        padding: 5px 10px;
+    }
+    
+    .logo img {
+        height: 50px;
+    }
+    
+    .menu a {
+        font-size: 0.9rem;
+    }
+}

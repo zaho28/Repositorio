@@ -1,0 +1,147 @@
+/* ==========================
+   1. DEFINICIÓN DE VARIABLES (CRUCIAL)
+   ========================== */
+:root {
+    /* Color principal de acento (rosa/vino) */
+    --accent: #c45a77; 
+    /* Color para texto secundario (links inactivos) */
+    --muted: #5e4a4a;
+    /* Color de fondo suave (para hover/activo) */
+    --light-pink: #f3e4e9;
+}
+
+/* ==========================
+   2. ESTRUCTURA PRINCIPAL DEL SIDEBAR
+   ========================== */
+.sidebar {
+    width: 220px;
+    background-color: #fff;
+    /* Usa la variable de acento */
+    border-right: 4px solid var(--accent); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 25px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    /* Asegura que el sidebar esté arriba de otros elementos */
+    z-index: 100; 
+}
+
+
+.logo img {
+    width: 120px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+
+/* ==========================
+   3. ESTILOS DEL MENÚ Y LINKS
+   ========================== */
+.menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* El link (que es un <Link> en JSX) debe ser display: flex */
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: var(--muted);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Estilo de los íconos */
+.menu a i {
+    font-size: 1.2rem;
+    color: var(--muted); /* El ícono inactivo usa el color muted */
+    transition: color 0.3s ease;
+}
+
+/* Estilo al pasar el ratón (Hover) */
+.menu a:hover {
+    background-color: var(--light-pink);
+    color: var(--accent); /* El texto toma el color de acento */
+    font-weight: 600;
+}
+
+.menu a:hover i {
+    color: var(--accent); /* El ícono también toma el color de acento */
+}
+
+/* Estilo del link ACTIVO (Cuando la ruta coincide) */
+/* Usa .menu a.activo, que es la clase que asigna tu JSX */
+.menu a.activo {
+    background-color: var(--light-pink);
+    color: var(--accent);
+    font-weight: 600;
+    border-left: 4px solid var(--accent); /* La línea lateral para destacar */
+}
+
+.menu a.activo i {
+    color: var(--accent);
+}
+
+/* ==========================
+   4. RESPONSIVE (Versión Móvil)
+   ========================== */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        border-right: none;
+        border-bottom: 4px solid var(--accent);
+        position: static; 
+        flex-direction: row; /* Cambia a horizontal */
+        justify-content: space-around;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+        display: none; /* Ocultar logo en móvil para ahorrar espacio */
+    }
+
+    .menu {
+        flex-direction: row; 
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .menu a {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+        gap: 5px;
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        flex-direction: column; /* Pone ícono sobre texto */
+        text-align: center;
+    }
+    
+    .menu a span {
+        font-size: 0.75rem;
+    }
+
+    /* Estilo Activo en Móvil */
+    .menu a.activo {
+        border-left: none;
+        border-bottom: 2px solid var(--accent);
+        padding-left: 10px;
+        padding-right: 10px; 
+    }
+}
+
+@media (max-width: 480px) {
+    .menu a {
+        font-size: 0.75rem; 
+        padding: 6px 8px;
+    }
+}

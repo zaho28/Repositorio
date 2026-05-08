@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio administrador</title>
+  <link rel="stylesheet" href="/css/inicio_admi.css">
+</head>
+
+<body>
+  <header>
+    <img src="/imagenes/Gurama_Logo.jpeg" alt="Logo del sitio">
+    <a href="registrarse.html">
+    <button>Registrarse</button>
+    </a>
+  </header>
+
+  <div class="contenedor">
+    <div class="formulario_inicio">
+      <h2>Iniciar sesión</h2>
+      
+      <form>
+        <p>Estas ingresando como administrador,para continuar ingrese su codigo</p>
+
+        <label for="codigo">Código de administrador</label>
+        <input 
+        type="password" 
+        id="codigo" 
+        name="codigo" 
+        placeholder="Ingresa tu código de administrador" 
+        required>
+
+        <button type="submit">Ingresar</button>
+        <button type="submit" onclick="location.href='iniciar_sesion.html'">Volver</button>
+      </form>
+
+      <script src="../js/tocken.js" defer></script>
+    </div>
+  </div> 
+</body>
+</html>

@@ -1,0 +1,567 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(136, 49, 103);
+    background-color: #fff5fbd2;
+}
+/* ======= HEADER ======= */
+
+.header-cliente {
+    width: 100%;
+    background-color: #E6E6E6; /* Fondo gris claro */
+    border-bottom: 3px solid #f5b4da; /* Borde sutil del color rosa */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container_c {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 15px 40px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 80px;
+    width: auto;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+/* ======= NAVEGACIÓN ======= */
+
+.menu ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #5a3d54;
+    font-weight: 500;
+    transition: color 0.3s ease, border-bottom 0.3s;
+    padding-bottom: 4px;
+}
+
+.menu a:hover {
+    color: #b25b90;
+}
+
+.menu a.activo {
+    color: #7a235f;
+    font-weight: bold;
+    border-bottom: 2px solid #b25b90;
+}
+
+/* ======= ICONOS ======= */
+
+.iconos {
+    display: flex;
+    align-items: center;
+}
+
+.iconos img {
+    width: 28px;
+    margin-left: 15px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.iconos img:hover {
+    transform: scale(1.15);
+}
+
+.botones {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 18px 34px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background-color: #e6e6e6;
+    color: black;
+    border: 2px solid #e6e6e6;
+}
+
+.btn:hover {
+    background-color: #dcdcdc;
+    color: #222;
+}
+
+.btn-primario,
+.btn-secundario,
+.btn-terciario,
+.btn-cuaternario {
+    background-color: #e6e6e6;
+    color: #797676;
+}
+
+.pie-pagina {
+    background-color: #e6e6e6;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 40px;
+    gap: 15px;
+    color: #000;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-top: 4px solid #d4a9c2;
+}
+
+.pie-pagina p {
+    margin: 0;
+}
+
+.iconos-redes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.iconos-redes img {
+    width: 20px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.iconos-redes img:hover {
+    transform: scale(1.1);
+}
+
+.pedidos-personalizados {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.pedidos-personalizados h2 {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.pedidos-personalizados p {
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+.productos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.producto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #dfa1b6;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.producto:hover {
+    transform: scale(1.03);
+}
+
+.producto img {
+    width: 360px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.boton-producto {
+    background-color: #fff;
+    color: #8b3e59;
+    border: none;
+    font-weight: bold;
+    padding: 10px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.boton-producto:hover {
+    background-color: #d4a9c2;
+    color: #fff;
+    text-transform: none;
+}
+
+/*Sabana*/
+
+.contenedor-imagen {
+    display: flex;
+    justify-content: center;
+    align-items: self-start;
+    gap: 60px;
+    padding: 60px 80px;
+    background-color: #b4788b;
+}
+
+.tarjeta-imagen {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    text-align: center;
+    width: 460px;
+}
+
+.tarjeta-imagen h2 {
+    color: #8a2d48;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.tarjeta-imagen img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+}
+
+.nota-precio {
+    color: #000;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.panel-derecho {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 460px;
+}
+
+.panel-opciones {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px 25px;
+    color: #000;
+    margin-bottom: 15px; 
+    border: 2px solid #f0c8da;
+}
+
+.panel-opciones h3 {
+    color: #000;
+    font-weight: 700;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #b4788b;
+    padding-bottom: 6px;
+}
+
+.opciones-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 15px;
+}
+
+.opciones-grid label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.opciones-grid label:hover {
+    background-color: #ececec;
+}
+
+.btn-ver {
+    width: 100%;
+    background-color: #8a2d48;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-ver:hover {
+    background-color: #a3415f;
+}
+
+.vista-precio {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: white;
+}
+
+.vista-precio label {
+    font-size: 0.9rem;
+}
+
+.vista-precio input {
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 1rem;
+    text-align: right;
+    background-color: #dcdcdc;
+    color: #333;
+}
+
+/*Cubrelecho*/
+
+/* ===================== CUBRELECHO ===================== */
+
+.contenedor-imagen {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 70px;
+    padding: 60px 80px;
+    background-color: #b4788b;
+}
+
+/* === Tarjeta con la imagen del producto === */
+.tarjeta-imagen {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    width: 460px;
+    text-align: center;
+}
+
+.tarjeta-imagen h2 {
+    color: #8a2d48;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.tarjeta-imagen img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+}
+
+.nota-precio {
+    color: #000;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 10px;
+    text-align: left;
+}
+
+/* === Panel derecho (opciones de personalización) === */
+.panel-derecho {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+    width: 460px;
+}
+
+/* Panel general */
+.panel-opciones {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    padding: 20px 25px;
+    gap: 20px;
+    color: #000;
+    border: 2px solid #f0c8da;
+}
+
+.panel-opciones h3 {
+    color: #000;
+    font-weight: 700;
+    margin-bottom: 14px;
+    border-bottom: 2px solid #b4788b;
+    padding-bottom: 6px;
+    font-size: 1rem;
+}
+
+/* Campo de selección */
+.campo select {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    color: #8a2d48;
+}
+
+/* Botones de Lado 1 / Lado 2 */
+.botones-tela {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    margin-top: 15px;
+}
+
+.btn-tela {
+    flex: 1;
+    background-color: #8a2d48;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 0;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-tela:hover,
+.btn-tela.activo {
+    background-color: #a94563;
+    transform: scale(1.03);
+}
+
+/* Panel desplegable de tela */
+.panel-tela {
+    display: none;
+    background-color: #fff;
+    border: 2px solid #a74662;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+    color: #000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.panel-tela h4 {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    color: #000;
+}
+
+.opciones-tela {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.opciones-tela p {
+    background-color: #f3f3f3;
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+.opciones-tela p:hover {
+    background-color: #e3e3e3;
+    cursor: pointer;
+}
+
+/* Vista del precio */
+.vista-precio {
+    margin-top: 20px;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.rectangulo-precio {
+    background-color: #e6e6e6;
+    width: 100%;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 15px;
+    font-weight: 600;
+    color: #000;
+}
+
+/* Botón Volver */
+.btn-volver {
+    background-color: transparent;
+    color: #792b49;
+    border: 2px solid #792b49;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    align-self: flex-start; 
+    margin-bottom: 15px;
+    margin-left: 10px;
+}
+
+.btn-volver:hover {
+  background-color: #792b49;
+  color: #fff;
+}
+
+/* Botón Guardar cambios */
+.btn-guardar {
+  background-color: #792b49;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.btn-guardar:hover {
+  background-color: #9b3b5f;
+}
+
+/* Centrar botones e imagen en columna */
+.panel-izquierdo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

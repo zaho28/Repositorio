@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimientos - GuramaOnline</title>
+    <link rel="stylesheet" href="../css/panel_control.css">
+    <link rel="stylesheet" href="../css/movimientos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <a href="panel_admin.html">
+                <img src="../imagenes/Logo_GO.jpeg" alt="GuramaOnline">
+            </a>
+        </div>
+        
+        <nav class="menu">
+            <a href="panel_admin.html">
+                <i class="fa-solid fa-gauge"></i>
+                <span>Panel de control</span>
+            </a>
+            
+            <a href="productos.html">
+                <i class="fa-solid fa-box"></i>
+                <span>Productos</span>
+            </a>
+        
+            <a href="movimientos.html" class="activo">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                <span>Movimientos</span>
+            </a>
+            <a href="entradas.html">
+                <i class="fa-solid fa-arrow-down"></i>
+                <span>Entradas</span>
+            </a>
+
+            <a href="salidas.html">
+                <i class="fa-solid fa-arrow-up"></i>
+                <span>Salidas</span>
+            </a>
+            
+            <a href="usuario.html">
+                <i class="fa-solid fa-user"></i>
+                <span>Usuario</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="contenido">
+        <header class="header-panel">
+            <div>
+                <h1>Movimientos</h1>
+                <p>Entradas y salidas de productos</p>
+            </div>
+            <div class="usuario">
+                <a href="perfil_admi.html">
+                    <span>Admin.gurama</span>
+                    <img src="../imagenes/logo_perfil.webp" alt="perfil">
+                </a>
+            </div>
+        </header>
+
+        <section class="cuadro-blanco movimientos-principal">
+            <h2>Registre todas sus entradas y salidas aquí</h2>
+
+            <div class="contenedor-movimientos">
+                <div class="tarjeta">
+                    <div class="texto">
+                        <p>Entradas</p>
+                    </div>
+                    <a href="entradas.html" class="btn-agregar">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+
+                <div class="tarjeta">
+                    <div class="texto">
+                        <p>Salidas</p>
+                    </div>
+                    <a href="salidas.html" class="btn-agregar">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

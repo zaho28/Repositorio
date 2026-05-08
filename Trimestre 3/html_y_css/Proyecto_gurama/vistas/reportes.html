@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/panel_control.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>GuramaOnline</title>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <a href="panel_admin.html">
+        <img src="../imagenes/Logo_GO.jpeg" alt="GuramaOnline">
+      </a>
+    </div>
+    
+    <nav class="menu">
+      <a href="panel_admin.html" class="menu-item activo">
+        <i class="fa-solid fa-gauge"></i>
+        <span>Panel de control</span>
+      </a>
+      
+      <a href="productos.html">
+        <i class="fa-solid fa-box"></i>
+        <span>Productos</span>
+      </a>
+  
+      <a href="movimientos.html">
+        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+        <span>Movimientos</span>
+      </a>
+      
+      <a href="usuario.html">
+        <i class="fa-solid fa-user"></i>
+        <span>Usuario</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="contenido">
+    <header class="header-panel">
+      <h1>Panel de control</h1>
+      <div class="usuario">
+        <a href="perfil_admi.html">
+          <span>Admin.gurama</span>
+          <img src="../imagenes/logo_perfil.webp" alt="perfil">
+        </a>
+      </div>
+    </header>
+  
+    <section class="opciones">
+      <h2>Selecciona una opción</h2>
+      <div class="opciones-botones">
+
+        <!-- Reportes -->
+        <a href="panel_admin.html">
+          <div class="opcion opcionE">
+            <i class="fa-solid fa-file-lines"></i>
+            <p>Reportes</p>
+          </div>
+        </a>
+        
+        <!-- Historial Ventas -->
+        <a href="historial_ventas.html">
+          <div class="opcion">
+            <i class="fa-solid fa-percent"></i>
+            <p>Historial de venta</p>
+          </div>
+        </a>
+  
+        <!-- Notificaciones -->
+        <a href="notificaciones_ventas.html">
+          <div class="opcion">
+            <i class="fa-solid fa-bell"></i>
+            <p>Notificaciones</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="reporte">
+      <h3>Reportes</h3>
+      <div class="grafico-estatico">
+        <div class="etiquetas">
+          <span class="punto ventas"></span> Ventas
+          <span class="punto productos"></span> Productos
+          <span class="punto produccion"></span> Producción
+        </div>
+
+        <div class="grafico">
+          <div class="lineas-horizontal"></div>
+          <div class="lineas-vertical"></div>
+        </div>
+      </div>
+    </section>
+    </main>
+</body>
+</html>
