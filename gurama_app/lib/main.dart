@@ -7,7 +7,8 @@ import 'screens/cliente_page.dart';
 import 'screens/admin_panel_page.dart';
 import 'screens/admin_code_page.dart';
 import 'models/usuario.dart';
-import 'screens/recower_password_page.dart';
+import 'screens/recover_password_page.dart';
+import 'screens/change_password_page.dart';
 
 void main() {
   runApp(const GuramaApp());
@@ -41,6 +42,9 @@ class GuramaApp extends StatelessWidget {
         '/cliente': (context) => const ClientePage(),
 
         '/admin-panel': (context) => const AdminPanelPage(),
+
+        '/change-password': (context) =>
+          const ChangePasswordPage(),
 
         '/recover-password': (context) =>
           const RecoverPasswordPage(),

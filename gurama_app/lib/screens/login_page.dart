@@ -252,7 +252,12 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                           '/recover-password',
+                           );
+                      },
 
                       child: const Text(
                         "¿Olvidó su contraseña?",
