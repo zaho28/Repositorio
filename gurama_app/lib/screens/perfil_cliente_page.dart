@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/usuario.dart';
 import 'login_page.dart';
+import 'cambiar_datos_page.dart';
 
 class PerfilClientePage extends StatelessWidget {
 
@@ -163,9 +164,15 @@ class PerfilClientePage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
 
-                          Navigator.pushNamed(
+                          Navigator.push(
                             context,
-                            '/editar-datos',
+                            
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  CambiarDatosPage(
+                                usuario: usuario,
+                              ),
+                            ),
                           );
                         },
 
