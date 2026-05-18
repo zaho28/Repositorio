@@ -1,0 +1,61 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../constants/app_constants.dart';
+
+class ApiService {
+  static String? _token;
+
+  static void setToken(String token) {
+    _token = token;
+  }
+
+  static void clearToken() {
+    _token = null;
+  }
+
+  static String? get currentToken => _token;
+
+  static Map<String, String> get _headers => {
+    'x-api-key': AppConstants.apiKey,
+    if (_token != null) 'Authorization': 'Bearer $_token',
+  };
+
+  static Map<String, String> get _postHeaders => {
+    'x-api-key': AppConstants.apiKey,
+    'Content-Type': 'application/json',
+    if (_token != null) 'Authorization': 'Bearer $_token',
+  };
+
+  static Future<http.Response> get(String url) async {
+    final request = http.Request('GET', Uri.parse(url));
+    _headers.forEach((key, value) => request.headers[key] = value);
+
+    print('>>> HEADERS: ${request.headers}'); // 👈 agrega esta línea
+
+    final streamed = await request.send();
+    return await http.Response.fromStream(streamed);
+  }
+
+  static Future<http.Response> post(String url, Map<String, dynamic> body) async {
+    final request = http.Request('POST', Uri.parse(url));
+    _postHeaders.forEach((key, value) => request.headers[key] = value);
+    request.body = jsonEncode(body);
+    final streamed = await request.send();
+    return await http.Response.fromStream(streamed);
+  }
+
+  static Future<http.Response> patch(String url, Map<String, dynamic> body) async {
+    final request = http.Request('PATCH', Uri.parse(url));
+    _postHeaders.forEach((key, value) => request.headers[key] = value);
+    request.body = jsonEncode(body);
+    final streamed = await request.send();
+    return await http.Response.fromStream(streamed);
+  }
+
+  static Future<http.Response> delete(String url) async {
+    final request = http.Request('DELETE', Uri.parse(url));
+    _headers.forEach((key, value) => request.headers[key] = value);
+    final streamed = await request.send();
+    return await http.Response.fromStream(streamed);
+  }
+}

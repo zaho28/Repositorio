@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
-        const apiKey = req.headers['x-api-key']; // ← cambia authorization por x-api-key
+        const apiKey = req.headers['x-api-key']; 
 
         console.log('MIDDLEWARE - x-api-key recibido:', apiKey);
         console.log('MIDDLEWARE - API_KEY esperado:', process.env.API_KEY);
