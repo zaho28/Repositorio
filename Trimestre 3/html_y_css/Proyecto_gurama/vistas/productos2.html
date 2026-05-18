@@ -1,0 +1,88 @@
+<!-- Vista de la informacion de los productos con la sesion iniciada -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalles del producto</title>
+  <link rel="stylesheet" href="../css/cliente.css">
+</head>
+
+<body>
+  <header class="header-cliente">
+    <div class="header-container_c">
+      <div class="logo">
+        <a href="cliente.html">
+          <img src="../imagenes/Logo_GO2.png" alt="Logo Gurama Online">
+        </a>
+      </div>
+
+      <nav class="menu">
+        <ul>
+          <li><a href="cliente.html" class="activo">Inicio</a></li>
+          <li><a href="catalogo_2.html">Catálogo</a></li>
+          <li><a href="pedido.html">Pedido personalizado</a></li>
+          <li><a href="../index.html">Cerrar sesión</a></li>
+        </ul>
+      </nav>
+
+      <div class="iconos">
+        <a href="carrito.html">
+          <img src="../imagenes/icono_carrito.png" alt="Carrito">
+        </a>
+        <a href="perfil.html">
+          <img src="../imagenes/icono_usuario.png" alt="Perfil">
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>
+    <div class="contenedor-producto">
+      <div class="imagen-producto">
+        <img id="producto-imagen" src="" alt="Producto">
+      </div>
+
+      <div class="info-producto">
+        <h2 id="producto-nombre"></h2>
+        <p id="producto-descripcion"></p>
+        <p class="precio" id="producto-precio"></p>
+
+        <!--Botón para agregar al carrito -->
+        <a id="btnAgregar" href="../vistas/carrito.html" class="btn-carrito">Agregar al carrito 🛒</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- SCRIPT -->
+  <script src="../js/productos.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"));
+    const producto = productos.find(p => p.id === id);
+
+    if (producto) {
+      document.getElementById("producto-imagen").src = producto.imagen;
+      document.getElementById("producto-nombre").textContent = producto.nombre;
+      document.getElementById("producto-descripcion").textContent = producto.descripcion;
+      document.getElementById("producto-precio").textContent = producto.precio;
+    }
+
+    // Redirección si intenta agregar al carrito sin sesión
+    document.getElementById("btnAgregar").addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = "../vistas/carrito.html"; // Cambia la ruta si tu carrito está en otra carpeta
+    });
+  </script>
+
+  <!-- PIE DE PÁGINA -->
+  <footer>
+    <p>Síguenos en nuestras redes sociales</p>
+    <a href="https://www.instagram.com/_guramaa_/?igsh=d3VqcXE4cGdvdTYw&utm_source=qr" target="_blank">Instagram</a>
+    <a href="https://www.tiktok.com/@_guramaa_?fbclid=PAZXh0bgNhZW0CMTEAAacqQCLxN9-WneTF4qrzVM9UUO2VW1YXo_j-W5NnQo0zYA2dIdXPBYqc6z-11g_aem_tINF11cpYGJOHCIz3Zp7Ew" target="_blank">TikTok</a>
+    <p>© Gurama 2025. Un proyecto de RACE-Coders. Todos los derechos reservados. Prohibida la reproducción no autorizada de este contenido.</p>
+  </footer>
+</body>
+</html>

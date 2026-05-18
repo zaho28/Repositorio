@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - GuramaOnline</title>
+    <link rel="stylesheet" href="../css/panel_control.css">
+    <link rel="stylesheet" href="../css/movimientos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- PANEL LATERAL -->
+    <aside class="sidebar">
+        <div class="logo">
+            <a href="panel_admin.html">
+                <img src="../imagenes/Logo_GO.jpeg" alt="GuramaOnline">
+            </a>
+        </div>
+        
+        <nav class="menu">
+            <a href="panel_admin.html">
+                <i class="fa-solid fa-gauge"></i>
+                <span>Panel de control</span>
+            </a>
+            
+            <a href="productos.html">
+                <i class="fa-solid fa-box"></i>
+                <span>Productos</span>
+            </a>
+        
+            <a href="movimientos.html">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                <span>Movimientos</span>
+            </a>
+
+            <a href="entradas.html">
+                <i class="fa-solid fa-arrow-down"></i>
+                <span>Entradas</span>
+            </a>
+
+            <a href="salidas.html">
+                <i class="fa-solid fa-arrow-up"></i>
+                <span>Salidas</span>
+            </a>
+            
+            <a href="usuario.html" class="activo">
+                <i class="fa-solid fa-user"></i>
+                <span>Usuarios</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contenido">
+        <header class="header-panel">
+            <div>
+                <h1>Usuarios</h1>
+                <p>Información de usuarios y pedidos realizados por ellos</p>
+            </div>
+            <div class="usuario">
+                <a href="perfil_admi.html">
+                    <span>Admin.gurama</span>
+                    <img src="../imagenes/logo_perfil.webp" alt="perfil">
+                </a>
+            </div>
+        </header>
+
+        <!-- SECCIÓN DE INFORMACIÓN DE USUARIOS -->
+        <section class="cuadro-blanco usuarios-section">
+            <div class="usuarios-header">
+                <button class="btn-activo">Información usuario</button>
+                <button class="btn-registrar">
+                    <i class="fa-solid fa-plus"></i> Registrar
+                </button>
+            </div>
+
+            <!-- TABLA DE USUARIOS -->
+            <div class="tabla-usuarios">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Rol</th>
+                            <th>Fecha de inicio</th>
+                            <th>Teléfono</th>
+                            <th>Pedidos registrados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fa-solid fa-pen"></i></td>
+                            <td>01</td>
+                            <td>Mariana Lopez</td>
+                            <td>Cliente</td>
+                            <td>22/06/2025</td>
+                            <td>3208980258</td>
+                            <td>
+                                <button class="btn-ver">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TARJETA DE DETALLE DE PEDIDO -->
+            <div class="detalle-pedido">
+                <h4>Primer pedido (24/06/2025)</h4>
+                <ul>
+                    <li>Virogranos XL, precio a pagar: $114.000</li>
+                    <li>Sábanas flores XL, precio a pagar: $75.000</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
