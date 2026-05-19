@@ -43,3 +43,14 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Plugins (se regeneran con flutter pub get)
+.flutter-plugins
+**/ios/Pods/
+**/android/.gradle/
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+**/windows/flutter/ephemeral/
+**/linux/flutter/ephemeral/
+**/macos/Pods/

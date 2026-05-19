@@ -336,7 +336,7 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
                     imageUrl: imagenPreviewUrl!,
-                    httpHeaders: {'x-api-key': AppConstants.apiKey},
+                    httpHeaders: ApiService.headers,
                     height: 160,
                     width: double.infinity,
                     fit: BoxFit.cover,
