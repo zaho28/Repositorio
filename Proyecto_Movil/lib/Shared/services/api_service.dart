@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../constants/app_constants.dart';
@@ -15,7 +16,7 @@ class ApiService {
 
   static String? get currentToken => _token;
 
-  static Map<String, String> get _headers => {
+  static Map<String, String> get headers => {
     'x-api-key': AppConstants.apiKey,
     if (_token != null) 'Authorization': 'Bearer $_token',
   };
@@ -28,7 +29,7 @@ class ApiService {
 
   static Future<http.Response> get(String url) async {
     final request = http.Request('GET', Uri.parse(url));
-    _headers.forEach((key, value) => request.headers[key] = value);
+    headers.forEach((key, value) => request.headers[key] = value);
 
     print('>>> HEADERS: ${request.headers}'); // 👈 agrega esta línea
 
@@ -54,8 +55,19 @@ class ApiService {
 
   static Future<http.Response> delete(String url) async {
     final request = http.Request('DELETE', Uri.parse(url));
-    _headers.forEach((key, value) => request.headers[key] = value);
+    headers.forEach((key, value) => request.headers[key] = value);
     final streamed = await request.send();
     return await http.Response.fromStream(streamed);
+  }
+
+  static Future<http.StreamedResponse> postMultipart(String url, File file, {String fileField = 'imagen_producto'}) async {
+    final request = http.MultipartRequest('POST', Uri.parse(url));
+    headers.forEach((key, value) => request.headers[key] = value);
+    
+    request.files.add(
+      await http.MultipartFile.fromPath(fileField, file.path),
+    );
+
+    return await request.send();
   }
 }

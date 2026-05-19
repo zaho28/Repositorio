@@ -34,34 +34,37 @@ class PanelControlScreen extends StatelessWidget {
             // Header del drawer con datos del usuario
             DrawerHeader(
               decoration: const BoxDecoration(color: AppColors.primario),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: AppColors.blanco,
-                    backgroundImage: usuario.imgPerfil != null
-                        ? NetworkImage('${AppConstants.baseUrl}/${usuario.imgPerfil}')
-                        : null,
-                    child: usuario.imgPerfil == null
-                        ? const Icon(Icons.person, color: AppColors.primario, size: 35)
-                        : null,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    usuario.nombreCompleto,
-                    style: const TextStyle(
-                      color: AppColors.blanco,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                onTap: () => _navegar(context, '/perfil'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: AppColors.blanco,
+                      backgroundImage: usuario.imgPerfil != null
+                          ? NetworkImage(AppConstants.getImageUrl(usuario.imgPerfil), headers: ApiService.headers)
+                          : null,
+                      child: usuario.imgPerfil == null
+                          ? const Icon(Icons.person, color: AppColors.primario, size: 35)
+                          : null,
                     ),
-                  ),
-                  Text(
-                    usuario.correo,
-                    style: const TextStyle(color: AppColors.blanco, fontSize: 12),
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                    Text(
+                      usuario.nombreCompleto,
+                      style: const TextStyle(
+                        color: AppColors.blanco,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      usuario.correo,
+                      style: const TextStyle(color: AppColors.blanco, fontSize: 12),
+                    ),
+                  ],
+                ),
               ),
             ),
 
@@ -157,7 +160,7 @@ class PanelControlScreen extends StatelessWidget {
                         radius: 16,
                         backgroundColor: AppColors.blanco,
                         backgroundImage: usuario.imgPerfil != null
-                            ? NetworkImage('${AppConstants.subirImagen}/${usuario.imgPerfil}')
+                            ? NetworkImage('${AppConstants.baseUrl}/${usuario.imgPerfil}', headers: ApiService.headers)
                             : null,
                         child: usuario.imgPerfil == null
                             ? const Icon(Icons.person, color: AppColors.primario, size: 18)

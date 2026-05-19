@@ -43,6 +43,13 @@ class UsuarioModel {
   bool get isCliente  => idRolUsuario == '2';
   bool get isWorker   => idRolUsuario == '3';
 
+  String get nombreRol {
+    if (isAdmin) return 'Administrador';
+    if (isWorker) return 'Trabajador';
+    if (isCliente) return 'Cliente';
+    return 'Usuario';
+  }
+
   factory UsuarioModel.fromJson(Map<String, dynamic> json) {
     return UsuarioModel(
       idUsuario: json['id_usuario']?.toString() ?? '',
