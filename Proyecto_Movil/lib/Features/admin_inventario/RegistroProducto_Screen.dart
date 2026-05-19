@@ -69,6 +69,9 @@ class _RegistroProductoScreenState extends State<RegistroProductoScreen> {
         ApiService.get(AppConstants.obtenerClasificaciones),
       ]);
 
+      print('>>> Categorias Status: ${results[0].statusCode} Body: ${results[0].body}');
+      print('>>> Clasificaciones Status: ${results[1].statusCode} Body: ${results[1].body}');
+
       if (results[0].statusCode == 200 && results[1].statusCode == 200) {
         setState(() {
           categorias      = jsonDecode(results[0].body);
@@ -79,6 +82,7 @@ class _RegistroProductoScreenState extends State<RegistroProductoScreen> {
         setState(() => cargandoDatos = false);
       }
     } catch (e) {
+      print('>>> Error al cargar datos: $e');
       setState(() => cargandoDatos = false);
     }
   }
@@ -138,12 +142,14 @@ class _RegistroProductoScreenState extends State<RegistroProductoScreen> {
 
       // 2. Subir imagen si se seleccionó
       if (imagenNueva != null && productoId != null) {
-        final bytes       = await imagenNueva!.readAsBytes();
-        final base64Image = base64Encode(bytes);
-        await ApiService.post(
+        final resImagen = await ApiService.postMultipart(
           '${AppConstants.subirImagenProducto}/$productoId/imagen',
-          {'imagen': base64Image},
+          imagenNueva!,
+          fileField: 'imagen_producto',
         );
+        if (resImagen.statusCode != 200 && resImagen.statusCode != 201) {
+          print('Error al subir imagen: ${resImagen.statusCode}');
+        }
       }
 
       if (mounted) {

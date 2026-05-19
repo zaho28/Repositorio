@@ -83,6 +83,11 @@ class GuramaApp extends StatelessWidget {
         final u = ModalRoute.of(context)!.settings.arguments as UsuarioModel;
         return RegistroProductoScreen(usuario: u);
       },
+      '/entradas': (context) => const EntradasScreen(),
+      '/salidas': (context) => const SalidasScreen(),
+      '/perfil': (context) => const PerfilAdminScreen(),
+      '/cambiar-datos': (context) => const CambiarDatosScreen(),
+      '/cambiar-contrasena': (context) => const CambiarContrasenaScreen(),
     };
   }
 }

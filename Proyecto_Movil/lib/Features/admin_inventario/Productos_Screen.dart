@@ -6,6 +6,7 @@ import '../../Shared/widgets/Custom_AppBar.dart';
 import '../../Shared/providers/producto_provider.dart';
 import '../../data/models/producto_model.dart';
 import '../../data/models/usuario_model.dart';
+import '../../Shared/services/api_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductosScreen extends StatefulWidget {
@@ -62,7 +63,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
                     borderRadius: BorderRadius.circular(12),
                     child: CachedNetworkImage(
                       imageUrl: '${AppConstants.baseUrl}${p.rutaImagen}',
-                      httpHeaders: {'x-api-key': AppConstants.apiKey},
+                      httpHeaders: ApiService.headers,
                       height: 200,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -268,7 +269,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 child: CachedNetworkImage(
                                   imageUrl: '${AppConstants.baseUrl}${p.rutaImagen}',
-                                  httpHeaders: {'x-api-key': AppConstants.apiKey},
+                                  httpHeaders: ApiService.headers,
                                   fit: BoxFit.cover,
                                   placeholder: (context, url) => const Center(
                                     child: CircularProgressIndicator(

@@ -1,9 +1,7 @@
 class AppConstants {
   // (host cel)
-  static const String _baseUrl = 'http://10.119.90.248:3000';
+  static const String _baseUrl = 'http://10.186.62.248:3000';
   static const String baseUrl = _baseUrl;
-  // casa
-  //static const String _baseUrl = 'http://192.168.1.65:3000';
 
   // API KEY
   static const String apiKey = 'xyz123';
@@ -13,6 +11,13 @@ class AppConstants {
     'Content-Type': 'application/json',
     'x-api-key': apiKey,
   };
+
+  static String getImageUrl(String? path) {
+    if (path == null || path.isEmpty) return '';
+    final safePath = path.startsWith('/') ? path.substring(1) : path;
+    final safeBase = baseUrl.endsWith('/') ? baseUrl : '$baseUrl/';
+    return '$safeBase$safePath';
+  }
 
   // Enpoints
 
