@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'data/models/usuario_model.dart';
-import 'data/models/producto_model.dart';
+import 'Data/models/usuario_model.dart';
+import 'Data/models/producto_model.dart';
 import 'Features/index.dart';
 import 'Shared/providers/auth_provider.dart';
 import 'Shared/providers/producto_provider.dart';
+import 'Shared/providers/material_provider.dart';
+import 'Shared/providers/pedido_provider.dart';
+import 'Shared/services/cache_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(const GuramaApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");  
+  await CacheService.limpiarCacheSiEsNecesario();
+  
+  final authProvider = AuthProvider();
+  await authProvider.loadTokenFromStorage(); 
+
+  runApp(GuramaApp(authProvider: authProvider));
 }
 
 class GuramaApp extends StatelessWidget {
-  const GuramaApp({super.key});
+  final AuthProvider authProvider;                          
+  const GuramaApp({super.key, required this.authProvider}); 
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider.value(value: authProvider),        
         ChangeNotifierProvider(create: (_) => ProductoProvider()),
+        ChangeNotifierProvider(create: (_) => MaterialProvider()),
+        ChangeNotifierProvider(create: (_) => PedidoProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -56,7 +70,7 @@ class GuramaApp extends StatelessWidget {
         final u = ModalRoute.of(context)!.settings.arguments as UsuarioModel;
         return PedidosRealizadosScreen(usuario: u);
       },
-      '/admin/reportes': (context) {
+      /*'/admin/reportes': (context) {
         final u = ModalRoute.of(context)!.settings.arguments as UsuarioModel;
         return ReportesScreen(usuario: u);
       },
@@ -67,7 +81,7 @@ class GuramaApp extends StatelessWidget {
       '/admin/notificaciones': (context) {
         final u = ModalRoute.of(context)!.settings.arguments as UsuarioModel;
         return NotificacionesScreen(usuario: u);
-      },
+      },*/
       '/admin/usuarios': (context) {
         final u = ModalRoute.of(context)!.settings.arguments as UsuarioModel;
         return GestionUsuariosScreen(usuario: u);

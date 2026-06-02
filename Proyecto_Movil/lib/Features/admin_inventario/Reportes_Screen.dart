@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../../Shared/constants/app_colors.dart';
 import '../../Shared/constants/app_constants.dart';
 import '../../Shared/widgets/Custom_AppBar.dart';
 import '../../Shared/services/api_service.dart';
-import '../../data/models/usuario_model.dart';
+import '../../Data/models/usuario_model.dart';
+import '../../Data/models/reporte_model.dart';
 
 class ReportesScreen extends StatefulWidget {
   final UsuarioModel usuario;
@@ -17,9 +18,9 @@ class ReportesScreen extends StatefulWidget {
 class _ReportesScreenState extends State<ReportesScreen> {
   bool cargando = true;
   String? error;
-  Map<String, dynamic>? resumenGeneral;
+  ResumenGeneralModel? resumenGeneral;
   List pedidos = [];
-  List productosStockBajo = [];
+  List<TopProductoModel> productosStockBajo = [];
 
   @override
   void initState() {
@@ -36,13 +37,15 @@ class _ReportesScreenState extends State<ReportesScreen> {
       final pedidosRes = await ApiService.get(AppConstants.obtenerPedidos);
 
       if (resumenRes.statusCode == 200) {
-        resumenGeneral = jsonDecode(resumenRes.body);
+        resumenGeneral = ResumenGeneralModel.fromJson(
+          jsonDecode(resumenRes.body) as Map<String, dynamic>,
+        );
       }
       if (topRes.statusCode == 200) {
-        final top = jsonDecode(topRes.body) as List;
-        productosStockBajo = top.where((p) =>
-        (p['stock_actual'] ?? 0) < (p['stock_minimo'] ?? 0)
-        ).toList();
+        final top = (jsonDecode(topRes.body) as List)
+            .map((p) => TopProductoModel.fromJson(p as Map<String, dynamic>))
+            .toList();
+        productosStockBajo = top.where((p) => p.tieneStockBajo).toList();
       }
       if (pedidosRes.statusCode == 200) {
         pedidos = jsonDecode(pedidosRes.body);
@@ -84,7 +87,7 @@ class _ReportesScreenState extends State<ReportesScreen> {
                   children: [
                     _StatCard(
                       label: 'Total Entradas',
-                      value: '${resumenGeneral!['totalEntradas'] ?? 0}',
+                      value: '${resumenGeneral!.totalEntradas}',
                       sub: 'unidades recibidas',
                       color: Colors.green.shade50,
                       borderColor: Colors.green.shade200,
@@ -92,7 +95,7 @@ class _ReportesScreenState extends State<ReportesScreen> {
                     const SizedBox(width: 12),
                     _StatCard(
                       label: 'Total Salidas',
-                      value: '${resumenGeneral!['totalSalidas'] ?? 0}',
+                      value: '${resumenGeneral!.totalSalidas}',
                       sub: 'unidades vendidas',
                       color: Colors.red.shade50,
                       borderColor: Colors.red.shade200,
@@ -104,7 +107,7 @@ class _ReportesScreenState extends State<ReportesScreen> {
                   children: [
                     _StatCard(
                       label: 'Balance Neto',
-                      value: '${(resumenGeneral!['totalEntradas'] ?? 0) - (resumenGeneral!['totalSalidas'] ?? 0)}',
+                      value: '${resumenGeneral!.balanceNeto}',
                       sub: 'diferencia',
                       color: Colors.blue.shade50,
                       borderColor: Colors.blue.shade200,
@@ -127,15 +130,15 @@ class _ReportesScreenState extends State<ReportesScreen> {
                   ),
                   child: Column(
                     children: productosStockBajo.map((p) => ListTile(
-                      title: Text(p['producto'] ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
-                      subtitle: Text('Mínimo: ${p['stock_minimo']}'),
+                      title: Text(p.producto, style: const TextStyle(fontWeight: FontWeight.w600)),
+                      subtitle: Text('Mínimo: ${p.stockMinimo}'),
                       trailing: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
                           color: Colors.red.shade100,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Text('${p['stock_actual']}',
+                        child: Text('${p.stockActual}',
                             style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
                       ),
                     )).toList(),
@@ -149,9 +152,8 @@ class _ReportesScreenState extends State<ReportesScreen> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.secundario)),
               const SizedBox(height: 10),
               ...pedidos.take(10).map((p) {
-                final ticket = (p['ticket_compra'] as List?)?.isNotEmpty == true
-                    ? p['ticket_compra'][0] : null;
-                final total = ticket != null ? ticket['total_ticket'] ?? 0 : 0;
+                final ticket = p['ticket_compra'];
+                final total = ticket != null ? (ticket['total_ticket'] ?? 0) : 0;
                 final estado = ticket?['estado_pago']?['nom_metodo'] ?? p['estado'] ?? '-';
                 final usuario = p['usuario'];
                 final nombre = usuario != null
@@ -163,7 +165,7 @@ class _ReportesScreenState extends State<ReportesScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.blanco,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), blurRadius: 4)],
+                    boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 4)],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,4 +242,4 @@ class _StatCard extends StatelessWidget {
       ),
     );
   }
-}
+}*/

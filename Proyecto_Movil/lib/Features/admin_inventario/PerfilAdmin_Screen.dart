@@ -1,14 +1,18 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+import '../../Shared/providers/auth_provider.dart';
+import '../../Shared/widgets/Custom_AppBar.dart';
+import '../../Shared/widgets/AdminSidebar.dart';
 import '../../Shared/constants/app_colors.dart';
 import '../../Shared/constants/app_constants.dart';
-import '../../Shared/widgets/Custom_AppBar.dart';
 import '../../Shared/services/api_service.dart';
-import '../../Shared/providers/auth_provider.dart';
+import '../../Data/models/usuario_model.dart';
+
 
 class PerfilAdminScreen extends StatefulWidget {
   const PerfilAdminScreen({super.key});
@@ -110,10 +114,11 @@ class _PerfilAdminScreenState extends State<PerfilAdminScreen> {
     final usuario = auth.usuario;
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'Perfil'),
+      appBar: CustomAppBar(title: 'Perfil', showProfile: false), // Ocultamos en el header porque ya estamos en perfil
+      drawer: usuario != null ? AdminSidebar(usuario: usuario) : null,
       backgroundColor: AppColors.fondo,
       body: _cargando && usuario == null
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _errorMensaje != null && usuario == null
               ? Center(child: Text(_errorMensaje!, style: const TextStyle(color: Colors.red)))
               : SingleChildScrollView(
@@ -148,7 +153,7 @@ class _PerfilAdminScreenState extends State<PerfilAdminScreen> {
                                     Positioned.fill(
                                       child: Container(
                                         decoration: const BoxDecoration(color: Colors.black45, shape: BoxShape.circle),
-                                        child: const Center(child: CircularProgressIndicator(color: Colors.white)),
+                                          child: Center(child: CircularProgressIndicator(color: Colors.white)),
                                       ),
                                     ),
                                   Positioned(
@@ -188,7 +193,7 @@ class _PerfilAdminScreenState extends State<PerfilAdminScreen> {
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                        child: const Text('Cambiar datos', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        child: Text('Cambiar datos', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(height: 12),
                       ElevatedButton(

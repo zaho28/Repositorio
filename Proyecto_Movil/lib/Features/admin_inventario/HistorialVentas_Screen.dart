@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../../Shared/constants/app_colors.dart';
 import '../../Shared/constants/app_constants.dart';
 import '../../Shared/widgets/Custom_AppBar.dart';
 import '../../Shared/services/api_service.dart';
-import '../../data/models/usuario_model.dart';
+import '../../Data/models/usuario_model.dart';
 
 class HistorialVentasScreen extends StatefulWidget {
   final UsuarioModel usuario;
@@ -160,7 +160,7 @@ class _HistorialVentasScreenState extends State<HistorialVentasScreen> {
                       children: [
                         _StatCard(
                           label: 'Total Entradas',
-                          value: '${resumen!['totalEntradas'] ?? 0}',
+                          value: '${resumen?['totalEntradas'] ?? 0}',
                           color: Colors.green.shade50,
                           borderColor: Colors.green.shade200,
                           textColor: Colors.green.shade800,
@@ -168,7 +168,7 @@ class _HistorialVentasScreenState extends State<HistorialVentasScreen> {
                         const SizedBox(width: 12),
                         _StatCard(
                           label: 'Total Salidas',
-                          value: '${resumen!['totalSalidas'] ?? 0}',
+                          value: '${resumen?['totalSalidas'] ?? 0}',
                           color: Colors.red.shade50,
                           borderColor: Colors.red.shade200,
                           textColor: Colors.red.shade800,
@@ -206,7 +206,7 @@ class _HistorialVentasScreenState extends State<HistorialVentasScreen> {
                           ...resumenMensual.map((m) => Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                             decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(color: AppColors.suave.withValues(alpha: 0.5))),
+                              border: Border(bottom: BorderSide(color: AppColors.suave.withOpacity(0.5))),
                             ),
                             child: Row(
                               children: [
@@ -240,7 +240,7 @@ class _HistorialVentasScreenState extends State<HistorialVentasScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.blanco,
                           borderRadius: BorderRadius.circular(10),
-                          boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), blurRadius: 4)],
+                          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 4)],
                         ),
                         child: Row(
                           children: [
@@ -318,4 +318,4 @@ class _StatCard extends StatelessWidget {
       ),
     );
   }
-}
+}*/

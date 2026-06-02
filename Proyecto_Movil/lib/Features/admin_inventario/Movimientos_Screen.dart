@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+
+import '../../Data/models/usuario_model.dart';
+import '../../Shared/widgets/Custom_AppBar.dart';
+import '../../Shared/widgets/AdminSidebar.dart';
 import '../../Shared/constants/app_colors.dart';
 import '../../Shared/constants/app_constants.dart';
-import '../../Shared/widgets/Custom_AppBar.dart';
 import '../../Shared/services/api_service.dart';
-import '../../data/models/usuario_model.dart';
+
 
 class MovimientosScreen extends StatefulWidget {
   final UsuarioModel usuario;
@@ -68,6 +71,7 @@ class _MovimientosScreenState extends State<MovimientosScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'Movimientos'),
+      drawer: AdminSidebar(usuario: widget.usuario),
       backgroundColor: AppColors.fondo,
       body: Column(
         children: [
@@ -169,7 +173,7 @@ class _MovimientosScreenState extends State<MovimientosScreen> {
           // Lista
           Expanded(
             child: cargando
-                ? const Center(child: CircularProgressIndicator(color: AppColors.primario))
+                ? Center(child: CircularProgressIndicator(color: AppColors.primario))
                 : error != null
                 ? Center(child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -180,7 +184,7 @@ class _MovimientosScreenState extends State<MovimientosScreen> {
               ],
             ))
                 : movimientosFiltrados.isEmpty
-                ? const Center(child: Text('No hay movimientos', style: TextStyle(color: Colors.grey)))
+                ? Center(child: Text('No hay movimientos', style: TextStyle(color: Colors.grey)))
                 : RefreshIndicator(
               onRefresh: cargarMovimientos,
               child: ListView.builder(
@@ -200,7 +204,7 @@ class _MovimientosScreenState extends State<MovimientosScreen> {
                           width: 4,
                         ),
                       ),
-                      boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), blurRadius: 4)],
+                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 4)],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12),

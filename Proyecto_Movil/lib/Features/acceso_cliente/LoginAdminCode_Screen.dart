@@ -10,7 +10,7 @@ import '../../Shared/constants/app_colors.dart';
 import '../../Shared/constants/app_constants.dart';
 import '../../Shared/providers/auth_provider.dart';
 import '../../Shared/services/api_service.dart';
-import '../../data/models/usuario_model.dart';
+import '../../Data/models/usuario_model.dart';
 
 class LoginAdminCodeScreen extends StatelessWidget {
   final String idUsuario;

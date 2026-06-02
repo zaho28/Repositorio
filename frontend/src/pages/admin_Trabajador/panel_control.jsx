@@ -148,16 +148,16 @@ function HistorialVentas() {
 //  SUBCOMPONENTE: NOTIFICACIONES
 // ─────────────────────────────────────────────
 const NOTIF_FILTROS = [
-    { key: 'todas',      clase: 'activo-todas',    label: 'Todas',      tipo: null },
+    { key: 'todas', clase: 'activo-todas', label: 'Todas', tipo: null },
     { key: 'stock-bajo', clase: 'activo-stockbajo', label: 'Stock Bajo', tipo: 'stock-bajo' },
-    { key: 'agotado',    clase: 'activo-agotado',   label: 'Agotados',   tipo: 'agotado' },
-    { key: 'pedidos',    clase: 'activo-pedidos',   label: 'Pedidos',    tipo: 'pedido' },
+    { key: 'agotado', clase: 'activo-agotado', label: 'Agotados', tipo: 'agotado' },
+    { key: 'pedidos', clase: 'activo-pedidos', label: 'Pedidos', tipo: 'pedido' },
 ];
 
 const BADGE_TIPO = {
     'stock-bajo': { bg: '#fff3cd', color: '#856404', label: 'Stock Bajo' },
-    'agotado':    { bg: '#f8d7da', color: '#721c24', label: 'Agotado' },
-    'pedido':     { bg: '#d1ecf1', color: '#0c5460', label: 'Pedido' },
+    'agotado': { bg: '#f8d7da', color: '#721c24', label: 'Agotado' },
+    'pedido': { bg: '#d1ecf1', color: '#0c5460', label: 'Pedido' },
 };
 
 function Notificaciones() {
@@ -191,7 +191,7 @@ function Notificaciones() {
         try {
             const data = await apiGet('/notificaciones/estadisticas');
             setEstadisticas(data);
-        } catch {}
+        } catch { }
     };
 
     const getFiltroPorKey = (key) => NOTIF_FILTROS.find(f => f.key === key);
@@ -318,7 +318,7 @@ const handlePrint = () => {
     // Abre una ventana nueva solo con el contenido del reporte
     const contenido = document.querySelector('.reporte-imprimible');
     if (!contenido) return;
- 
+
     const ventana = window.open('', '_blank', 'width=900,height=700');
     ventana.document.write(`
         <!DOCTYPE html>
@@ -463,7 +463,7 @@ function Reportes() {
             setVentasPorOrigen([
                 { name: 'Online', value: origen.online, color: '#c45a77' },
                 { name: 'Manual', value: origen.manual, color: '#ec4899' },
-                { name: 'Admin',  value: origen.admin,  color: '#f59e0b' },
+                { name: 'Admin', value: origen.admin, color: '#f59e0b' },
             ]);
 
             await cargarDatosPedidos();
@@ -477,8 +477,16 @@ function Reportes() {
 
             const metodosPago = {};
             pedidos.forEach(p => {
-                const ticket = p.ticket_compra?.[0];
-                const m = ticket?.metodo_pago?.nom_metodo || 'Sin definir';
+                const ticket = p.ticket_compra;
+                const estadoPago = ticket?.estado_pago?.nom_metodo || '';
+                const metodoPago = ticket?.metodo_pago?.nom_metodo || '';
+                const esPendiente =
+                    estadoPago.toLowerCase().includes('pendiente') ||
+                    metodoPago.toLowerCase().includes('pendiente');
+
+                if (esPendiente) return; // ← saltar pedidos pendientes
+
+                const m = metodoPago || 'Sin definir';
                 if (!metodosPago[m]) metodosPago[m] = { metodo: m, monto_total: 0, cantidad: 0 };
                 metodosPago[m].monto_total += parseFloat(ticket?.total_ticket) || 0;
                 metodosPago[m].cantidad += 1;
@@ -489,37 +497,63 @@ function Reportes() {
             pedidos.forEach(p => {
                 const id = p.id_usuario;
                 const nombre = p.usuario ? `${p.usuario.nom_1} ${p.usuario.ape_1}` : id;
-                const ticket = p.ticket_compra?.[0];
-                if (!clientes[id]) clientes[id] = { id_usuario: id, nombre, telefono: p.usuario?.telefono, cantidad_pedidos: 0, total_monto: 0 };
+                const ticket = p.ticket_compra;
+
+                const estadoPago = ticket?.estado_pago?.nom_metodo || '';
+                const metodoPago = ticket?.metodo_pago?.nom_metodo || '';
+                const esPendiente =
+                    estadoPago.toLowerCase().includes('pendiente') ||
+                    metodoPago.toLowerCase().includes('pendiente');
+
+                if (!clientes[id]) clientes[id] = {
+                    id_usuario: id,
+                    nombre,
+                    telefono: p.usuario?.telefono,
+                    cantidad_pedidos: 0,
+                    total_monto: 0
+                };
+
                 clientes[id].cantidad_pedidos += 1;
-                clientes[id].total_monto += parseFloat(ticket?.total_ticket) || 0;
+
+                // Solo suma el monto si el pago está confirmado
+                if (!esPendiente) {
+                    clientes[id].total_monto += parseFloat(ticket?.total_ticket) || 0;
+                }
             });
             setTopClientes(Object.values(clientes).sort((a, b) => b.total_monto - a.total_monto).slice(0, 3));
 
             setIngresosPorPedido(pedidos
                 .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).slice(0, 10)
                 .map(p => {
-                    const ticket = p.ticket_compra?.[0];
+                    const ticket = p.ticket_compra;
+                    const estadoPago = ticket?.estado_pago?.nom_metodo || '';
+                    const metodoPago = ticket?.metodo_pago?.nom_metodo || '';
+                    const esPendiente =
+                        estadoPago.toLowerCase().includes('pendiente') ||
+                        metodoPago.toLowerCase().includes('pendiente');
+
                     return {
                         id_pedido: p.id_pedido,
                         cliente: p.usuario ? `${p.usuario.nom_1} ${p.usuario.ape_1}` : p.id_usuario,
                         fecha: new Date(p.fecha).toLocaleDateString(),
-                        metodo: ticket?.metodo_pago?.nom_metodo || '-',
-                        estado: ticket?.estado_pago?.nom_metodo || p.estado,
-                        total: parseFloat(ticket?.total_ticket) || 0,
+                        metodo: metodoPago || '-',
+                        estado: estadoPago || p.estado,
+                        total: esPendiente ? 0 : (parseFloat(ticket?.total_ticket) || 0),  // ← aquí
                     };
                 }));
         } catch (e) { console.error(e); }
     };
 
     const getEstadoClase = (estado) => {
-        if (estado === 'Pagado')    return 'pedido-estado-pagado';
+        if (estado === 'Pagado') return 'pedido-estado-pagado';
         if (estado === 'Pendiente') return 'pedido-estado-pendiente';
         return 'pedido-estado-otro';
     };
 
-    const totalVentas  = ventasPorMetodoPago.reduce((s, m) => s + m.monto_total, 0);
-    const totalPedidos = ingresosPorPedido.reduce((s, p) => s + p.total, 0);
+    const totalVentas = ventasPorMetodoPago.reduce((s, m) => s + m.monto_total, 0);
+    const totalPedidos = ingresosPorPedido
+        .filter(p => !p.estado.toLowerCase().includes('pendiente'))
+        .reduce((s, p) => s + p.total, 0);
 
     if (loading) return <p className="panel-loading">Generando reportes...</p>;
 
@@ -629,7 +663,7 @@ function Reportes() {
                             <Tooltip />
                             <Legend />
                             <Line type="monotone" dataKey="entradas" stroke="#10b981" strokeWidth={3} name="Entradas" />
-                            <Line type="monotone" dataKey="salidas"  stroke="#c45a77" strokeWidth={3} name="Salidas" />
+                            <Line type="monotone" dataKey="salidas" stroke="#c45a77" strokeWidth={3} name="Salidas" />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
@@ -715,9 +749,9 @@ function Reportes() {
 //  COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────────
 const OPCIONES_PANEL = [
-    { key: 'reportes',         label: 'Reportes' },
+    { key: 'reportes', label: 'Reportes' },
     { key: 'historial_ventas', label: 'Historial de ventas' },
-    { key: 'notificaciones',   label: 'Notificaciones' },
+    { key: 'notificaciones', label: 'Notificaciones' },
 ];
 
 export default function PanelControl() {
@@ -727,9 +761,9 @@ export default function PanelControl() {
 
     const renderContenido = () => {
         switch (activo) {
-            case 'reportes':         return <Reportes />;
+            case 'reportes': return <Reportes />;
             case 'historial_ventas': return <HistorialVentas />;
-            case 'notificaciones':   return <Notificaciones />;
+            case 'notificaciones': return <Notificaciones />;
             default: return (
                 <div className="panel-placeholder">
                     <div className="panel-placeholder-icono"></div>
