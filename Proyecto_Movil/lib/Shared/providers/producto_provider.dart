@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
 import '../services/api_service.dart';
-import '../../data/models/producto_model.dart';
+import '../../Data/models/producto_model.dart';
 
 class ProductoProvider extends ChangeNotifier {
   List<ProductoModel> _productos = [];

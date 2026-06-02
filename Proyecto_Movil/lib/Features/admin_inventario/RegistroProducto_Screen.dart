@@ -11,7 +11,7 @@ import '../../Shared/widgets/Custom_TextField.dart';
 import '../../Shared/widgets/Custom_Sizedbox.dart';
 import '../../Shared/providers/producto_provider.dart';
 import '../../Shared/services/api_service.dart';
-import '../../data/models/usuario_model.dart';
+import '../../Data/models/usuario_model.dart';
 
 class RegistroProductoScreen extends StatefulWidget {
   final UsuarioModel usuario;
