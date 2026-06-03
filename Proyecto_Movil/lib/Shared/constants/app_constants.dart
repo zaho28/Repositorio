@@ -1,10 +1,11 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class AppConstants {
-  // (host cel)
-  static const String _baseUrl = 'http://10.186.62.248:3000';
-  static const String baseUrl = _baseUrl;
+  static String get _baseUrl => dotenv.env['BASE_URL'] ?? 'http://localhost:3000';
+  static String get baseUrl => _baseUrl;
 
   // API KEY
-  static const String apiKey = 'xyz123';
+  static String get apiKey => dotenv.env['API_KEY'] ?? '';
 
   // Headers globales
   static Map<String, String> get headers => {
@@ -12,6 +13,7 @@ class AppConstants {
     'x-api-key': apiKey,
   };
 
+  // Función para construir URLs de imágenes
   static String getImageUrl(String? path) {
     if (path == null || path.isEmpty) return '';
     final safePath = path.startsWith('/') ? path.substring(1) : path;
@@ -19,76 +21,74 @@ class AppConstants {
     return '$safeBase$safePath';
   }
 
-  // Enpoints
-
   // AUTH
-  static const String login = '$_baseUrl/auth/login'; // Post
-  static const String verifyCode = '$_baseUrl/auth/verify-code'; // Post
-  static const String logout = '$_baseUrl/auth/logout'; // Post
+  static String get login => '$_baseUrl/auth/login';
+  static String get verifyCode => '$_baseUrl/auth/verify-code';
+  static String get logout => '$_baseUrl/auth/logout';
 
   // USUARIOS
-  static const String crearUsuario = '$_baseUrl/usuarios';           // Post
-  static const String obtenerUsuarios = '$_baseUrl/usuarios';        // Get
-  static const String obtenerUsuario = '$_baseUrl/usuarios';         // Get
-  static const String actualizarUsuario = '$_baseUrl/usuarios';      // Patch
-  static const String eliminarUsuario = '$_baseUrl/usuarios';        // Delete
-  static const String cambiarContrasena = '$_baseUrl/usuarios';      // Patch
-  static const String subirImagen = '$_baseUrl/usuarios';            // Post
-  static const String solicitarReset = '$_baseUrl/usuarios/solicitar-reset'; // Post
-  static const String resetContrasena = '$_baseUrl/usuarios/reset-contrasena'; // Post
-  static const String cambiarEstado = '$_baseUrl/usuarios';          // Patch
+  static String get crearUsuario => '$_baseUrl/usuarios';
+  static String get obtenerUsuarios => '$_baseUrl/usuarios';
+  static String get obtenerUsuario => '$_baseUrl/usuarios';
+  static String get actualizarUsuario => '$_baseUrl/usuarios';
+  static String get eliminarUsuario => '$_baseUrl/usuarios';
+  static String get cambiarContrasena => '$_baseUrl/usuarios';
+  static String get subirImagen => '$_baseUrl/usuarios';
+  static String get solicitarReset => '$_baseUrl/usuarios/solicitar-reset';
+  static String get resetContrasena => '$_baseUrl/usuarios/reset-contrasena';
+  static String get cambiarEstado => '$_baseUrl/usuarios';
 
-// PRODUCTOS
-  static const String crearProducto = '$_baseUrl/productos';            // Post
-  static const String obtenerProductos = '$_baseUrl/productos';         // Get
-  static const String verificarProducto = '$_baseUrl/productos/check';  // Get
-  static const String obtenerProducto = '$_baseUrl/productos';          // Get
-  static const String actualizarProducto = '$_baseUrl/productos';       // Patch
-  static const String eliminarProducto = '$_baseUrl/productos';         // Delete
-  static const String subirImagenProducto = '$_baseUrl/productos';      // Post
+  // PRODUCTOS
+  static String get crearProducto => '$_baseUrl/productos';
+  static String get obtenerProductos => '$_baseUrl/productos';
+  static String get verificarProducto => '$_baseUrl/productos/check';
+  static String get obtenerProducto => '$_baseUrl/productos';
+  static String get actualizarProducto => '$_baseUrl/productos';
+  static String get eliminarProducto => '$_baseUrl/productos';
+  static String get subirImagenProducto => '$_baseUrl/productos';
 
-  // ====== CATEGORIAS ======
-  static const String obtenerCategorias = '$_baseUrl/categorias';
-  static const String obtenerClasificaciones = '$_baseUrl/categorias/clasificaciones';
+  // CATEGORIAS
+  static String get obtenerCategorias => '$_baseUrl/categorias';
+  static String get obtenerClasificaciones => '$_baseUrl/categorias/clasificaciones';
 
-  // ====== MOVIMIENTOS ======
-  static const String obtenerMovimientos = '$_baseUrl/movimientos';
-  static const String crearMovimiento = '$_baseUrl/movimientos';
-  static const String resumenGeneral = '$_baseUrl/movimientos/resumen-general';
-  static const String movimientosPorDia = '$_baseUrl/movimientos/por-dia';
-  static const String movimientosPorTipo = '$_baseUrl/movimientos/por-tipo';
-  static const String topProductos = '$_baseUrl/movimientos/top-productos';
-  static const String resumenMensual = '$_baseUrl/movimientos/resumen-mensual';
-  static const String movimientosTipo = '$_baseUrl/movimientos/tipo';  // /{tipo}
-  static const String obtenerMovimiento = '$_baseUrl/movimientos';     // /{id}
-  static const String actualizarMovimiento = '$_baseUrl/movimientos';  // /{id}
-  static const String eliminarMovimiento = '$_baseUrl/movimientos';    // /{id}
+  // MOVIMIENTOS
+  static String get obtenerMovimientos => '$_baseUrl/movimientos';
+  static String get crearMovimiento => '$_baseUrl/movimientos';
+  static String get resumenGeneral => '$_baseUrl/movimientos/resumen-general';
+  static String get movimientosPorDia => '$_baseUrl/movimientos/por-dia';
+  static String get movimientosPorTipo => '$_baseUrl/movimientos/por-tipo';
+  static String get topProductos => '$_baseUrl/movimientos/top-productos';
+  static String get resumenMensual => '$_baseUrl/movimientos/resumen-mensual';
+  static String get movimientosTipo => '$_baseUrl/movimientos/tipo';
+  static String get obtenerMovimiento => '$_baseUrl/movimientos';
+  static String get actualizarMovimiento => '$_baseUrl/movimientos';
+  static String get eliminarMovimiento => '$_baseUrl/movimientos';
 
-  // ====== PEDIDOS ======
-  static const String crearPedido = '$_baseUrl/pedidos/crear';
-  static const String obtenerPedidos = '$_baseUrl/pedidos';
-  static const String pedidosPorUsuario = '$_baseUrl/pedidos/usuario'; // /{id_usuario}
-  static const String detallePedido = '$_baseUrl/pedidos/detalle';     // /{id_pedido}
-  static const String actualizarPedido = '$_baseUrl/pedidos';          // /{id_pedido}
-  static const String eliminarPedido = '$_baseUrl/pedidos';            // /{id_pedido}
+  // PEDIDOS
+  static String get crearPedido => '$_baseUrl/pedidos/crear';
+  static String get obtenerPedidos => '$_baseUrl/pedidos';
+  static String get pedidosPorUsuario => '$_baseUrl/pedidos/usuario';
+  static String get detallePedido => '$_baseUrl/pedidos/detalle';
+  static String get actualizarPedido => '$_baseUrl/pedidos';
+  static String get eliminarPedido => '$_baseUrl/pedidos';
 
-  // ====== NOTIFICACIONES ======
-  static const String obtenerNotificaciones = '$_baseUrl/notificaciones';
-  static const String contarNotificaciones = '$_baseUrl/notificaciones/count';
-  static const String notificacionesStockBajo = '$_baseUrl/notificaciones/stock-bajo';
-  static const String notificacionesAgotados = '$_baseUrl/notificaciones/agotados';
-  static const String notificacionesPedidosRecientes = '$_baseUrl/notificaciones/pedidos-recientes';
-  static const String estadisticasNotificaciones = '$_baseUrl/notificaciones/estadisticas';
+  // NOTIFICACIONES
+  static String get obtenerNotificaciones => '$_baseUrl/notificaciones';
+  static String get contarNotificaciones => '$_baseUrl/notificaciones/count';
+  static String get notificacionesStockBajo => '$_baseUrl/notificaciones/stock-bajo';
+  static String get notificacionesAgotados => '$_baseUrl/notificaciones/agotados';
+  static String get notificacionesPedidosRecientes => '$_baseUrl/notificaciones/pedidos-recientes';
+  static String get estadisticasNotificaciones => '$_baseUrl/notificaciones/estadisticas';
 
-  // ====== PEDIDOS PERSONALIZADOS ======
-  static const String obtenerMateriales = '$_baseUrl/pedidos-personalizados/materiales';
-  static const String crearMaterial = '$_baseUrl/pedidos-personalizados/materiales';
-  static const String materialesPorTipo = '$_baseUrl/pedidos-personalizados/materiales'; // /{tipo}
-  static const String coloresMaterial = '$_baseUrl/pedidos-personalizados/materiales';   // /{id}/colores
-  static const String disenosMaterial = '$_baseUrl/pedidos-personalizados/materiales';   // /{id}/disenos
-  static const String actualizarMaterial = '$_baseUrl/pedidos-personalizados/materiales'; // /{id}
-  static const String subirImagenMaterial = '$_baseUrl/pedidos-personalizados/materiales'; // /{id}/imagen
-  static const String crearPedidoPersonalizado = '$_baseUrl/pedidos-personalizados';
-  static const String obtenerPedidosPersonalizados = '$_baseUrl/pedidos-personalizados';
-  static const String pedidosPersonalizadosPorUsuario = '$_baseUrl/pedidos-personalizados/usuario'; // /{id_usuario}
+  // PEDIDOS PERSONALIZADOS
+  static String get obtenerMateriales => '$_baseUrl/pedidos-personalizados/materiales';
+  static String get crearMaterial => '$_baseUrl/pedidos-personalizados/materiales';
+  static String get materialesPorTipo => '$_baseUrl/pedidos-personalizados/materiales';
+  static String get coloresMaterial => '$_baseUrl/pedidos-personalizados/materiales';
+  static String get disenosMaterial => '$_baseUrl/pedidos-personalizados/materiales';
+  static String get actualizarMaterial => '$_baseUrl/pedidos-personalizados/materiales';
+  static String get subirImagenMaterial => '$_baseUrl/pedidos-personalizados/materiales';
+  static String get crearPedidoPersonalizado => '$_baseUrl/pedidos-personalizados';
+  static String get obtenerPedidosPersonalizados => '$_baseUrl/pedidos-personalizados';
+  static String get pedidosPersonalizadosPorUsuario => '$_baseUrl/pedidos-personalizados/usuario';
 }

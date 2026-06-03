@@ -1,90 +1,86 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'dart:convert';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import '../../Shared/widgets/Custom_AppBar.dart';
 import '../../Shared/widgets/Custom_Button.dart';
 import '../../Shared/widgets/Custom_TextField.dart';
 import '../../Shared/widgets/Custom_Sizedbox.dart';
 import '../../Shared/constants/app_colors.dart';
-import '../../Shared/constants/app_constants.dart';
 import '../../Shared/providers/auth_provider.dart';
 import '../../Shared/services/api_service.dart';
+import '../../Shared/widgets/app_snackbar.dart';
+import '../../core/network/network_info.dart';
+import '../../features/auth/data/repositories/auth_repository_impl.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-  final TextEditingController correoController = TextEditingController();
-  final TextEditingController contrasenaController = TextEditingController();
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
-  Future<void> login(BuildContext context) async {
-    try {
-      final response = await http.post(
-        Uri.parse(AppConstants.login),
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': AppConstants.apiKey,
-        },
-        body: jsonEncode({
-          'correo': correoController.text,
-          'contrasena': contrasenaController.text,
-        }),
-      );
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _correoController = TextEditingController();
+  final TextEditingController _contrasenaController = TextEditingController();
+  bool _loading = false;
 
-      print('STATUS: ${response.statusCode}');
-      print('BODY: ${response.body}');
-      final data = jsonDecode(response.body);
+  late final AuthRepositoryImpl _authRepo;
 
-      if (!context.mounted) return;
+  @override
+  void initState() {
+    super.initState();
+    _authRepo = AuthRepositoryImpl(
+      networkInfo: NetworkInfoImpl(InternetConnection()),
+    );
+  }
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+  @override
+  void dispose() {
+    _correoController.dispose();
+    _contrasenaController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _login() async {
+    final correo = _correoController.text.trim();
+    final contrasena = _contrasenaController.text.trim();
+
+    if (correo.isEmpty || contrasena.isEmpty) {
+      AppSnackBar.warning(context, 'Por favor completa todos los campos');
+      return;
+    }
+
+    setState(() => _loading = true);
+
+    final result = await _authRepo.login(correo: correo, contrasena: contrasena);
+
+    if (!mounted) return;
+    setState(() => _loading = false);
+
+    result.fold(
+      (failure) => AppSnackBar.error(context, failure.message),
+
+      (data) async {
         if (data['needs_code'] == true) {
-          // Admin/trabajador - debe verificar código
           if (data['token'] != null) {
-            context.read<AuthProvider>().setToken(data['token']);
+            await context.read<AuthProvider>().setToken(data['token']);
             ApiService.setToken(data['token']);
           }
           context.read<AuthProvider>().setUsuario(data['user']);
-
           Navigator.pushNamed(
             context,
             '/admin-code',
-            arguments: {
-              'id_usuario': data['user']['id_usuario'].toString()
-            },
+            arguments: {'id_usuario': data['user']['id_usuario'].toString()},
           );
         } else {
-          // Cliente - va directo
-          context.read<AuthProvider>().setToken(data['token']);
+          await context.read<AuthProvider>().setToken(data['token']);
           ApiService.setToken(data['token']);
           context.read<AuthProvider>().setUsuario(data['user']);
-
-          // Navigator.pushReplacementNamed(context, '/cliente');
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('¡Bienvenido a Gurama Online!'),
-              backgroundColor: Colors.green,
-            ),
-          );
+          AppSnackBar.success(context, '¡Bienvenido a Gurama Online!');
         }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(data['message'] ?? 'Correo o contraseña incorrectos'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } catch (e) {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error de conexión'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
+      },
+    );
+  } // 👈 Esta llave faltaba — cierra _login()
 
   @override
   Widget build(BuildContext context) {
@@ -125,20 +121,30 @@ class LoginScreen extends StatelessWidget {
                   CustomTextField(
                     label: 'Correo electrónico',
                     icon: Icons.email,
-                    controller: correoController,
+                    controller: _correoController,
                   ),
                   AppSpaces.verticalMedium,
                   CustomTextField(
                     label: 'Contraseña',
                     icon: Icons.lock,
-                    controller: contrasenaController,
+                    controller: _contrasenaController,
                     isPassword: true,
                   ),
                   AppSpaces.verticalinter,
-                  CustomButton(
-                    text: 'INGRESAR',
-                    onPressed: () => login(context),
-                  ),
+                  _loading
+                      ? const SizedBox(
+                          height: 48,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primario,
+                              strokeWidth: 2.5,
+                            ),
+                          ),
+                        )
+                      : CustomButton(
+                          text: 'INGRESAR',
+                          onPressed: _login,
+                        ),
                   AppSpaces.verticalMedium,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

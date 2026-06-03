@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../../Shared/constants/app_colors.dart';
 import '../../Shared/constants/app_constants.dart';
 import '../../Shared/widgets/Custom_AppBar.dart';
 import '../../Shared/services/api_service.dart';
-import '../../data/models/usuario_model.dart';
+import '../../Data/models/usuario_model.dart';
 
 class NotificacionesScreen extends StatefulWidget {
   final UsuarioModel usuario;
@@ -211,7 +211,7 @@ class _NotificacionesScreenState extends State<NotificacionesScreen> {
                       color: AppColors.blanco,
                       borderRadius: BorderRadius.circular(10),
                       border: Border(left: BorderSide(color: color, width: 4)),
-                      boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), blurRadius: 4)],
+                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 4)],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
@@ -224,7 +224,7 @@ class _NotificacionesScreenState extends State<NotificacionesScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: color.withValues(alpha: 0.1),
+                                  color: color.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Text(labelPorTipo(tipo),
@@ -281,9 +281,9 @@ class _StatChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
+          color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
+          border: Border.all(color: color.withOpacity(0.3)),
         ),
         child: Column(
           children: [
@@ -294,4 +294,4 @@ class _StatChip extends StatelessWidget {
       ),
     );
   }
-}
+}*/

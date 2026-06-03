@@ -31,8 +31,6 @@ class ApiService {
     final request = http.Request('GET', Uri.parse(url));
     headers.forEach((key, value) => request.headers[key] = value);
 
-    print('>>> HEADERS: ${request.headers}'); // 👈 agrega esta línea
-
     final streamed = await request.send();
     return await http.Response.fromStream(streamed);
   }

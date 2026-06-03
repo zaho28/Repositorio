@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import '../../Data/models/usuario_model.dart';
+import '../../Data/models/producto_model.dart';
+import '../../Shared/providers/producto_provider.dart';
+import '../../Shared/widgets/Custom_AppBar.dart';
+import '../../Shared/widgets/AdminSidebar.dart';
 import '../../Shared/constants/app_colors.dart';
 import '../../Shared/constants/app_constants.dart';
-import '../../Shared/widgets/Custom_AppBar.dart';
-import '../../Shared/providers/producto_provider.dart';
-import '../../data/models/producto_model.dart';
-import '../../data/models/usuario_model.dart';
 import '../../Shared/services/api_service.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 
 class ProductosScreen extends StatefulWidget {
   final UsuarioModel usuario;
@@ -70,7 +73,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
                       placeholder: (_, __) => Container(
                         height: 200,
                         color: AppColors.fondo,
-                        child: const Center(
+                        child: Center(
                           child: CircularProgressIndicator(color: AppColors.primario),
                         ),
                       ),
@@ -171,6 +174,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
 
     return Scaffold(
       appBar: CustomAppBar(title: 'Productos'),
+      drawer: AdminSidebar(usuario: widget.usuario),
       backgroundColor: AppColors.fondo,
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primario,
@@ -212,7 +216,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
             ),
           Expanded(
             child: provider.cargando
-                ? const Center(child: CircularProgressIndicator(color: AppColors.primario))
+                ? Center(child: CircularProgressIndicator(color: AppColors.primario))
                 : provider.error != null
                 ? Center(
               child: Column(
@@ -271,7 +275,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
                                   imageUrl: '${AppConstants.baseUrl}${p.rutaImagen}',
                                   httpHeaders: ApiService.headers,
                                   fit: BoxFit.cover,
-                                  placeholder: (context, url) => const Center(
+                                  placeholder: (context, url) => Center(
                                     child: CircularProgressIndicator(
                                       color: AppColors.primario,
                                       strokeWidth: 2,
