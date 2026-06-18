@@ -14,6 +14,18 @@ class ProductoModel {
   final String? tamano;
   final String? ultimaActualiz;
 
+  String get precioFormateado => '\$${precioUnitario.toStringAsFixed(2)}';
+
+  bool get disponible => estado && stockActual > 0;
+
+  // tu modelo no tiene categoria/clasificacion como string,
+  // devuelve null para que el widget los ignore
+  String? get nombreCategoria => null;
+  String? get nombreClasificacion => null;
+
+  // el campo en tu modelo se llama 'tamano', la pantalla pide 'tamanio'
+  String? get tamanio => tamano;
+  
   ProductoModel({
     required this.idProducto,
     required this.nomProducto,

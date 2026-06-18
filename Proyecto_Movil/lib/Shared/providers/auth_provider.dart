@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../Data/models/usuario_model.dart';
-import '../constants/app_constants.dart';      
+import '../constants/app_constants.dart';
 import '../services/secure_storage_service.dart';
+import '../../Shared/services/fcm_service.dart';
 
 class AuthProvider extends ChangeNotifier {
   String? _token;
@@ -11,27 +12,42 @@ class AuthProvider extends ChangeNotifier {
   UsuarioModel? get usuario => _usuario;
   bool get isLoggedIn => _token != null && _usuario != null;
 
-  // Carga el token guardado al iniciar la app
-  Future<void> loadTokenFromStorage() async {
-    _token = await SecureStorageService.getToken();
-    notifyListeners();
+  /// Carga token Y usuario al iniciar la app.
+  /// Retorna true si había sesión guardada completa.
+  Future<bool> loadTokenFromStorage() async {
+    _token   = await SecureStorageService.getToken();
+    final json = await SecureStorageService.getUsuario();
+
+    if (_token != null && json != null) {
+      _usuario = UsuarioModel.fromJson(json);
+      notifyListeners();
+      return true; // sesión completa
+    }
+
+    // Token sin usuario (inconsistencia) = limpiar
+    await SecureStorageService.clearAll();
+    _token   = null;
+    _usuario = null;
+    return false;
   }
 
-  // Guarda en Secure Storage también
+  /// Guarda token en memoria y en almacenamiento seguro
   Future<void> setToken(String token) async {
     _token = token;
     await SecureStorageService.saveToken(token);
     notifyListeners();
   }
 
-  // Recibe el Map del JSON y lo convierte al modelo
+  /// Guarda usuario en memoria y en almacenamiento seguro
   void setUsuario(Map<String, dynamic> json) {
     _usuario = UsuarioModel.fromJson(json);
+    SecureStorageService.saveUsuario(json); // sin await, no bloquea UI
     notifyListeners();
   }
 
-   // borra del Secure Storage también
+  /// Cierra sesión: borra todo
   Future<void> logout() async {
+    await FcmService.desuscribirTodos(); // ← NUEVO
     _token = null;
     _usuario = null;
     await SecureStorageService.clearAll();
@@ -40,12 +56,12 @@ class AuthProvider extends ChangeNotifier {
 
   Map<String, String> get postHeaders => {
     'Content-Type': 'application/json',
-    'x-api-key': AppConstants.apiKey, 
+    'x-api-key': AppConstants.apiKey,
     if (_token != null) 'Authorization': 'Bearer $_token',
   };
 
   Map<String, String> get getHeaders => {
-    'x-api-key': AppConstants.apiKey, 
+    'x-api-key': AppConstants.apiKey,
     if (_token != null) 'Authorization': 'Bearer $_token',
   };
 }

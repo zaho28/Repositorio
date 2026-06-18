@@ -7,14 +7,14 @@ import '../../Shared/widgets/Custom_AppBar.dart';
 import '../../Shared/services/api_service.dart';
 import '../../Shared/providers/auth_provider.dart';
 
-class CambiarContrasenaScreen extends StatefulWidget {
-  const CambiarContrasenaScreen({super.key});
+class CambiarContrasenaAScreen extends StatefulWidget {
+  const CambiarContrasenaAScreen({super.key});
 
   @override
-  State<CambiarContrasenaScreen> createState() => _CambiarContrasenaScreenState();
+  State<CambiarContrasenaAScreen> createState() => _CambiarContrasenaAScreenState();
 }
 
-class _CambiarContrasenaScreenState extends State<CambiarContrasenaScreen> {
+class _CambiarContrasenaAScreenState extends State<CambiarContrasenaAScreen> {
   final _formKey = GlobalKey<FormState>();
   
   final _actualController = TextEditingController();
@@ -27,7 +27,7 @@ class _CambiarContrasenaScreenState extends State<CambiarContrasenaScreen> {
   
   bool _cargando = false;
 
-  Future<void> _cambiarContrasena() async {
+  Future<void> _CambiarContrasenaA() async {
     if (!_formKey.currentState!.validate()) return;
 
     if (_nuevaController.text != _confirmarController.text) {
@@ -113,7 +113,7 @@ class _CambiarContrasenaScreenState extends State<CambiarContrasenaScreen> {
                 const SizedBox(height: 30),
 
                 ElevatedButton(
-                  onPressed: _cargando ? null : _cambiarContrasena,
+                  onPressed: _cargando ? null : _CambiarContrasenaA,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primario,
                     padding: const EdgeInsets.symmetric(vertical: 16),

@@ -254,19 +254,39 @@ export class PedidosPersonalizadosService {
   // --------------------------------------------------------
   // OBTENER PEDIDOS PERSONALIZADOS (admin/trabajador)
   // --------------------------------------------------------
-  async findAll( query: any ) {
-    console.log('controller - obtener pedidos personalizados (admin/trabajador):', JSON.stringify(query));
+  async findAll(query: any) {
     return this.prisma.pedido_personalizado.findMany({
-      include: {
-        pedido: {
-          select: { fecha: true, estado: true, id_usuario: true },
+        include: {
+            pedido: {
+                include: {                    
+                    usuario: {
+                        select: {
+                            nom_1: true,
+                            ape_1: true,
+                            telefono: true,
+                            correo: true,
+                        }
+                    },
+                    ticket_compra: {
+                        include: {
+                            estado_pago: true,
+                            metodo_pago: true,
+                        }
+                    }
+                }
+            },
+            detalles: {
+                include: {
+                    material: {
+                        select: {
+                            nombre: true,
+                            tipo: true,
+                            unidad: true,
+                        }
+                    },
+                },
+            },
         },
-        detalles: {
-          include: {
-            material: { select: { nombre: true, tipo: true, unidad: true } },
-          },
-        },
-      },
     });
   }
 

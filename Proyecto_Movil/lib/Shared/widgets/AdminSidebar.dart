@@ -22,7 +22,7 @@ class AdminSidebar extends StatelessWidget {
   void _logout(BuildContext context) {
     context.read<AuthProvider>().logout();
     ApiService.clearToken();
-    Navigator.pushReplacementNamed(context, '/login');
+    Navigator.pushReplacementNamed(context, '/landing');
   }
 
   @override
@@ -93,21 +93,6 @@ class AdminSidebar extends StatelessWidget {
             title: 'Pedidos realizados',
             onTap: () => _navegar(context, '/admin/pedidos'),
           ),
-          /*_MenuItem(
-            icon: Icons.bar_chart,
-            title: 'Reportes',
-            onTap: () => _navegar(context, '/admin/reportes'),
-          ),
-          _MenuItem(
-            icon: Icons.history,
-            title: 'Historial de ventas',
-            onTap: () => _navegar(context, '/admin/historial'),
-          ),
-          _MenuItem(
-            icon: Icons.notifications,
-            title: 'Notificaciones',
-            onTap: () => _navegar(context, '/admin/notificaciones'),
-          ),*/
 
           // Solo admin (rol 1)
           if (usuario.isAdmin) ...[

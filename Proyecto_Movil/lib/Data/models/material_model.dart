@@ -51,3 +51,42 @@ class MaterialModel {
     'estado':          estado,
   };
 }
+class ColorMaterialModel {
+  final int idColor;
+  final String nombre;
+  final String? codigoHex;
+
+  ColorMaterialModel({
+    required this.idColor,
+    required this.nombre,
+    this.codigoHex,
+  });
+
+  factory ColorMaterialModel.fromJson(Map<String, dynamic> json) {
+    return ColorMaterialModel(
+      idColor:   json['id_color'] ?? 0,
+      nombre:    json['nombre'] ?? '',
+      codigoHex: json['codigo_hex'],
+    );
+  }
+}
+
+class DisenoMaterialModel {
+  final int idDiseno;
+  final String nombre;
+  final String? rutaImagen;
+
+  DisenoMaterialModel({
+    required this.idDiseno,
+    required this.nombre,
+    this.rutaImagen,
+  });
+
+  factory DisenoMaterialModel.fromJson(Map<String, dynamic> json) {
+    return DisenoMaterialModel(
+      idDiseno:   json['id_diseno'] ?? 0,
+      nombre:     json['nombre'] ?? '',
+      rutaImagen: json['ruta_imagen'],
+    );
+  }
+}

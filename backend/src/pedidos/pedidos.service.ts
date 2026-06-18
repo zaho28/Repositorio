@@ -2,10 +2,14 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
+import { FcmPushService } from '../notificaciones/fcm-push.service';
 
 @Injectable()
 export class PedidosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private fcmPush: FcmPushService,
+  ) {}
 
   // -------------------------------------------------------
   // CREAR PEDIDO COMPLETO CON TICKET (transacción)
@@ -18,8 +22,7 @@ export class PedidosService {
       throw new BadRequestException('Faltan datos obligatorios (items, id_usuario, metodo_pago)');
     }
 
-    return this.prisma.$transaction(async (tx) => {
-      // Crear el pedido
+    const resultado = await this.prisma.$transaction(async (tx) => {
       const pedido = await tx.pedido.create({
         data: {
           fecha: new Date(),
@@ -31,7 +34,6 @@ export class PedidosService {
 
       const resultados: { producto: string; cantidad: number; stock_restante: number }[] = [];
 
-      // Procesar cada producto
       for (const item of items) {
         const { id_producto, cantidad, precio } = item;
 
@@ -45,14 +47,22 @@ export class PedidosService {
 
         if (producto.stock_actual < cantidad) {
           throw new BadRequestException(
-            `Stock insuficiente para ${producto.nom_producto}. Disponible: ${producto.stock_actual}, Solicitado: ${cantidad}`,
+            `Stock insuficiente para "${producto.nom_producto}". Disponible: ${producto.stock_actual}, Solicitado: ${cantidad}`,
+          );
+        }
+
+        // Guard extra: nunca permitir stock negativo
+        const nuevoStock = producto.stock_actual - cantidad;
+        if (nuevoStock < 0) {
+          throw new BadRequestException(
+            `La operación dejaría el stock de "${producto.nom_producto}" en negativo. Operación cancelada.`,
           );
         }
 
         await tx.producto.update({
           where: { id_producto },
           data: {
-            stock_actual: { decrement: cantidad },
+            stock_actual: nuevoStock,   // valor absoluto, nunca negativo
             ultima_actualiz: new Date(),
           },
         });
@@ -84,7 +94,6 @@ export class PedidosService {
         });
       }
 
-      // Crear el ticket de compra
       const num_ticket = Math.floor(100000 + Math.random() * 900000);
 
       const ticket = await tx.ticket_compra.create({
@@ -100,17 +109,26 @@ export class PedidosService {
       });
 
       return {
-        success: true,
-        message: 'Pedido creado con éxito',
-        data: {
-          id_pedido: pedido.id_pedido,
-          num_ticket,
-          id_ticket: ticket.id_ticket_c,
-          productos_procesados: resultados.length,
-          detalles: resultados,
-        },
+        id_pedido: pedido.id_pedido,
+        num_ticket,
+        id_ticket: ticket.id_ticket_c,
+        productos_procesados: resultados.length,
+        detalles: resultados,
       };
     });
+
+    // ── Notificar a admins DESPUÉS de que la transacción cerró exitosamente
+    await this.fcmPush.notificarAdmins(
+      'Nuevo pedido recibido',
+      `Pedido #${resultado.num_ticket} - ${resultado.productos_procesados} producto(s)`,
+      { id_pedido: String(resultado.id_pedido), pantalla: '/pedidos_realizados' },
+    );
+
+    return {
+      success: true,
+      message: 'Pedido creado con éxito',
+      data: resultado,
+    };
   }
 
   // -------------------------------------------------------
@@ -145,8 +163,10 @@ export class PedidosService {
 
   // -------------------------------------------------------
   // OBTENER TODOS LOS PEDIDOS (ADMIN)
+  // FIX: detalles_pedido ahora incluye el producto para que
+  //      el frontend pueda contar items correctamente.
   // -------------------------------------------------------
-  async findAll(query : any) {
+  async findAll(query: any) {
     console.log('service - todos los pedidos:', JSON.stringify(query));
     return this.prisma.pedido.findMany({
       orderBy: { fecha: 'desc' },
@@ -165,7 +185,19 @@ export class PedidosService {
             metodo_pago: true,
           },
         },
-        detalles_pedido: true,
+        // ── FIX: antes era `detalles_pedido: true` ──────────────────────────
+        // Con true el array llega pero sin datos del producto, así el frontend
+        // contaba 0 items en pedidos que sí tenían productos.
+        detalles_pedido: {
+          include: {
+            producto: {
+              select: {
+                nom_producto: true,
+                precio_unitario: true,
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -214,16 +246,57 @@ export class PedidosService {
   }
 
   // -------------------------------------------------------
-  // ACTUALIZAR ESTADO DE UN PEDIDO
+  // ACTUALIZAR ESTADO / MÉTODO DE PAGO DE UN PEDIDO
   // -------------------------------------------------------
   async update(id_pedido: number, dto: UpdatePedidoDto) {
-    console.log('service - actualizar pedido:', { id_pedido, dto });
-    await this.findOne(id_pedido);
+    const pedido = await this.findOne(id_pedido);
 
-    return this.prisma.pedido.update({
+    const metodoPagoMap: Record<string, string> = {
+      'Efectivo':      'Mtd_EF',
+      'Nequi':         'Mtd_NQ',
+      'DaviPlata':     'Mtd_DP',
+      'Daviplata':     'Mtd_DP',
+      'Tarjeta':       'Mtd_TJ',
+      'Transferencia': 'Mtd_TJ',
+      'Por_definir':   'Mtd_PD',
+    };
+
+    const pedidoActualizado = await this.prisma.pedido.update({
       where: { id_pedido },
-      data: { estado: dto.estado },
+      data: {
+        ...(dto.estado && { estado: dto.estado }),
+      },
     });
+
+    if (dto.metodo_pago) {
+      const idMetPago = metodoPagoMap[dto.metodo_pago] ?? 'Mtd_PD';
+      await this.prisma.ticket_compra.updateMany({
+        where: { id_pedido },
+        data: { id_met_pago: idMetPago as any },
+      });
+    }
+
+    // ── Notificar al cliente si cambió el estado
+    if (dto.estado) {
+      const mensajes: Record<string, string> = {
+        'Pendiente':      'Tu pedido está pendiente de confirmación ',
+        'Pagado':         'Tu pago fue confirmado ',
+        'En preparación': 'Tu pedido está siendo preparado con cariño ',
+        'Entregado':      'Tu pedido fue entregado ',
+        'Finalizado':     'Tu pedido fue finalizado ',
+      };
+
+      const cuerpo = mensajes[dto.estado] ?? `Estado actualizado: ${dto.estado}`;
+
+      await this.fcmPush.notificarUsuario(
+        pedido.id_usuario,
+        'Actualización de tu pedido',
+        cuerpo,
+        { id_pedido: String(id_pedido), pantalla: '/mis_pedidos' },
+      );
+    }
+
+    return pedidoActualizado;
   }
 
   // -------------------------------------------------------
