@@ -12,8 +12,8 @@ import '../../Shared/widgets/Custom_TextField.dart';
 import '../../Shared/widgets/Custom_Sizedbox.dart';
 import '../../Shared/services/api_service.dart';
 import '../../Shared/providers/producto_provider.dart';
-import '../../data/models/producto_model.dart';
-import '../../data/models/usuario_model.dart';
+import '../../Data/models/producto_model.dart';
+import '../../Data/models/usuario_model.dart';
 
 class EditarProductoScreen extends StatefulWidget {
   final ProductoModel producto;
@@ -54,7 +54,7 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
   @override
   void initState() {
     super.initState();
-    // Pre-llenar con datos actuales del producto (igual que web usa productoDesdeState)
+    // Pre-llenar con datos actuales del producto
     final p = widget.producto;
     nombreController     = TextEditingController(text: p.nomProducto);
     precioController     = TextEditingController(text: p.precioUnitario.toString());
@@ -129,7 +129,7 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
     try {
       final productoId = widget.producto.idProducto;
 
-      // 1. Actualizar datos del producto (PATCH)
+      // Actualizar datos del producto (PATCH)
       final res = await ApiService.patch(
         '${AppConstants.actualizarProducto}/$productoId',
         {
@@ -154,7 +154,7 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
         return;
       }
 
-      // 2. Subir imagen nueva si se seleccionó (igual que web)
+      // Subir imagen nueva si se selecciono
       if (imagenNueva != null) {
         final bytes = await imagenNueva!.readAsBytes();
         final base64Image = base64Encode(bytes);
@@ -201,7 +201,7 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              // ── Mensajes ───────────────────────────────
+              // Mensajes 
               if (error != null) ...[
                 _MensajeBox(texto: error!, esError: true),
                 AppSpaces.verticalMedium,
@@ -211,7 +211,7 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
                 AppSpaces.verticalMedium,
               ],
 
-              // ── Sección: Información ───────────────────
+              //Sección: Información 
               _SeccionTitulo('Información del Producto'),
               AppSpaces.verticalMedium,
 
@@ -229,7 +229,7 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
               ),
               AppSpaces.verticalMedium,
 
-              // Stock actual — solo lectura (igual que web)
+              // Stock actual — solo lectura 
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -266,7 +266,7 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
               ),
               AppSpaces.verticalLarge,
 
-              // ── Sección: Clasificación ─────────────────
+              // Sección: Clasificación 
               _SeccionTitulo('Clasificación y Atributos'),
               AppSpaces.verticalMedium,
 

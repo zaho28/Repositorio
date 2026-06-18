@@ -7,14 +7,14 @@ import '../../Shared/widgets/Custom_AppBar.dart';
 import '../../Shared/services/api_service.dart';
 import '../../Shared/providers/auth_provider.dart';
 
-class CambiarDatosScreen extends StatefulWidget {
-  const CambiarDatosScreen({super.key});
+class CambiarDatosAScreen extends StatefulWidget {
+  const CambiarDatosAScreen({super.key});
 
   @override
-  State<CambiarDatosScreen> createState() => _CambiarDatosScreenState();
+  State<CambiarDatosAScreen> createState() => _CambiarDatosAScreenState();
 }
 
-class _CambiarDatosScreenState extends State<CambiarDatosScreen> {
+class _CambiarDatosAScreenState extends State<CambiarDatosAScreen> {
   final _formKey = GlobalKey<FormState>();
   
   final _nom1Controller = TextEditingController();
