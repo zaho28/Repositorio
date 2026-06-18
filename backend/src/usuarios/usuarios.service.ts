@@ -266,4 +266,16 @@ export class UsuariosService {
       data: { estado: nuevoEstado },
     });
   }
+
+// --------------------------------------------------------
+// GUARDAR TOKEN FCM
+// --------------------------------------------------------
+  async guardarFcmToken(id_usuario: string, token: string) {
+      await this.findOne(id_usuario); // verifica que existe
+
+      return this.prisma.usuario.update({
+          where: { id_usuario },
+          data: { fcm_token: token },
+      });
+  }
 }

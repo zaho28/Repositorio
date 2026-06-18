@@ -15,7 +15,7 @@ model categoria {
 }
 
 model clasificacion {
-  id_clasificacion Int                      @id @default(autoincrement())
+  id_clasificacion Int                       @id @default(autoincrement())
   nombre_clas      clasificacion_nombre_clas
   productos        producto[]
 }
@@ -90,23 +90,23 @@ model tipo_pedido {
 }
 
 model producto {
-  id_producto      Int              @id @default(autoincrement())
-  nom_producto     String           @db.VarChar(60)
-  precio_unitario  Decimal          @db.Decimal(10, 2)
+  id_producto      Int      @id @default(autoincrement())
+  nom_producto     String   @db.VarChar(60)
+  precio_unitario  Decimal  @db.Decimal(10, 2)
   stock_actual     Int
   stock_minimo     Int
-  ultima_actualiz  DateTime         @db.DateTime(0)
-  color            String?          @db.VarChar(20)
-  talla            String?          @db.VarChar(20)
-  tama_o           String?          @map("tamaño") @db.VarChar(20)
-  descripcion      String           @db.VarChar(255)
+  ultima_actualiz  DateTime @db.DateTime(0)
+  color            String?  @db.VarChar(20)
+  talla            String?  @db.VarChar(20)
+  tama_o           String?  @map("tamaño") @db.VarChar(20)
+  descripcion      String   @db.VarChar(255)
   id_categoria     Int
   id_clasificacion Int
-  ruta_imagen      String?          @db.VarChar(255)
-  estado           Boolean?         @default(true)
+  ruta_imagen      String?  @db.VarChar(255)
+  estado           Boolean? @default(true)
 
-  categoria     categoria        @relation(fields: [id_categoria], references: [id_categoria])
-  clasificacion clasificacion    @relation(fields: [id_clasificacion], references: [id_clasificacion])
+  categoria     categoria         @relation(fields: [id_categoria], references: [id_categoria])
+  clasificacion clasificacion     @relation(fields: [id_clasificacion], references: [id_clasificacion])
   detalles      detalles_pedido[]
   movimientos   movimiento[]
 
@@ -115,22 +115,23 @@ model producto {
 }
 
 model ticket_compra {
-  id_ticket_c   Int                     @id @default(autoincrement())
-  num_ticket    Int                     @unique(map: "num_ticket")
-  fecha_emision DateTime                @db.DateTime(0)
-  sub_total     Decimal                 @db.Decimal(10, 0)
-  total_ticket  Decimal                 @db.Decimal(10, 0)
-  id_pedido     Int                     @unique
+  id_ticket_c   Int      @id @default(autoincrement())
+  num_ticket    Int      @unique(map: "num_ticket")
+  fecha_emision DateTime @db.DateTime(0)
+  sub_total     Decimal  @db.Decimal(10, 0)
+  total_ticket  Decimal  @db.Decimal(10, 0)
+  id_pedido     Int      @unique
+
   id_estado   estado_pago_id_estado
-  id_met_pago   metodo_pago_id_met_pago
+  id_met_pago metodo_pago_id_met_pago
 
   estado_pago estado_pago @relation(fields: [id_estado], references: [id_estado])
   metodo_pago metodo_pago @relation(fields: [id_met_pago], references: [id_met_pago])
   pedido      pedido      @relation(fields: [id_pedido], references: [id_pedido])
 
   @@index([id_estado], map: "id_estado")
+  @@index([id_met_pago], map: "id_met_pago")
   @@index([id_pedido], map: "id_pedido")
-  @@index([id_met_pago], map: "ticket_compra_ibfk_3")
 }
 
 model usuario {
@@ -150,8 +151,8 @@ model usuario {
   reset_codigo   String?              @db.VarChar(255)
   reset_expira   DateTime?            @db.DateTime(0)
   estado         Int                  @default(1)
-  fcm_token      String?              @db.VarChar(255)
-
+  fcm_token      String?              @db.VarChar(255) 
+  
   rol            rol_usuario    @relation(fields: [id_rol_usuario], references: [id_rol_usuario])
   tipo_documento tipo_documento @relation(fields: [t_doc], references: [t_doc])
   pedidos        pedido[]
@@ -202,7 +203,7 @@ model pedido_personalizado {
   tamanio         String                             @db.VarChar(30)
   precio_total    Decimal                            @db.Decimal(10, 2)
 
-  pedido   pedido                                @relation(fields: [id_pedido], references: [id_pedido])
+  pedido   pedido                         @relation(fields: [id_pedido], references: [id_pedido])
   detalles detalle_pedido_personalizado[]
 
   @@index([id_pedido], map: "id_pedido")

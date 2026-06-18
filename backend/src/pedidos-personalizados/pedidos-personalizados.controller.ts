@@ -239,13 +239,23 @@ export class PedidosPersonalizadosController {
     @ApiResponse({ status: 403, description: 'Prohibido - Permisos insuficiente.' })
     @ApiResponse({ status: 500, description: 'Error al consultar pedidos personalizados.' })
 
-    async findAll(@Query() query: any) {
+    /*async findAll(@Query() query: any) {
         try {
             return await this.service.findAll(query);
         } catch (error: any ) {
             if (error instanceof BadRequestException) {
                 throw error;
             }
+            throw new InternalServerErrorException('Error al obtener pedidos personalizados');
+        }
+    }*/
+    // En pedidos-personalizados.controller.ts
+    @Get()
+    async findAll(@Query() query: any) {
+        try {
+            return await this.service.findAll(query);
+        } catch (error: any) {
+            console.error('ERROR findAll personalizados:', error.message, error.stack);  // 👈
             throw new InternalServerErrorException('Error al obtener pedidos personalizados');
         }
     }

@@ -209,7 +209,7 @@ class _PerfilAdminScreenState extends State<PerfilAdminScreen> {
                       OutlinedButton(
                         onPressed: () {
                           auth.logout();
-                          if (mounted) Navigator.pushReplacementNamed(context, '/login');
+                          if (mounted) Navigator.pushReplacementNamed(context, '/landing');
                         },
                         style: OutlinedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 50),

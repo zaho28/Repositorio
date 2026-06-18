@@ -234,7 +234,7 @@ Los admins pasan por verificación de código 2FA al iniciar sesión (`/admin-co
 | Nombre | Color | Hex |
 |---|---|---|
 | Primario | Rosa fuerte | `#c45a77` |
-| Secundario | Vino | `#7a235f` |
+| Secundario | Vino | `#0xFFb4788b` |
 | Suave | Rosa claro | `#d4a9c2` |
 | Fondo | Rosa muy claro | `#f3e4e9` |
 | Texto | Marrón oscuro | `#5a3d54` |

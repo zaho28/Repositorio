@@ -5,7 +5,7 @@ import '../../Data/models/usuario_model.dart';
 import '../../Data/models/pedido_model.dart';
 import '../../Shared/providers/pedido_provider.dart';
 import '../../Shared/widgets/Custom_AppBar.dart';
-import '../../Shared/widgets/AdminSidebar.dart';
+import '../../Shared/widgets/AdminSidebar.dart'; 
 import '../../Shared/constants/app_colors.dart';
 
 
@@ -160,11 +160,12 @@ class _PedidoCardState extends State<_PedidoCard> {
   Widget _estadoBadge(String estado) {
     Color color;
     switch (estado) {
-      case 'Pendiente': color = Colors.orange; break;
-      case 'Pagado':    color = Colors.blue; break;
-      case 'Entregado': color = Colors.green; break;
-      case 'Finalizado': color = AppColors.primario; break;
-      default: color = Colors.grey;
+      case 'Pendiente':      color = Colors.orange; break;
+      case 'Pagado':         color = Colors.blue; break;
+      case 'En preparación': color = Colors.purple; break;
+      case 'Entregado':      color = Colors.green; break;
+      case 'Finalizado':     color = AppColors.primario; break;
+      default:               color = Colors.grey;
     }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -234,12 +235,37 @@ class _PedidoCardState extends State<_PedidoCard> {
   }
 
   void _cambiarEstado() async {
-    final estados = ['Pendiente', 'Pagado', 'Entregado', 'Finalizado'];
+    // ── 'En preparación' agregado entre Pagado y Entregado
+    final estados = ['Pendiente', 'Pagado', 'En preparación', 'Entregado', 'Finalizado'];
+
     final nuevo = await showDialog<String>(
       context: context,
       builder: (context) => SimpleDialog(
         title: const Text('Cambiar Estado'),
-        children: estados.map((e) => SimpleDialogOption(onPressed: () => Navigator.pop(context, e), child: Text(e))).toList(),
+        children: estados.map((e) {
+          Color color;
+          switch (e) {
+            case 'Pendiente':      color = Colors.orange; break;
+            case 'Pagado':         color = Colors.blue; break;
+            case 'En preparación': color = Colors.purple; break;
+            case 'Entregado':      color = Colors.green; break;
+            case 'Finalizado':     color = AppColors.primario; break;
+            default:               color = Colors.grey;
+          }
+          return SimpleDialogOption(
+            onPressed: () => Navigator.pop(context, e),
+            child: Row(
+              children: [
+                Container(
+                  width: 10, height: 10,
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                ),
+                Text(e),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
 
