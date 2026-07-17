@@ -8,6 +8,6 @@ import { PrismaModule } from '../prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [NotificacionesController],
   providers: [NotificacionesService, FcmPushService],
-  exports: [FcmPushService],
+  exports: [FcmPushService, NotificacionesService],
 })
 export class NotificacionesModule {}

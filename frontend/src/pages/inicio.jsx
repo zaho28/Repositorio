@@ -93,7 +93,6 @@ function Inicio() {
     const handleVerOfertas = () => {
         setMostrarVentana(false);
         setClas_seleccionada('En_oferta');
-        // Hacer scroll hacia el catálogo
         setTimeout(() => {
             const catalogo = document.querySelector('.contenido-inicio');
             if (catalogo) {

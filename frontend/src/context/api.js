@@ -3,9 +3,7 @@ const API_URL = 'http://localhost:3000';
 
 // Obtiene los headers con token y authorization
 const getHeaders = () => {
-    //console.log('API_KEY:', import.meta.env.VITE_API_KEY); 
-    //const token = localStorage.getItem('token');
-    //console.log('Token enviado:', token);
+    
     return {
         'Content-Type': 'application/json',
         'x-api-key': import.meta.env.VITE_API_KEY,

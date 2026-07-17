@@ -156,6 +156,7 @@ model usuario {
   tipo_documento tipo_documento @relation(fields: [t_doc], references: [t_doc])
   pedidos        pedido[]
   movimientos    movimiento[]
+  notificaciones  notificacion[]
 
   @@index([id_rol_usuario], map: "id_rol_usuario")
   @@index([t_doc], map: "t_doc")
@@ -244,6 +245,21 @@ model material_diseno {
   material material @relation(fields: [id_material], references: [id_material])
 
   @@index([id_material], map: "idx_diseno_material")
+}
+
+model notificacion {
+  id_notificacion  Int      @id @default(autoincrement())
+  id_usuario       String   @db.VarChar(15)
+  titulo           String   @db.VarChar(150)
+  mensaje          String   @db.VarChar(500)
+  tipo             String   @default("general") @db.VarChar(50)
+  leida            Boolean  @default(false)
+  fecha            DateTime @default(now())
+
+  usuario          usuario  @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+
+  @@index([id_usuario])
+  @@index([id_usuario, leida])
 }
 
 // ─── ENUMS ────────────────────────────────────────────────────────────────────

@@ -138,4 +138,35 @@ export class NotificacionesController {
       throw new InternalServerErrorException('Error interno al obtener estadísticas de notificaciones');
     }
   }
+  // ── Endpoints para notificaciones persistidas (tabla notificacion) ──────────
+
+  // GET /notificaciones/usuario/:id
+  @Get('usuario/:id')
+  notificacionesPorUsuario(@Param('id') id: string) {
+    return this.notificacionesService.notificacionesPorUsuario(id);
+  }
+
+  // GET /notificaciones/usuario/:id/count
+  @Get('usuario/:id/count')
+  async contarNoLeidas(@Param('id') id: string) {
+    const count = await this.notificacionesService.contarNoLeidas(id);
+    return { count };
+  }
+
+  // PATCH /notificaciones/:id/leer?usuario=:id_usuario
+  @Patch(':id/leer')
+  @HttpCode(HttpStatus.OK)
+  marcarLeida(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('usuario') id_usuario: string,
+  ) {
+    return this.notificacionesService.marcarLeida(id, id_usuario);
+  }
+
+  // PATCH /notificaciones/usuario/:id/leer-todas
+  @Patch('usuario/:id/leer-todas')
+  @HttpCode(HttpStatus.OK)
+  marcarTodasLeidas(@Param('id') id: string) {
+    return this.notificacionesService.marcarTodasLeidas(id);
+  }
 } 

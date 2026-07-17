@@ -11,13 +11,19 @@ export class ProductosService {
   // OBTENER TODOS LOS PRODUCTOS ACTIVOS
   // --------------------------------------------------------
   async findAll(query: any) {
-    return this.prisma.producto.findMany({
+    const productos = await this.prisma.producto.findMany({
       where: { estado: true },
       include: {
         categoria: { select: { nombre_c: true } },
         clasificacion: { select: { nombre_clas: true } },
       },
     });
+
+    // Prisma anida la relación (producto.categoria.nombre_c,
+    // producto.clasificacion.nombre_clas). El front (Flutter) espera
+    // estos campos aplanados en la raíz del producto, así que los
+    // exponemos ahí sin perder el objeto anidado original.
+    return productos.map((p) => this._aplanarProducto(p));
   }
 
   // --------------------------------------------------------
@@ -33,7 +39,18 @@ export class ProductosService {
     });
 
     if (!producto) throw new NotFoundException(`Producto ${id} no encontrado`);
-    return producto;
+    return this._aplanarProducto(producto);
+  }
+
+  // --------------------------------------------------------
+  // Aplana nombre_c y nombre_clas al nivel raíz del producto
+  // --------------------------------------------------------
+  private _aplanarProducto(p: any) {
+    return {
+      ...p,
+      nombre_c: p.categoria?.nombre_c ?? null,
+      nombre_clas: p.clasificacion?.nombre_clas ?? null,
+    };
   }
 
   // --------------------------------------------------------

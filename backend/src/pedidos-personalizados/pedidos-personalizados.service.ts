@@ -139,7 +139,7 @@ export class PedidosPersonalizadosService {
   id_usuario: string;
   tipo_producto: string;
   tamanio: string;
-  metodo_pago: string;
+  metodo_pago?: string;
   materiales: { id_material: number; cantidad: number }[];
   }) {
     // Buscar usuario
@@ -217,7 +217,7 @@ export class PedidosPersonalizadosService {
           total_ticket: precio_total,
           id_pedido: pedido.id_pedido,
           id_estado: 'E_pt',
-          id_met_pago: dto.metodo_pago as any,
+          id_met_pago: (dto.metodo_pago ?? 'Mtd_PD') as any,
         },
       });
 

@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
-import { secureStorage } from '../utils/storage'; // ← importa el helper
+import { secureStorage } from '../utils/storage'; // importa el helper
 
 const API_URL = 'http://localhost:3000';
 const API_KEY = import.meta.env.VITE_API_KEY;
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
 
     const saveusuarioPendiente = (user) => {
         setUsuarioPendiente(user);
-        secureStorage.setItem('usuarioPendiente', user, sessionStorage); // ← encriptado
+        secureStorage.setItem('usuarioPendiente', user, sessionStorage); // encriptado
     };
 
     const clearusuarioPendiente = () => {
@@ -39,10 +39,10 @@ export const AuthProvider = ({ children }) => {
     const updateusuarioActual = (newdatosUsuario) => {
         setUsuarioActual(newdatosUsuario);
         if (esAdministrador(newdatosUsuario)) {
-            secureStorage.setItem('user', newdatosUsuario, sessionStorage); // ← encriptado
+            secureStorage.setItem('user', newdatosUsuario, sessionStorage); // encriptado
             secureStorage.removeItem('user', localStorage);
         } else {
-            secureStorage.setItem('user', newdatosUsuario, localStorage); // ← encriptado
+            secureStorage.setItem('user', newdatosUsuario, localStorage); // encriptado
             secureStorage.removeItem('user', sessionStorage);
         }
     };

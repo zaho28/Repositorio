@@ -83,8 +83,13 @@ const DIRECCION = 'Calle 123 #45-67, Bogotá';
                     }
                 });
 
-                setNotificaciones(notifs);
-                setCantidadNoLeidas(notifs.length);
+                const leidasGuardadas = JSON.parse(
+                    localStorage.getItem('notifs_leidas_${usuarioActual.id_usuario}') || '[]'
+                );
+                const notifsVisibles = notifs.filter(n => !leidasGuardadas.includes(n.id));
+
+                setNotificaciones(notifsVisibles);
+                setCantidadNoLeidas(notifsVisibles.length);
             } catch (error) {
                 console.error('Error al cargar notificaciones:', error);
             }
@@ -95,7 +100,15 @@ const DIRECCION = 'Calle 123 #45-67, Bogotá';
 
     const handleAbrirNotif = () => {
         setMostrarNotif(!mostrarNotif);
-        setCantidadNoLeidas(0); // marcar como leídas al abrir
+
+        if (!mostrarNotif) {
+            const idActuales = notificaciones.map(n => n.id);
+            const key = 'notifs_leidas_${usuarioActual.id_usuario}';
+            const leidasGuardadas = JSON.parse(localStorage.getItem(key) || '[]');
+            const nuevasLeidas = [...new Set([...leidasGuardadas, ...idActuales])];
+            localStorage.setItem(key, JSON.stringify(nuevasLeidas));
+            setCantidadNoLeidas(0); // marcar como leídas al abrir
+        }
     };
 
     const getTipoColor = (tipo) => {

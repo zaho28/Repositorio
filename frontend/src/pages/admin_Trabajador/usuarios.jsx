@@ -317,6 +317,8 @@ function ModalEditar({ usuario, onClose, onGuardado }) {
         correo: usuario.correo || '',
         telefono: usuario.telefono || '',
         id_rol_usuario: usuario.id_rol_usuario || '2',
+        //isaura
+        codigo_visible: usuario.codigo_visible || '',
     });
     const [guardando, setGuardando] = useState(false);
     const [error, setError] = useState('');
@@ -357,6 +359,7 @@ function ModalEditar({ usuario, onClose, onGuardado }) {
                         { name: 'nom_2', label: 'Segundo Nombre' },
                         { name: 'ape_1', label: 'Primer Apellido *' },
                         { name: 'ape_2', label: 'Segundo Apellido' },
+                        { name: 'codigo_visible', label: 'Código' },
                     ].map(({ name, label }) => (
                         <div key={name} style={s.modalCampo}>
                             <label style={s.modalLabel}>{label}</label>

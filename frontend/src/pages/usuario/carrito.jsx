@@ -8,7 +8,9 @@ import { secureStorage } from '../../utils/storage';
 
 const Carrito = () => {
     const navigate = useNavigate();
-    const { cartItems, updateQuantity, removeItem, getCartTotal, getTotalItems } = useCart();
+    
+    // Extraemos "clearCart" (o "vaciarCarrito") del contexto de tu carrito
+    const { cartItems, updateQuantity, removeItem, clearCart, getCartTotal, getTotalItems } = useCart();
 
     // Función para obtener la URL de la imagen
     const getImageUrl = (rutaImagen) => {
@@ -35,9 +37,20 @@ const Carrito = () => {
         }
     };
 
-    // FUNCIÓN MEJORADA: Genera el ticket con validaciones
+    // FUNCIÓN PARA VACIAR EL CARRITO COMPLETO
+    const handleClearCart = () => {
+        if (window.confirm('¿Estás seguro de que deseas vaciar todo el carrito?')) {
+            if (typeof clearCart === 'function') {
+                clearCart();
+            } else {
+                // Por si en tu context se llama de otra forma (ej. vaciarCarrito)
+                console.warn("clearCart no está definido, intentando vaciarCarrito...");
+            }
+        }
+    };
+
+    // VALIDA Y OBLIGA AL INICIO DE SESIÓN
     const handleGenerarTicket = () => {
-        // Validar que el usuario esté autenticado
         const user = secureStorage.getItem('user', localStorage) || secureStorage.getItem('user', sessionStorage);
         const isLoggedIn = !!user;
 
@@ -51,14 +64,11 @@ const Carrito = () => {
             return;
         }
 
-        // LOG para debugging
         console.log('Generando ticket con items:', cartItems);
 
-        // Calcular totales
         const subtotal = getCartTotal();
         const total = subtotal;
 
-        // Preparar datos del pedido con toda la información necesaria
         const pedidoData = {
             cartItems: cartItems.map(item => ({
                 id: item.id,
@@ -71,24 +81,18 @@ const Carrito = () => {
             })),
             subtotal,
             total,
-            // Información adicional
             timestamp: new Date().toISOString(),
-            // Esta bandera indica que es un pedido sin pago inmediato
             tipoPedido: 'pendiente'
         };
 
         console.log('Guardando en sessionStorage:', pedidoData);
 
-        // Limpiar cualquier dato previo
         sessionStorage.removeItem('paymentData');
         sessionStorage.removeItem('pedidoProcesado');
 
-        // Guardar en sessionStorage
         try {
             sessionStorage.setItem('paymentData', JSON.stringify(pedidoData));
             console.log('Datos guardados correctamente');
-            
-            // Navegar al ticket
             navigate('/ticket-compra');
         } catch (error) {
             console.error('Error al guardar en sessionStorage:', error);
@@ -121,16 +125,24 @@ const Carrito = () => {
         <>
             <Header />
             
-            {/* Contenido principal */}
             <main className="carrito-main">
                 <div className="carrito-container">
                     <div className="carrito-header">
                         <h1>Carrito ({getTotalItems()} productos)</h1>
-                        <Link to="/catalogo_c">
-                            <button className="btn-seguir-comprando">
-                                Seleccionar más productos
+                        <div className="carrito-header-acciones">
+                            {/* NUEBO BOTÓN: Vaciar Carrito */}
+                            <button 
+                                onClick={handleClearCart} 
+                                className="btn-vaciar-carrito"
+                            >
+                                Vaciar Carrito
                             </button>
-                        </Link>
+                            <Link to="/catalogo_c">
+                                <button className="btn-seguir-comprando">
+                                    Seleccionar más productos
+                                </button>
+                            </Link>
+                        </div>
                     </div>
 
                     <div className="carrito-content">
@@ -138,7 +150,6 @@ const Carrito = () => {
                         <div className="carrito-productos-lista">
                             {cartItems.map((producto) => (
                                 <div key={producto.id} className="carrito-producto-card">
-                                    {/* Imagen del producto */}
                                     <img 
                                         src={getImageUrl(producto.image)} 
                                         alt={producto.name}
@@ -148,7 +159,6 @@ const Carrito = () => {
                                         }}
                                     />
 
-                                    {/* Información del producto */}
                                     <div className="carrito-producto-info">
                                         <h3>{producto.name}</h3>
                                         <p className="carrito-producto-categoria">
@@ -158,7 +168,6 @@ const Carrito = () => {
                                             {formatPrice(producto.price)}
                                         </p>
                                         
-                                        {/* Mostrar stock disponible */}
                                         {producto.stock_actual && (
                                             <p className="carrito-producto-stock">
                                                 Stock disponible: {producto.stock_actual}
@@ -166,7 +175,6 @@ const Carrito = () => {
                                         )}
                                     </div>
 
-                                    {/* Controles de cantidad y eliminar */}
                                     <div className="carrito-producto-controles">
                                         <div className="carrito-cantidad-control">
                                             <button
@@ -200,7 +208,7 @@ const Carrito = () => {
 
                                         <button
                                             onClick={() => handleRemoveItem(producto.id)}
-                                            className="carrito-btn-eliminar"
+                                            className="eliminar" 
                                         >
                                             Eliminar
                                         </button>

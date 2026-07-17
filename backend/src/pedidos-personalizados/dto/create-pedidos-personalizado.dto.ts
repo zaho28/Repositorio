@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsArray, IsNumber, ValidateNested, Min } from 'class-validator';
+import { IsNotEmpty, IsString, IsArray, IsNumber, IsOptional, ValidateNested, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class MaterialItemDto {
@@ -29,10 +29,12 @@ export class MaterialItemDto {
     @Type(() => String)
     tamanio: string;
 
+    // El cliente no elige método de pago al personalizar; queda "Por definir"
+    // hasta que el admin/trabajador lo asigne al cotizar el pedido.
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     @Type(() => String)
-    metodo_pago: string;
+    metodo_pago?: string;
 
     @IsArray()
     @ValidateNested({ each: true })

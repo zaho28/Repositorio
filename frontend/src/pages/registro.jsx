@@ -38,10 +38,10 @@ const Registro = () => {
       ape_1: ape_1.trim(),
       ape_2: ape_2.trim() || null,
       correo: correo.trim(),
-      telefono: Number(telefono.trim()), 
+      telefono: (telefono.trim()), 
       contrasena: contrasena.trim(),
       t_doc: t_doc,
-      id_rol_usuario: "2", // ← cliente por defecto
+      id_rol_usuario: "2", // cliente por defecto
     };
 
     console.log('Enviando registro:', datosUsuario);

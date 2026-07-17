@@ -822,6 +822,53 @@ body {
     }
 }
 
+/* Contenedor de los botones en la cabecera del carrito */
+.carrito-header-acciones {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Botón Vaciar Carrito (Estilo delineado/borde rojo para que contraste elegantemente sin sobrecargar) */
+.btn-vaciar-carrito {
+    background-color: transparent;
+    color: #e06d75; /* El mismo rojo/coral que usas para el botón de eliminar */
+    border: 2px solid #e06d75;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-vaciar-carrito:hover {
+    background-color: #e06d75;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(224, 109, 117, 0.2);
+}
+
+/* Ajustes responsivos para que los botones se apilen correctamente en pantallas pequeñas */
+@media (max-width: 600px) {
+    .carrito-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .carrito-header-acciones {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-vaciar-carrito,
+    .btn-seguir-comprando {
+        width: 100%;
+        text-align: center;
+    }
+}
+
 /* Móvil pequeño (< 480px) */
 @media (max-width: 480px) {
     .ventana-contenido {

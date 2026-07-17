@@ -219,30 +219,92 @@ async pedidosRecientes(dias = 7) {
     }));
   }
 
-  private async _getAgotados() {
-    const productos = await this.prisma.$queryRaw<any[]>`
-      SELECT p.id_producto, p.nom_producto, p.stock_actual, p.stock_minimo,
-            p.ultima_actualiz, c.nombre_c as categoria, p.ruta_imagen
-      FROM producto p
-      LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
-      WHERE p.estado = 1 AND p.stock_actual = 0
-      ORDER BY p.ultima_actualiz DESC
-    `;
+    private async _getAgotados() {
+      const productos = await this.prisma.$queryRaw<any[]>`
+        SELECT p.id_producto, p.nom_producto, p.stock_actual, p.stock_minimo,
+              p.ultima_actualiz, c.nombre_c as categoria, p.ruta_imagen
+        FROM producto p
+        LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
+        WHERE p.estado = 1 AND p.stock_actual = 0
+        ORDER BY p.ultima_actualiz DESC
+      `;
 
-    return productos.map((p) => ({
-      tipo: 'agotado',
-      id_notificacion: `agotado-${p.id_producto}`,
-      id_producto: p.id_producto,
-      nom_producto: p.nom_producto,
-      stock_actual: p.stock_actual,
-      stock_minimo: p.stock_minimo,
-      fecha: p.ultima_actualiz,
-      mensaje: 'Producto agotado',
-      detalles: `${p.nom_producto} - SIN STOCK DISPONIBLE`,
-      ruta_destino: '/movimientos',
-      clase_boton: 'agotado',
-      categoria: p.categoria,
-      ruta_imagen: p.ruta_imagen,
-    }));
+      return productos.map((p) => ({
+        tipo: 'agotado',
+        id_notificacion: `agotado-${p.id_producto}`,
+        id_producto: p.id_producto,
+        nom_producto: p.nom_producto,
+        stock_actual: p.stock_actual,
+        stock_minimo: p.stock_minimo,
+        fecha: p.ultima_actualiz,
+        mensaje: 'Producto agotado',
+        detalles: `${p.nom_producto} - SIN STOCK DISPONIBLE`,
+        ruta_destino: '/movimientos',
+        clase_boton: 'agotado',
+        categoria: p.categoria,
+        ruta_imagen: p.ruta_imagen,
+      }));
+    }
+    // -------------------------------------------------------
+  // PERSISTENCIA EN TABLA notificacion (FCM real)
+  // -------------------------------------------------------
+
+  /** Crea una notificación para un usuario específico. */
+  async crearNotificacion(
+    id_usuario: string,
+    titulo: string,
+    mensaje: string,
+    tipo: 'pedido_estado' | 'stock_bajo' | 'pedido_nuevo',
+  ) {
+    return this.prisma.notificacion.create({
+      data: { id_usuario, titulo, mensaje, tipo },
+    });
+  }
+
+  /** Crea la misma notificación para todos los admins y trabajadores (rol 1 y 3). */
+  async crearNotificacionAdmins(
+    titulo: string,
+    mensaje: string,
+    tipo: 'pedido_estado' | 'stock_bajo' | 'pedido_nuevo',
+  ) {
+    const admins = await this.prisma.usuario.findMany({
+      where: { id_rol_usuario: { in: ['1', '3'] }, estado: 1 },
+      select: { id_usuario: true },
+    });
+    if (!admins.length) return;
+    await this.prisma.notificacion.createMany({
+      data: admins.map((a) => ({ id_usuario: a.id_usuario, titulo, mensaje, tipo })),
+    });
+  }
+
+  /** Devuelve todas las notificaciones de un usuario, más recientes primero. */
+  async notificacionesPorUsuario(id_usuario: string) {
+    return this.prisma.notificacion.findMany({
+      where: { id_usuario },
+      orderBy: { fecha: 'desc' },
+    });
+  }
+
+  /** Cuenta las no leídas (para el badge). */
+  async contarNoLeidas(id_usuario: string): Promise<number> {
+    return this.prisma.notificacion.count({
+      where: { id_usuario, leida: false },
+    });
+  }
+
+  /** Marca una notificación como leída (solo si pertenece al usuario). */
+  async marcarLeida(id_notificacion: number, id_usuario: string) {
+    return this.prisma.notificacion.updateMany({
+      where: { id_notificacion, id_usuario },
+      data: { leida: true },
+    });
+  }
+
+  /** Marca todas las notificaciones de un usuario como leídas. */
+  async marcarTodasLeidas(id_usuario: string) {
+    return this.prisma.notificacion.updateMany({
+      where: { id_usuario, leida: false },
+      data: { leida: true },
+    });
   }
 }

@@ -69,24 +69,15 @@ const Cliente = () => {
         }
     };
 
-    // Función para obtener la URL de la imagen
     const getImageUrl = (rutaImagen) => {
         if (!rutaImagen) return 'https://placehold.co/400x300?text=Gurama+Online/200x200?text=Sin+Imagen';
         return `http://localhost:3000${rutaImagen}`;
     };
 
-    // Manejar clic en "Ver ofertas" - redirige al catálogo con filtro de ofertas
+    // redirige al catálogo con filtro de ofertas
     const handleVerOfertas = () => {
         setMostrarVentana(false);
-        navigate('/catalogo_c?clasificacion=En Oferta');
-        
-        // Opcional: hacer scroll hacia el catálogo si está en la misma página
-        setTimeout(() => {
-            const catalogo = document.querySelector('.productos-nuevos');
-            if (catalogo) {
-                catalogo.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }, 100);
+        navigate('/catalogo_c?clasificacion=En_oferta');
     };
 
     return (

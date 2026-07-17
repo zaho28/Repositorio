@@ -22,6 +22,18 @@ export class PedidosService {
       throw new BadRequestException('Faltan datos obligatorios (items, id_usuario, metodo_pago)');
     }
 
+    // ── Guard: detectar productos duplicados en el mismo pedido
+    // Evita que un doble-envío desde el cliente descuente el stock dos veces
+    const idProductosVistos = new Set<number>();
+    for (const item of items) {
+      if (idProductosVistos.has(item.id_producto)) {
+        throw new BadRequestException(
+          `El producto ${item.id_producto} está duplicado en el pedido. No se procesó nada.`,
+        );
+      }
+      idProductosVistos.add(item.id_producto);
+    }
+
     const resultado = await this.prisma.$transaction(async (tx) => {
       const pedido = await tx.pedido.create({
         data: {
@@ -87,10 +99,11 @@ export class PedidosService {
           },
         });
 
+        // FIX: usar nuevoStock (ya calculado) en lugar de restar de nuevo
         resultados.push({
           producto: producto.nom_producto,
           cantidad,
-          stock_restante: producto.stock_actual - cantidad,
+          stock_restante: nuevoStock,
         });
       }
 
@@ -163,8 +176,6 @@ export class PedidosService {
 
   // -------------------------------------------------------
   // OBTENER TODOS LOS PEDIDOS (ADMIN)
-  // FIX: detalles_pedido ahora incluye el producto para que
-  //      el frontend pueda contar items correctamente.
   // -------------------------------------------------------
   async findAll(query: any) {
     console.log('service - todos los pedidos:', JSON.stringify(query));
@@ -185,9 +196,6 @@ export class PedidosService {
             metodo_pago: true,
           },
         },
-        // ── FIX: antes era `detalles_pedido: true` ──────────────────────────
-        // Con true el array llega pero sin datos del producto, así el frontend
-        // contaba 0 items en pedidos que sí tenían productos.
         detalles_pedido: {
           include: {
             producto: {
