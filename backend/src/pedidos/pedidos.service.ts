@@ -256,8 +256,21 @@ export class PedidosService {
   // -------------------------------------------------------
   // ACTUALIZAR ESTADO / MÉTODO DE PAGO DE UN PEDIDO
   // -------------------------------------------------------
+
+  // Estados finales: una vez alcanzados, el pedido no se puede volver a
+  // modificar (ni cambiar de estado ni anular). RF-007.3 / CP-010.
+  private readonly ESTADOS_INMUTABLES = ['Entregado', 'Finalizado', 'Anulado'];
+
   async update(id_pedido: number, dto: UpdatePedidoDto) {
     const pedido = await this.findOne(id_pedido);
+
+    // ── Bloquear cualquier cambio de estado si el pedido ya está en un
+    // estado final (incluye el caso de anular un pedido ya entregado).
+    if (dto.estado && this.ESTADOS_INMUTABLES.includes(pedido.estado)) {
+      throw new BadRequestException(
+        `No se puede modificar un pedido que ya está en estado "${pedido.estado}".`,
+      );
+    }
 
     const metodoPagoMap: Record<string, string> = {
       'Efectivo':      'Mtd_EF',
@@ -292,6 +305,7 @@ export class PedidosService {
         'En preparación': 'Tu pedido está siendo preparado con cariño ',
         'Entregado':      'Tu pedido fue entregado ',
         'Finalizado':     'Tu pedido fue finalizado ',
+        'Anulado':        'Tu pedido fue anulado. Si tienes dudas, contáctanos.',
       };
 
       const cuerpo = mensajes[dto.estado] ?? `Estado actualizado: ${dto.estado}`;
